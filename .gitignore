@@ -20,6 +20,7 @@ tsconfig.tsbuildinfo
 # Yarn
 # .yarn/
 .yarn/cache
+.yarn/.cache
 .yarn/install-state.gz
 !.yarn/patches
 !.yarn/releases
@@ -193,7 +194,7 @@ manifest.json
 # /docs/sources/packages_api
 
 # wire generated files
-# **/wire_gen.go
+**/wire_gen.go
 
 # Auto-generated internationalization files
 # public/locales/_build/
@@ -211,7 +212,7 @@ manifest.json
 # .pr-body.txt
 
 # Core plugin builds
-# public/app/plugins/**/dist/
+public/app/plugins/**/dist/
 
 # Ignore transpiled JavaScript resulting from the generate-transformations.ts script.
 # /public/app/features/transformers/docs/*.js
