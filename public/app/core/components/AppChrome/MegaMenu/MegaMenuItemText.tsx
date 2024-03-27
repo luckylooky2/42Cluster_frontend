@@ -49,15 +49,17 @@ MegaMenuItemText.displayName = 'MegaMenuItemText';
 const getStyles = (theme: GrafanaTheme2, isActive: Props['isActive']) => ({
   container: css({
     alignItems: 'center',
-    color: isActive ? theme.colors.text.primary : theme.colors.text.secondary,
+    // color: isActive ? theme.colors.text.primary : theme.colors.text.secondary,
     height: '100%',
     position: 'relative',
     width: '100%',
+    color: theme.colors.text.primary,
 
-    '&:hover, &:focus-visible': {
-      color: theme.colors.text.primary,
-      textDecoration: 'underline',
-    },
+    // '&:hover, &:focus-visible': {
+    //   // color: theme.colors.text.primary,
+    //   // textDecoration: 'underline',
+    //   backgroundColor: theme.colors.background.primary,
+    // },
 
     '&:focus-visible': {
       boxShadow: 'none',
@@ -67,20 +69,22 @@ const getStyles = (theme: GrafanaTheme2, isActive: Props['isActive']) => ({
     },
   }),
   containerActive: css({
-    backgroundColor: theme.colors.background.secondary,
+    backgroundColor: theme.colors.background.primary,
     borderTopRightRadius: theme.shape.radius.default,
     borderBottomRightRadius: theme.shape.radius.default,
+    fontWeight: 'var(--base-text-weight-semibold, 600)',
     position: 'relative',
 
     '&::before': {
-      backgroundImage: theme.colors.gradients.brandVertical,
+      backgroundImage: theme.colors.gradients.brandHorizontal,
       borderRadius: theme.shape.radius.default,
       content: '" "',
       display: 'block',
-      height: '100%',
+      height: theme.spacing(0.25),
       position: 'absolute',
-      transform: 'translateX(-50%)',
-      width: theme.spacing(0.5),
+      // transform: 'translateX(-50%)',
+      width: '100%', // theme.spacing(0.5),
+      bottom: '0%',
     },
   }),
   linkContent: css({

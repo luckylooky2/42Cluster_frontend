@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 
 import { GrafanaTheme2 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
-import { CustomScrollbar, Icon, IconButton, useStyles2, Stack } from '@grafana/ui';
+import { CustomScrollbar, useStyles2, Stack } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 import { t } from 'app/core/internationalization';
 import { useSelector } from 'app/types';
@@ -19,9 +19,27 @@ export interface Props extends DOMAttributes {
   onClose: () => void;
 }
 
+const addPriority = (menuName: string) => {
+  switch (menuName) {
+    case 'Home':
+      return 1;
+    case 'Dashboards':
+      return 2;
+    case 'Alerting':
+      return 3;
+    case 'Deployment':
+      return 4;
+    case 'Administration':
+      return 5;
+    default:
+      return 9;
+  }
+};
+
 export const MegaMenu = React.memo(
   forwardRef<HTMLDivElement, Props>(({ onClose, ...restProps }, ref) => {
     const navTree = useSelector((state) => state.navBarTree);
+    const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
     const styles = useStyles2(getStyles);
     const location = useLocation();
     const { chrome } = useGrafana();
@@ -29,26 +47,40 @@ export const MegaMenu = React.memo(
 
     // Remove profile + help from tree
     const navItems = navTree
-      .filter((item) => item.id !== 'profile' && item.id !== 'help')
+      .map((navItem) => ({
+        ...navItem,
+        priority: addPriority(navItem.text),
+        url:
+          navItem.id === 'dashboards/browse' && backendState.isValid ? `/d/${backendState.dashboardUID}` : navItem.url,
+      }))
+      .sort((a, b) => a.priority - b.priority)
+      .filter(
+        (item) =>
+          item.id !== 'profile' &&
+          item.id !== 'help' &&
+          item.id !== 'explore' &&
+          item.id !== 'connections' &&
+          item.id !== 'starred'
+      )
       .map((item) => enrichWithInteractionTracking(item, state.megaMenuDocked));
 
     const activeItem = getActiveItem(navItems, location.pathname);
 
-    const handleDockedMenu = () => {
-      chrome.setMegaMenuDocked(!state.megaMenuDocked);
-      if (state.megaMenuDocked) {
-        chrome.setMegaMenuOpen(false);
-      }
+    // const handleDockedMenu = () => {
+    //   chrome.setMegaMenuDocked(!state.megaMenuDocked);
+    //   if (state.megaMenuDocked) {
+    //     chrome.setMegaMenuOpen(false);
+    //   }
 
-      // refocus on undock/menu open button when changing state
-      setTimeout(() => {
-        document.getElementById(state.megaMenuDocked ? 'mega-menu-toggle' : 'dock-menu-button')?.focus();
-      });
-    };
+    //   // refocus on undock/menu open button when changing state
+    //   setTimeout(() => {
+    //     document.getElementById(state.megaMenuDocked ? 'mega-menu-toggle' : 'dock-menu-button')?.focus();
+    //   });
+    // };
 
     return (
       <div data-testid={selectors.components.NavMenu.Menu} ref={ref} {...restProps}>
-        <div className={styles.mobileHeader}>
+        {/* <div className={styles.mobileHeader}>
           <Icon name="bars" size="xl" />
           <IconButton
             tooltip={t('navigation.megamenu.close', 'Close menu')}
@@ -57,13 +89,13 @@ export const MegaMenu = React.memo(
             size="xl"
             variant="secondary"
           />
-        </div>
+        </div> */}
         <nav className={styles.content}>
           <CustomScrollbar showScrollIndicators hideHorizontalTrack>
             <ul className={styles.itemList} aria-label={t('navigation.megamenu.list-label', 'Navigation')}>
               {navItems.map((link, index) => (
                 <Stack key={link.text} direction={index === 0 ? 'row-reverse' : 'row'} alignItems="center">
-                  {index === 0 && (
+                  {/* {index === 0 && (
                     <IconButton
                       id="dock-menu-button"
                       className={styles.dockMenuButton}
@@ -76,7 +108,7 @@ export const MegaMenu = React.memo(
                       onClick={handleDockedMenu}
                       variant="secondary"
                     />
-                  )}
+                  )} */}
                   <MegaMenuItem
                     link={link}
                     onClick={state.megaMenuDocked ? undefined : onClose}
@@ -101,6 +133,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     height: '100%',
     minHeight: 0,
     position: 'relative',
+    padding: '0 var(--base-size-16, 16px)',
   }),
   mobileHeader: css({
     display: 'flex',
@@ -115,11 +148,12 @@ const getStyles = (theme: GrafanaTheme2) => ({
   itemList: css({
     boxSizing: 'border-box',
     display: 'flex',
-    flexDirection: 'column',
+    gap: theme.spacing(1),
+    flexDirection: 'row',
     listStyleType: 'none',
-    padding: theme.spacing(1, 1, 2, 1),
+    // padding: theme.spacing(1, 1, 2, 1),
     [theme.breakpoints.up('md')]: {
-      width: MENU_WIDTH,
+      // width: MENU_WIDTH,
     },
   }),
   dockMenuButton: css({

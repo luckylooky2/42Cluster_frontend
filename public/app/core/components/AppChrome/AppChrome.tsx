@@ -15,7 +15,7 @@ import { KioskMode } from 'app/types';
 import { AppChromeMenu } from './AppChromeMenu';
 import { DOCKED_LOCAL_STORAGE_KEY, DOCKED_MENU_OPEN_LOCAL_STORAGE_KEY } from './AppChromeService';
 import { MegaMenu } from './MegaMenu/MegaMenu';
-import { NavToolbar } from './NavToolbar/NavToolbar';
+// import { NavToolbar } from './NavToolbar/NavToolbar';
 import { ReturnToPrevious } from './ReturnToPrevious/ReturnToPrevious';
 import { TopSearchBar } from './TopBar/TopSearchBar';
 import { TOP_BAR_LEVEL_HEIGHT } from './types';
@@ -49,9 +49,9 @@ export function AppChrome({ children }: Props) {
     [styles.contentChromeless]: state.chromeless,
   });
 
-  const handleMegaMenu = () => {
-    chrome.setMegaMenuOpen(!state.megaMenuOpen);
-  };
+  // const handleMegaMenu = () => {
+  //   chrome.setMegaMenuOpen(!state.megaMenuOpen);
+  // };
 
   const { pathname, search } = locationService.getLocation();
   const url = pathname + search;
@@ -84,7 +84,8 @@ export function AppChrome({ children }: Props) {
           </LinkButton>
           <div className={cx(styles.topNav)}>
             {!searchBarHidden && <TopSearchBar />}
-            <NavToolbar
+            {!state.chromeless && <MegaMenu className={styles.dockedMegaMenu} onClose={() => {}} />}
+            {/* <NavToolbar
               searchBarHidden={searchBarHidden}
               sectionNav={state.sectionNav.node}
               pageNav={state.pageNav}
@@ -92,21 +93,18 @@ export function AppChrome({ children }: Props) {
               onToggleSearchBar={chrome.onToggleSearchBar}
               onToggleMegaMenu={handleMegaMenu}
               onToggleKioskMode={chrome.onToggleKioskMode}
-            />
+            /> */}
           </div>
         </>
       )}
       <main className={contentClass}>
         <div className={styles.panes}>
-          {!state.chromeless && state.megaMenuDocked && state.megaMenuOpen && (
-            <MegaMenu className={styles.dockedMegaMenu} onClose={() => chrome.setMegaMenuOpen(false)} />
-          )}
           <div className={styles.pageContainer} id="pageContent">
             {children}
           </div>
         </div>
       </main>
-      {!state.chromeless && !state.megaMenuDocked && <AppChromeMenu />}
+      {!state.chromeless && <AppChromeMenu />}
       {!state.chromeless && <CommandPalette />}
       {shouldShowReturnToPrevious && state.returnToPrevious && (
         <ReturnToPrevious href={state.returnToPrevious.href} title={state.returnToPrevious.title} />
@@ -120,9 +118,10 @@ const getStyles = (theme: GrafanaTheme2) => {
     content: css({
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: TOP_BAR_LEVEL_HEIGHT * 2,
+      paddingTop: TOP_BAR_LEVEL_HEIGHT * 3,
       flexGrow: 1,
       height: '100%',
+      alignItems: 'center',
     }),
     contentNoSearchBar: css({
       paddingTop: TOP_BAR_LEVEL_HEIGHT,
@@ -133,12 +132,8 @@ const getStyles = (theme: GrafanaTheme2) => {
     dockedMegaMenu: css({
       background: theme.colors.background.primary,
       borderRight: `1px solid ${theme.colors.border.weak}`,
-      display: 'none',
+      display: 'block',
       zIndex: theme.zIndex.navbarFixed,
-
-      [theme.breakpoints.up('xl')]: {
-        display: 'block',
-      },
     }),
     topNav: css({
       display: 'flex',
@@ -153,13 +148,14 @@ const getStyles = (theme: GrafanaTheme2) => {
       label: 'page-panes',
       display: 'flex',
       height: '100%',
-      width: '100%',
+      width: '95%',
+      maxWidth: '1100px',
       flexGrow: 1,
       minHeight: 0,
       flexDirection: 'column',
-      [theme.breakpoints.up('md')]: {
-        flexDirection: 'row',
-      },
+      // [theme.breakpoints.up('md')]: {
+      //   flexDirection: 'row',
+      // },
     }),
     pageContainer: css({
       label: 'page-container',

@@ -1,11 +1,11 @@
 import { css, cx } from '@emotion/css';
 import React, { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useLocalStorage } from 'react-use';
+// import { useLocation } from 'react-router-dom';
+// import { useLocalStorage } from 'react-use';
 
 import { GrafanaTheme2, NavModelItem, toIconName } from '@grafana/data';
-import { useStyles2, Text, IconButton, Icon } from '@grafana/ui';
-import { useGrafana } from 'app/core/context/GrafanaContext';
+import { useStyles2, Text, Icon } from '@grafana/ui';
+// import { useGrafana } from 'app/core/context/GrafanaContext';
 
 import { Indent } from '../../Indent/Indent';
 
@@ -23,37 +23,37 @@ interface Props {
 const MAX_DEPTH = 2;
 
 export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
-  const { chrome } = useGrafana();
-  const state = chrome.useState();
-  const menuIsDocked = state.megaMenuDocked;
-  const location = useLocation();
+  // const { chrome } = useGrafana();
+  // const state = chrome.useState();
+  // const menuIsDocked = state.megaMenuDocked;
+  // const location = useLocation();
   const FeatureHighlightWrapper = link.highlightText ? FeatureHighlight : React.Fragment;
   const hasActiveChild = hasChildMatch(link, activeItem);
-  const isActive = link === activeItem || (level === MAX_DEPTH && hasActiveChild);
-  const [sectionExpanded, setSectionExpanded] = useLocalStorage(
-    `grafana.navigation.expanded[${link.text}]`,
-    Boolean(hasActiveChild)
-  );
-  const showExpandButton = level < MAX_DEPTH && Boolean(linkHasChildren(link) || link.emptyMessage);
+  const isActive = link.text === activeItem?.text || (level === MAX_DEPTH && hasActiveChild);
+  // const [sectionExpanded, setSectionExpanded] = useLocalStorage(
+  //   `grafana.navigation.expanded[${link.text}]`,
+  //   Boolean(hasActiveChild)
+  // );
+  // const showExpandButton = level < MAX_DEPTH && Boolean(linkHasChildren(link) || link.emptyMessage);
   const item = useRef<HTMLLIElement>(null);
 
   const styles = useStyles2(getStyles);
 
   // expand parent sections if child is active
-  useEffect(() => {
-    if (hasActiveChild) {
-      setSectionExpanded(true);
-    }
-  }, [hasActiveChild, location, menuIsDocked, setSectionExpanded]);
+  // useEffect(() => {
+  //   if (hasActiveChild) {
+  //     setSectionExpanded(true);
+  //   }
+  // }, [hasActiveChild, location, menuIsDocked, setSectionExpanded]);
 
   // scroll active element into center if it's offscreen
   useEffect(() => {
-    if (menuIsDocked && isActive && item.current && isElementOffscreen(item.current)) {
+    if (isActive && item.current && isElementOffscreen(item.current)) {
       item.current.scrollIntoView({
         block: 'center',
       });
     }
-  }, [isActive, menuIsDocked]);
+  }, [isActive]);
 
   if (!link.url) {
     return null;
@@ -68,7 +68,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
       >
         {level !== 0 && <Indent level={level === MAX_DEPTH ? level - 1 : level} spacing={3} />}
         {level === MAX_DEPTH && <div className={styles.itemConnector} />}
-        <div className={styles.collapseButtonWrapper}>
+        {/* <div className={styles.collapseButtonWrapper}>
           {showExpandButton && (
             <IconButton
               aria-label={`${sectionExpanded ? 'Collapse' : 'Expand'} section ${link.text}`}
@@ -79,7 +79,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
               variant="secondary"
             />
           )}
-        </div>
+        </div> */}
         <div className={styles.collapsibleSectionWrapper}>
           <MegaMenuItemText
             isActive={isActive}
@@ -106,7 +106,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
           </MegaMenuItemText>
         </div>
       </div>
-      {showExpandButton && sectionExpanded && (
+      {/* {showExpandButton && sectionExpanded && (
         <ul className={styles.children}>
           {linkHasChildren(link) ? (
             link.children
@@ -126,7 +126,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
             </div>
           )}
         </ul>
-      )}
+      )} */}
     </li>
   );
 }
@@ -143,7 +143,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(1),
-    height: theme.spacing(4),
+    height: theme.spacing(6),
     paddingLeft: theme.spacing(0.5),
     position: 'relative',
   }),
@@ -182,12 +182,21 @@ const getStyles = (theme: GrafanaTheme2) => ({
   labelWrapper: css({
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(2),
+    gap: theme.spacing(1),
     minWidth: 0,
-    paddingLeft: theme.spacing(1),
+    // paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1),
+
+    '&:hover, &:focus-visible': {
+      // color: theme.colors.text.primary,
+      // textDecoration: 'underline',
+      backgroundColor: theme.colors.background.secondary,
+      borderRadius: '0.375rem',
+      padding: theme.spacing(0.5, 1, 0.5, 1),
+    },
   }),
   labelWrapperWithIcon: css({
-    paddingLeft: theme.spacing(0.5),
+    paddingLeft: theme.spacing(1),
   }),
   hasActiveChild: css({
     color: theme.colors.text.primary,
@@ -204,9 +213,9 @@ const getStyles = (theme: GrafanaTheme2) => ({
   }),
 });
 
-function linkHasChildren(link: NavModelItem): link is NavModelItem & { children: NavModelItem[] } {
-  return Boolean(link.children && link.children.length > 0);
-}
+// function linkHasChildren(link: NavModelItem): link is NavModelItem & { children: NavModelItem[] } {
+//   return Boolean(link.children && link.children.length > 0);
+// }
 
 function isElementOffscreen(element: HTMLElement) {
   const rect = element.getBoundingClientRect();
