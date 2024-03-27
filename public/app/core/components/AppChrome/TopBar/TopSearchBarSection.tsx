@@ -1,9 +1,9 @@
 import { css, cx } from '@emotion/css';
-import React, { useState } from 'react';
+import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
-import { useStyles2, useTheme2 } from '@grafana/ui';
-import { useMediaQueryChange } from 'app/core/hooks/useMediaQueryChange';
+import { useStyles2 } from '@grafana/ui';
+// import { useMediaQueryChange } from 'app/core/hooks/useMediaQueryChange';
 
 export interface TopSearchBarSectionProps {
   children: React.ReactNode;
@@ -12,21 +12,21 @@ export interface TopSearchBarSectionProps {
 
 export function TopSearchBarSection({ children, align = 'left' }: TopSearchBarSectionProps) {
   const styles = useStyles2(getStyles);
-  const theme = useTheme2();
-  const breakpoint = theme.breakpoints.values.sm;
+  // const theme = useTheme2();
+  // const breakpoint = theme.breakpoints.values.sm;
 
-  const [isSmallScreen, setIsSmallScreen] = useState(!window.matchMedia(`(min-width: ${breakpoint}px)`).matches);
+  // const [isSmallScreen] = useState(!window.matchMedia(`(min-width: ${breakpoint}px)`).matches);
 
-  useMediaQueryChange({
-    breakpoint,
-    onChange: (e: MediaQueryListEvent) => {
-      setIsSmallScreen(!e.matches);
-    },
-  });
+  // useMediaQueryChange({
+  //   breakpoint,
+  //   onChange: (e: MediaQueryListEvent) => {
+  //     setIsSmallScreen(!e.matches);
+  //   },
+  // });
 
-  if (isSmallScreen) {
-    return <>{children}</>;
-  }
+  // if (isSmallScreen) {
+  //   return <>{children}</>;
+  // }
 
   return (
     <div data-testid="wrapper" className={cx(styles.wrapper, { [styles[align]]: align === 'right' })}>
@@ -38,7 +38,7 @@ export function TopSearchBarSection({ children, align = 'left' }: TopSearchBarSe
 const getStyles = (theme: GrafanaTheme2) => ({
   wrapper: css({
     display: 'flex',
-    gap: theme.spacing(0.5),
+    gap: theme.spacing(1.5),
     alignItems: 'center',
   }),
 
