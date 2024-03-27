@@ -42,6 +42,7 @@ interface State {
   loginErrorMessage?: string;
 }
 
+// 로그인 로직
 export class LoginCtrl extends PureComponent<Props, State> {
   result: LoginDTO | undefined;
 

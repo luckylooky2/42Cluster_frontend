@@ -1,6 +1,6 @@
 // Libraries
 import { css } from '@emotion/css';
-import React from 'react';
+import React, { useState } from 'react';
 
 // Components
 import { GrafanaTheme2 } from '@grafana/data';
@@ -11,6 +11,7 @@ import { t, Trans } from 'app/core/internationalization';
 
 import { ChangePassword } from '../ForgottenPassword/ChangePassword';
 
+import { LoginButton42Auth } from './LoginButton42Auth';
 import LoginCtrl from './LoginCtrl';
 import { LoginForm } from './LoginForm';
 import { LoginLayout, InnerBox } from './LoginLayout';
@@ -18,6 +19,8 @@ import { LoginServiceButtons } from './LoginServiceButtons';
 import { UserSignup } from './UserSignup';
 
 export const LoginPage = () => {
+  const [radioValue, setRadioValue] = useState('user');
+
   const styles = useStyles2(getStyles);
   document.title = Branding.AppTitle;
 
@@ -37,43 +40,77 @@ export const LoginPage = () => {
         loginErrorMessage,
       }) => (
         <LoginLayout isChangingPassword={isChangingPassword}>
-          {!isChangingPassword && (
-            <InnerBox>
-              {loginErrorMessage && (
-                <Alert className={styles.alert} severity="error" title={t('login.error.title', 'Login failed')}>
-                  {loginErrorMessage}
-                </Alert>
-              )}
-
-              {!disableLoginForm && (
-                <LoginForm onSubmit={login} loginHint={loginHint} passwordHint={passwordHint} isLoggingIn={isLoggingIn}>
-                  <HorizontalGroup justify="flex-end">
-                    {!config.auth.disableLogin && (
-                      <LinkButton
-                        className={styles.forgottenPassword}
-                        fill="text"
-                        href={`${config.appSubUrl}/user/password/send-reset-email`}
-                      >
-                        <Trans i18nKey="login.forgot-password">Forgot your password?</Trans>
-                      </LinkButton>
-                    )}
-                  </HorizontalGroup>
-                </LoginForm>
-              )}
-              <LoginServiceButtons />
-              {!disableUserSignUp && <UserSignup />}
-            </InnerBox>
+          {!isChangingPassword && ( // login radio group
+            <fieldset className={styles.radioGroup}>
+              <div className={styles.radioEach}>
+                <input
+                  type="radio"
+                  id="user"
+                  value="user"
+                  checked={radioValue === 'user'}
+                  onChange={() => setRadioValue('user')}
+                />
+                <label htmlFor="user">user</label>
+              </div>
+              <div className={styles.radioEach}>
+                <input
+                  type="radio"
+                  id="administrator"
+                  value="administrator"
+                  checked={radioValue === 'administrator'}
+                  onChange={() => setRadioValue('administrator')}
+                />
+                <label htmlFor="administrator">administrator</label>
+              </div>
+            </fieldset>
           )}
-
-          {isChangingPassword && (
-            <InnerBox>
-              <ChangePassword
-                showDefaultPasswordWarning={showDefaultPasswordWarning}
-                onSubmit={changePassword}
-                onSkip={() => skipPasswordChange()}
-              />
-            </InnerBox>
-          )}
+          <div className={styles.loginField}>
+            {radioValue === 'user' && (
+              <InnerBox>
+                <LoginButton42Auth />
+              </InnerBox>
+            )}
+            {radioValue === 'administrator' && !isChangingPassword && (
+              <InnerBox>
+                {loginErrorMessage && (
+                  <Alert className={styles.alert} severity="error" title={t('login.error.title', 'Login failed')}>
+                    {loginErrorMessage}
+                  </Alert>
+                )}
+                {!disableLoginForm && (
+                  <LoginForm
+                    onSubmit={login}
+                    loginHint={loginHint}
+                    passwordHint={passwordHint}
+                    isLoggingIn={isLoggingIn}
+                  >
+                    <HorizontalGroup justify="flex-end">
+                      {!config.auth.disableLogin && (
+                        <LinkButton
+                          className={styles.forgottenPassword}
+                          fill="text"
+                          href={`${config.appSubUrl}/user/password/send-reset-email`}
+                        >
+                          <Trans i18nKey="login.forgot-password">Forgot your password?</Trans>
+                        </LinkButton>
+                      )}
+                    </HorizontalGroup>
+                  </LoginForm>
+                )}
+                <LoginServiceButtons />
+                {!disableUserSignUp && <UserSignup />}
+              </InnerBox>
+            )}
+            {isChangingPassword && (
+              <InnerBox>
+                <ChangePassword
+                  showDefaultPasswordWarning={showDefaultPasswordWarning}
+                  onSubmit={changePassword}
+                  onSkip={() => skipPasswordChange()}
+                />
+              </InnerBox>
+            )}
+          </div>
         </LoginLayout>
       )}
     </LoginCtrl>
@@ -89,6 +126,23 @@ const getStyles = (theme: GrafanaTheme2) => {
 
     alert: css({
       width: '100%',
+    }),
+
+    radioGroup: css({
+      display: 'flex',
+      gap: '12px',
+      justifyContent: 'center',
+    }),
+
+    radioEach: css({
+      display: 'flex',
+      gap: '4px',
+    }),
+
+    loginField: css({
+      display: 'flex',
+      width: '80%',
+      justifyContent: 'center',
     }),
   };
 };

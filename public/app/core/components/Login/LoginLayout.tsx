@@ -80,6 +80,7 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       alignItems: 'center',
       justifyContent: 'center',
       minWidth: '100%',
+      borderRadius: theme.shape.borderRadius(5),
     }),
     container: css({
       minHeight: '100%',
@@ -160,9 +161,10 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       overflowY: 'hidden',
       alignItems: 'center',
       justifyContent: 'center',
+      flexDirection: 'column',
     }),
     loginInnerBox: css({
-      padding: theme.spacing(0, 2, 2, 2),
+      padding: theme.spacing(2, 0, 2, 0),
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -170,6 +172,7 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       flexGrow: 1,
       maxWidth: 415,
       width: '100%',
+      height: '300px',
       transform: 'translate(0px, 0px)',
       transition: '0.25s ease',
     }),
