@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import { isTruthy } from '@grafana/data';
 import { LoginPage } from 'app/core/components/Login/LoginPage';
@@ -11,17 +11,13 @@ import UserAdminPage from 'app/features/admin/UserAdminPage';
 import LdapPage from 'app/features/admin/ldap/LdapPage';
 import { getAlertingRoutes } from 'app/features/alerting/routes';
 import { ConnectionsRedirectNotice } from 'app/features/connections/components/ConnectionsRedirectNotice';
-import { ROUTES as CONNECTIONS_ROUTES } from 'app/features/connections/constants';
-import { getRoutes as getDataConnectionsRoutes } from 'app/features/connections/routes';
-import { DATASOURCES_ROUTES } from 'app/features/datasources/constants';
-import { getRoutes as getPluginCatalogRoutes } from 'app/features/plugins/admin/routes';
 import { getAppPluginRoutes } from 'app/features/plugins/routes';
-import { getProfileRoutes } from 'app/features/profile/routes';
 import { AccessControlAction, DashboardRoutes } from 'app/types';
 
 import { SafeDynamicImport } from '../core/components/DynamicImports/SafeDynamicImport';
 import { RouteDescriptor } from '../core/navigation/types';
 import { getPublicDashboardRoutes } from '../features/dashboard/routes';
+import { getPublicDeploymentRoutes } from '../features/deployment/routes';
 
 export const extraRoutes: RouteDescriptor[] = [];
 
@@ -107,36 +103,36 @@ export function getAppRoutes(): RouteDescriptor[] {
         () => import(/* webpackChunkName: "DashboardImport"*/ 'app/features/manage-dashboards/DashboardImportPage')
       ),
     },
-    {
-      path: DATASOURCES_ROUTES.List,
-      component: () => <Redirect to={CONNECTIONS_ROUTES.DataSources} />,
-    },
-    {
-      path: DATASOURCES_ROUTES.Edit,
-      component: (props: RouteComponentProps<{ uid: string }>) => (
-        <Redirect to={CONNECTIONS_ROUTES.DataSourcesEdit.replace(':uid', props.match.params.uid)} />
-      ),
-    },
-    {
-      path: DATASOURCES_ROUTES.Dashboards,
-      component: (props: RouteComponentProps<{ uid: string }>) => (
-        <Redirect to={CONNECTIONS_ROUTES.DataSourcesDashboards.replace(':uid', props.match.params.uid)} />
-      ),
-    },
-    {
-      path: DATASOURCES_ROUTES.New,
-      component: () => <Redirect to={CONNECTIONS_ROUTES.DataSourcesNew} />,
-    },
-    {
-      path: '/datasources/correlations',
-      component: SafeDynamicImport(() =>
-        config.featureToggles.correlations
-          ? import(/* webpackChunkName: "CorrelationsPage" */ 'app/features/correlations/CorrelationsPage')
-          : import(
-              /* webpackChunkName: "CorrelationsFeatureToggle" */ 'app/features/correlations/CorrelationsFeatureToggle'
-            )
-      ),
-    },
+    // {
+    //   path: DATASOURCES_ROUTES.List,
+    //   component: () => <Redirect to={CONNECTIONS_ROUTES.DataSources} />,
+    // },
+    // {
+    //   path: DATASOURCES_ROUTES.Edit,
+    //   component: (props: RouteComponentProps<{ uid: string }>) => (
+    //     <Redirect to={CONNECTIONS_ROUTES.DataSourcesEdit.replace(':uid', props.match.params.uid)} />
+    //   ),
+    // },
+    // {
+    //   path: DATASOURCES_ROUTES.Dashboards,
+    //   component: (props: RouteComponentProps<{ uid: string }>) => (
+    //     <Redirect to={CONNECTIONS_ROUTES.DataSourcesDashboards.replace(':uid', props.match.params.uid)} />
+    //   ),
+    // },
+    // {
+    //   path: DATASOURCES_ROUTES.New,
+    //   component: () => <Redirect to={CONNECTIONS_ROUTES.DataSourcesNew} />,
+    // },
+    // {
+    //   path: '/datasources/correlations',
+    //   component: SafeDynamicImport(() =>
+    //     config.featureToggles.correlations
+    //       ? import(/* webpackChunkName: "CorrelationsPage" */ 'app/features/correlations/CorrelationsPage')
+    //       : import(
+    //           /* webpackChunkName: "CorrelationsFeatureToggle" */ 'app/features/correlations/CorrelationsFeatureToggle'
+    //         )
+    //   ),
+    // },
     {
       path: '/dashboards',
       component: SafeDynamicImport(
@@ -155,20 +151,20 @@ export function getAppRoutes(): RouteDescriptor[] {
         () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
       ),
     },
-    {
-      path: '/explore',
-      pageClass: 'page-explore',
-      roles: () => contextSrv.evaluatePermission([AccessControlAction.DataSourcesExplore]),
-      component: SafeDynamicImport(() =>
-        config.exploreEnabled
-          ? import(/* webpackChunkName: "explore" */ 'app/features/explore/ExplorePage')
-          : import(/* webpackChunkName: "explore-feature-toggle-page" */ 'app/features/explore/FeatureTogglePage')
-      ),
-    },
-    {
-      path: '/apps',
-      component: () => <NavLandingPage navId="apps" />,
-    },
+    // {
+    //   path: '/explore',
+    //   pageClass: 'page-explore',
+    //   roles: () => contextSrv.evaluatePermission([AccessControlAction.DataSourcesExplore]),
+    //   component: SafeDynamicImport(() =>
+    //     config.exploreEnabled
+    //       ? import(/* webpackChunkName: "explore" */ 'app/features/explore/ExplorePage')
+    //       : import(/* webpackChunkName: "explore-feature-toggle-page" */ 'app/features/explore/FeatureTogglePage')
+    //   ),
+    // },
+    // {
+    //   path: '/apps',
+    //   component: () => <NavLandingPage navId="apps" />,
+    // },
     {
       path: '/alerts-and-incidents',
       component: () => <NavLandingPage navId="alerts-and-incidents" />,
@@ -483,21 +479,30 @@ export function getAppRoutes(): RouteDescriptor[] {
         () => import(/* webpackChunkName: "NotificationsPage"*/ 'app/features/notifications/NotificationsPage')
       ),
     },
-    {
-      path: '/explore/metrics',
-      chromeless: false,
-      exact: false,
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DataTrailsPage"*/ 'app/features/trails/DataTrailsPage')
-      ),
-    },
-    ...getPluginCatalogRoutes(),
-    ...getSupportBundleRoutes(),
+    // {
+    //   path: '/deployment',
+    //   pageClass: 'page-dashboard',
+    //   routeName: DashboardRoutes.Home,
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardPageProxy" */ '../features/deployment/Deployment')
+    //   ),
+    // },
+    // {
+    //   path: '/explore/metrics',
+    //   chromeless: false,
+    //   exact: false,
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DataTrailsPage"*/ 'app/features/trails/DataTrailsPage')
+    //   ),
+    // },
+    // ...getPluginCatalogRoutes(),
+    // ...getSupportBundleRoutes(),
     ...getAlertingRoutes(),
-    ...getProfileRoutes(),
+    // ...getProfileRoutes(),
     ...extraRoutes,
     ...getPublicDashboardRoutes(),
-    ...getDataConnectionsRoutes(),
+    ...getPublicDeploymentRoutes(),
+    // ...getDataConnectionsRoutes(),
     {
       path: '/*',
       component: PageNotFound,
