@@ -7,8 +7,20 @@ import { getNavSubTitle, getNavTitle } from '../utils/navBarItem-translations';
 
 export const initialState: NavModelItem[] = config.bootData?.navTree ?? [];
 
+function customNavTree(navTree: NavModelItem[]): NavModelItem[] {
+  return navTree.concat([
+    {
+      id: 'deployment',
+      text: 'Deployment',
+      icon: 'compass',
+      url: '/deployment',
+      sortWeight: 0,
+    },
+  ]);
+}
+
 function translateNav(navTree: NavModelItem[]): NavModelItem[] {
-  return navTree.map((navItem) => {
+  return customNavTree(navTree).map((navItem) => {
     const children = navItem.children && translateNav(navItem.children);
 
     return {
