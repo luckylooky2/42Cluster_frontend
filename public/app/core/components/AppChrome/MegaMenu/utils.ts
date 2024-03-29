@@ -77,11 +77,12 @@ export const getActiveItem = (
   pathname: string,
   currentBestMatch?: NavModelItem
 ): NavModelItem | undefined => {
-  const dashboardLinkMatch = '/dashboards';
+  // const dashboardLinkMatch = '/dashboards';
 
   for (const link of navTree) {
     const linkWithoutParams = stripQueryParams(link.url);
     const linkPathname = locationUtil.stripBaseFromUrl(linkWithoutParams);
+
     if (linkPathname && link.id !== 'starred') {
       if (linkPathname === pathname) {
         // exact match
@@ -97,20 +98,23 @@ export const getActiveItem = (
         // TODO refactor routes such that we don't need this custom logic
         currentBestMatch = link;
         break;
-      } else if (linkPathname === dashboardLinkMatch && pathname.startsWith('/d/')) {
+      } else if (pathname.startsWith('/d/')) {
         // dashboard match
         // TODO refactor routes such that we don't need this custom logic
-        if (isBetterMatch(link, currentBestMatch)) {
+        if (link.id === 'dashboards/browse') {
           currentBestMatch = link;
         }
+      } else if (pathname.startsWith('/org') || pathname.startsWith('/plugins')) {
+        currentBestMatch = link;
       }
     }
-    if (link.children) {
-      currentBestMatch = getActiveItem(link.children, pathname, currentBestMatch);
-    }
-    if (stripQueryParams(currentBestMatch?.url) === pathname) {
-      return currentBestMatch;
-    }
+    // if (link.children) {
+    //   currentBestMatch = getActiveItem(link.children, pathname, currentBestMatch);
+    // }
+    // if (stripQueryParams(currentBestMatch?.url) === pathname) {
+    //   return currentBestMatch;
+    // }
+    // console.log(linkPathname, pathname, link, currentBestMatch);
   }
   return currentBestMatch;
 };
