@@ -38,6 +38,9 @@ export interface MenuItemProps<T = unknown> {
   className?: string;
   /** Active */
   active?: boolean;
+  /** Check Type */
+  checkType?: boolean;
+  isChecked?: boolean; // for check icon
   /** Disabled */
   disabled?: boolean;
   /** Show in destructive style (error color) */
@@ -67,6 +70,8 @@ export const MenuItem = React.memo(
       onClick,
       className,
       active,
+      checkType = false,
+      isChecked,
       disabled,
       destructive,
       childItems,
@@ -166,6 +171,11 @@ export const MenuItem = React.memo(
       >
         <Stack direction="row" justifyContent="flex-start" alignItems="center">
           {icon && <Icon name={icon} className={styles.icon} aria-hidden />}
+          {checkType && isChecked ? (
+            <img src="public/img/42Cluster/white-check.svg" alt="check" className={styles.checkImg} />
+          ) : (
+            <div className={styles.checkImg} />
+          )}
           <span className={styles.ellipsis}>{label}</span>
           <div className={cx(styles.rightWrapper, { [styles.withShortcut]: hasShortcut })}>
             {hasShortcut && (
@@ -287,6 +297,10 @@ const getStyles = (theme: GrafanaTheme2) => {
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
+    }),
+    checkImg: css({
+      width: '10px',
+      height: '10px',
     }),
   };
 };
