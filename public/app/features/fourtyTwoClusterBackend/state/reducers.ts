@@ -5,7 +5,7 @@ import { FourtyTwoClusterBackendDTO, FourtyTwoClusterBackendState } from 'app/ty
 export const initialState: FourtyTwoClusterBackendState = {
   serviceId: 0,
   serviceName: '',
-  dashboardUID: '',
+  dashboards: [],
   isValid: false,
 };
 
