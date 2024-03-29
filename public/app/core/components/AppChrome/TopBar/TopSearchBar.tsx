@@ -10,6 +10,7 @@ import { contextSrv } from 'app/core/core';
 import { fourtyTwoClusterBackendFetching } from 'app/features/fourtyTwoClusterBackend/state/reducers';
 import { useSelector, useDispatch } from 'app/types';
 
+import { FourtyTwoClusterBackendMockData } from '../../../../mocks/FourtyTwoClusterBackend';
 import { Branding } from '../../Branding/Branding';
 // import { enrichHelpItem } from '../MegaMenu/utils';
 // import { NewsContainer } from '../News/NewsContainer';
@@ -31,13 +32,7 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(
-        fourtyTwoClusterBackendFetching({
-          serviceId: 0,
-          serviceName: '42 Morning glory',
-          dashboardUID: 'a87fb0d919ec0ea5f6543124e16c42a5',
-        })
-      );
+      dispatch(fourtyTwoClusterBackendFetching(FourtyTwoClusterBackendMockData.serviceInfo));
     }, 500);
   }, [dispatch]);
 
