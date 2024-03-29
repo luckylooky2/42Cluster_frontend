@@ -39,6 +39,7 @@ import { getTimeSrv } from '../services/TimeSrv';
 import { cleanUpDashboardAndVariables } from '../state/actions';
 import { initDashboard } from '../state/initDashboard';
 
+import DashboardSelect from './DashboardSelect';
 import { DashboardPageRouteParams, DashboardPageRouteSearchParams } from './types';
 
 export const mapStateToProps = (state: StoreState) => ({
@@ -109,6 +110,8 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
   initDashboard() {
     const { dashboard, match, queryParams } = this.props;
 
+    console.log('initDashboard', dashboard);
+
     if (dashboard) {
       this.closeDashboard();
     }
@@ -132,6 +135,9 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
   componentDidUpdate(prevProps: Props, prevState: State) {
     const { dashboard, match, templateVarsChangedInUrl } = this.props;
     const routeReloadCounter = (this.props.history.location.state as any)?.routeReloadCounter;
+
+    // dashboard.panels 값을 DashboardGrid 컴포넌트로 넘겨주어 렌더링한다
+    console.log('componentDidUpdate', dashboard, match);
 
     if (!dashboard) {
       return;
@@ -305,6 +311,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
     const showSubMenu = !editPanel && !kioskMode && !this.props.queryParams.editview;
 
     const showToolbar = kioskMode !== KioskMode.Full && !queryParams.editview;
+    const isHome = window.location.pathname === '/';
 
     const pageClassName = cx({
       'panel-in-fullscreen': Boolean(viewPanel),
@@ -341,6 +348,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
               />
             </header>
           )}
+          {!isHome && <DashboardSelect />}
           <DashboardPrompt dashboard={dashboard} />
           {initError && <DashboardFailed />}
           {showSubMenu && (
