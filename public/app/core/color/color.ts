@@ -8,7 +8,7 @@ export const customButtonColor = {
       },
       hover: {
         background: '#30363d',
-        borderColor: '#8b949e',
+        borderColor: 'rgba(240,246,252,0.1)', // '#8b949e',
       },
     },
     green: {
