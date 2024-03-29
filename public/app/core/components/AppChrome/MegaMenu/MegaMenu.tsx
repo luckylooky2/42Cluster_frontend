@@ -50,8 +50,7 @@ export const MegaMenu = React.memo(
       .map((navItem) => ({
         ...navItem,
         priority: addPriority(navItem.text),
-        url:
-          navItem.id === 'dashboards/browse' && backendState.isValid ? `/d/${backendState.dashboardUID}` : navItem.url,
+        url: navItem.id === 'dashboards/browse' && backendState.isValid ? backendState.dashboards[0].url : navItem.url,
       }))
       .sort((a, b) => a.priority - b.priority)
       .filter(
