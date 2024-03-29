@@ -10,7 +10,7 @@ export interface BrandComponentProps {
 }
 
 export const LoginLogo: FC<BrandComponentProps & { logo?: string }> = ({ className, logo }) => {
-  return <img className={className} src={`${logo ? logo : 'public/img/42Cluster.png'}`} alt="42Cluster" />;
+  return <img className={className} src={`${logo ? logo : 'public/img/42Cluster/42Cluster.png'}`} alt="42Cluster" />;
 };
 
 const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
@@ -43,7 +43,7 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src="public/img/42Cluster.png" alt="42Cluster" />;
+  return <img className={className} src="public/img/42Cluster/42Cluster.png" alt="42Cluster" />;
 };
 
 const LoginBoxBackground = () => {
