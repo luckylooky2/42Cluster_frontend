@@ -54,7 +54,7 @@ const DashboardSelect = () => {
 
   return (
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
-      <div className={styles.width}>
+      <div className={styles.select}>
         <ToolbarButton isOpen={isOpen} className={`${styles.button} ${styles.basicButton}`} aria-label="New">
           <div className={styles.ellipsis}>{currDashboard}</div>
         </ToolbarButton>
@@ -73,7 +73,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
       display: 'none',
     },
   }),
-  width: css({ width: '50px' }),
+  select: css({ width: '50px', margin: '0px 8px 10px 16px' }),
   ellipsis: css({ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
   button: css({
     maxWidth: '150px',
