@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { NavModel, NavModelItem, TimeRange, PageLayoutType, locationUtil } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { config, locationService } from '@grafana/runtime';
-import { Themeable2, withTheme2 } from '@grafana/ui';
+import { Divider, Themeable2, withTheme2 } from '@grafana/ui';
 import { notifyApp } from 'app/core/actions';
 import { Page } from 'app/core/components/Page/Page';
 import { EntityNotFound } from 'app/core/components/PageNotFound/EntityNotFound';
@@ -32,14 +32,13 @@ import { DashboardSettings } from '../components/DashboardSettings';
 import { PanelInspector } from '../components/Inspector/PanelInspector';
 import { PanelEditor } from '../components/PanelEditor/PanelEditor';
 import { ShareModal } from '../components/ShareModal';
-import { SubMenu } from '../components/SubMenu/SubMenu';
 import { DashboardGrid } from '../dashgrid/DashboardGrid';
 import { liveTimer } from '../dashgrid/liveTimer';
 import { getTimeSrv } from '../services/TimeSrv';
 import { cleanUpDashboardAndVariables } from '../state/actions';
 import { initDashboard } from '../state/initDashboard';
 
-import DashboardSelect from './DashboardSelect';
+import DashboardSelectBar from './DashboardSelectBar';
 import { DashboardPageRouteParams, DashboardPageRouteSearchParams } from './types';
 
 export const mapStateToProps = (state: StoreState) => ({
@@ -348,14 +347,19 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
               />
             </header>
           )}
-          {!isHome && <DashboardSelect />}
+          {!isHome && (
+            <>
+              <DashboardSelectBar
+                showSubMenu={showSubMenu}
+                dashboard={dashboard}
+                ariaLabel={selectors.pages.Dashboard.SubMenu.submenu}
+              />
+              <Divider spacing={1} />
+            </>
+          )}
           <DashboardPrompt dashboard={dashboard} />
           {initError && <DashboardFailed />}
-          {showSubMenu && (
-            <section aria-label={selectors.pages.Dashboard.SubMenu.submenu}>
-              <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
-            </section>
-          )}
+
           {config.featureToggles.angularDeprecationUI && dashboard.hasAngularPlugins() && dashboard.uid !== null && (
             <AngularDeprecationNotice dashboardUid={dashboard.uid} />
           )}
