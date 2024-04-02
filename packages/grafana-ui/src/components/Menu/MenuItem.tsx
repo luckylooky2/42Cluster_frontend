@@ -172,7 +172,7 @@ export const MenuItem = React.memo(
         <Stack direction="row" justifyContent="flex-start" alignItems="center">
           {icon && <Icon name={icon} className={styles.icon} aria-hidden />}
           {checkType && isChecked ? (
-            <img src="public/img/42Cluster/white-check.svg" alt="check" className={styles.checkImg} />
+            <img src="public/img/42Cluster/check.svg" alt="check" className={styles.checkImg} />
           ) : (
             <div className={styles.checkImg} />
           )}
@@ -301,6 +301,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     checkImg: css({
       width: '10px',
       height: '10px',
+      filter: theme.isDark ? 'invert(100%)' : '',
     }),
   };
 };
