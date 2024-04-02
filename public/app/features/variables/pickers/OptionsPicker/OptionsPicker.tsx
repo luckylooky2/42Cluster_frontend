@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import { LoadingState } from '@grafana/data';
 import { ClickOutsideWrapper } from '@grafana/ui';
+import OptionSelect from 'app/features/dashboard/containers/OptionSelect';
 import { StoreState, ThunkDispatch } from 'app/types';
 
 import { VARIABLE_PREFIX } from '../../constants';
@@ -111,11 +112,13 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
 
     render() {
       const { variable, picker } = this.props;
-      const showOptions = picker.id === variable.id;
+      const showOptions = picker.id === variable.id; // true: dropdown 열림(picker), false: dropdown 닫힘(variable)
+      console.log(variable, picker, showOptions);
 
       return (
         <div className="variable-link-wrapper">
-          {showOptions ? this.renderOptions(picker) : this.renderLink(variable)}
+          <OptionSelect picker={{ options: [{ text: 'master' }, { text: 'node1' }] }} />
+          {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}
         </div>
       );
     }
