@@ -1,7 +1,8 @@
-interface FourtyTwoClusterBackendDashboard {
+export interface FourtyTwoClusterBackendDashboard {
   uid: string;
   namespace: string;
   url: string;
+  subCategory: string | null;
 }
 
 export interface FourtyTwoClusterBackendDTO {
