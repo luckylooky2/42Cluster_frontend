@@ -20,6 +20,8 @@ COPY packages packages
 COPY plugins-bundled plugins-bundled
 COPY public public
 
+RUN apk add --no-cache make build-base python3
+
 RUN yarn install --immutable
 
 COPY tsconfig.json .eslintrc .editorconfig .browserslistrc .prettierrc.js ./
@@ -67,7 +69,7 @@ COPY public/api-merged.json public/api-merged.json
 COPY pkg pkg
 COPY scripts scripts
 COPY conf conf
-COPY .github .github
+#COPY .github .github
 COPY LICENSE ./
 
 ENV COMMIT_SHA=${COMMIT_SHA}
