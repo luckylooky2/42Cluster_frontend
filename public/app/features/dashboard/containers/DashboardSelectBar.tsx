@@ -37,7 +37,7 @@ const getStyles = (theme: GrafanaTheme2) => {
   return {
     selectBar: css({
       display: 'flex',
-      justifyContent: 'space-between',
+      // justifyContent: 'space-between',
     }),
   };
 };

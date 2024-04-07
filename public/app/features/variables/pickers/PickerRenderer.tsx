@@ -23,7 +23,7 @@ export const PickerRenderer = (props: Props) => {
 
   return (
     <div className="gf-form">
-      <PickerLabel variable={props.variable} />
+      {/* <PickerLabel variable={props.variable} /> */}
       {props.variable.hide !== VariableHide.hideVariable && PickerToRender && (
         <PickerToRender variable={props.variable} readOnly={props.readOnly ?? false} />
       )}
