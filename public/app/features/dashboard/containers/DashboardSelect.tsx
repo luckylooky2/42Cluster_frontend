@@ -6,11 +6,12 @@ import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
 import { useSelector } from 'app/types';
 
-import { customButtonColor } from '../../../core/color/color';
+import { GitHubButtonStyles } from '../../../../style/GitHubButton';
 
 const DashboardSelect = () => {
   const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
   const [isOpen, setIsOpen] = useState(false);
+  const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
   const currDashboard = backendState.dashboards.length
     ? backendState.dashboards.filter((v) => v.uid === window.location.pathname.split('/')[2])[0].namespace
@@ -55,7 +56,11 @@ const DashboardSelect = () => {
   return (
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <div className={styles.select}>
-        <ToolbarButton isOpen={isOpen} className={`${styles.button} ${styles.basicButton}`} aria-label="New">
+        <ToolbarButton
+          isOpen={isOpen}
+          className={`${gitHubButtonStyles.button} ${gitHubButtonStyles.basicButton} ${styles.button}`}
+          aria-label="New"
+        >
           <div className={styles.ellipsis}>{currDashboard}</div>
         </ToolbarButton>
       </div>
@@ -75,48 +80,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
   }),
   select: css({ margin: '0px 8px 10px 16px' }),
   ellipsis: css({ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
-  button: css({
-    maxWidth: '150px',
-    fontFamily: 'inherit',
-    fontWeight: '500',
-    fontSize: '14px',
-    cursor: 'pointer',
-    appearance: 'none',
-    userSelect: 'none',
-    textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: '32px',
-    // minWidth: max-content,
-    // box-shadow: var(--button-default-shadow-resting, var(--color-btn-shadow, 0 0 transparent)), var(--button-default-shadow-inset, var(--color-btn-inset-shadow, 0 0 transparent)),
-    borderRadius: '6px',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderImage: 'initial',
-    textDecoration: 'none',
-    padding: '0px 12px',
-    gap: '8px',
-    transition: 'color 80ms cubic-bezier(0.65, 0, 0.35, 1) 0s, fill, background-color, border-color',
-  }),
-  basicButton: css({
-    color: theme.isDark ? customButtonColor.dark.default.color : customButtonColor.light.default.color,
-    backgroundColor: theme.isDark
-      ? customButtonColor.dark.default.basic.background
-      : customButtonColor.light.default.basic.background,
-    borderColor: theme.isDark
-      ? customButtonColor.dark.default.basic.borderColor
-      : customButtonColor.light.default.basic.borderColor,
-
-    '&:hover': {
-      borderColor: theme.isDark
-        ? customButtonColor.dark.default.hover.borderColor
-        : customButtonColor.light.default.hover.borderColor,
-      backgroundColor: theme.isDark
-        ? customButtonColor.dark.default.hover.background
-        : customButtonColor.light.default.hover.background,
-    },
-  }),
+  button: css({ maxWidth: '150px' }),
 });
 
 export default DashboardSelect;
