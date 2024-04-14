@@ -1,7 +1,8 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 // import { cloneDeep } from 'lodash';
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { GitHubHoverStyles } from 'style/GitHubHover';
 
 import { GrafanaTheme2, locationUtil, textUtil } from '@grafana/data';
 import { Dropdown, ToolbarButton, useStyles2 } from '@grafana/ui';
@@ -25,6 +26,7 @@ import { TopSearchBarSection } from './TopSearchBarSection';
 
 export const TopSearchBar = React.memo(function TopSearchBar() {
   const styles = useStyles2(getStyles);
+  const gitHubHoverStyles = useStyles2(GitHubHoverStyles);
   const navIndex = useSelector((state) => state.navIndex);
   const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
   const location = useLocation();
@@ -51,15 +53,13 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
         <a className={styles.logo} href={homeUrl} title="Go to home">
           <Branding.MenuLogo className={styles.img} />
         </a>
-        {backendState.isValid ? (
-          <a className={styles.logo} href={homeUrl} title="Go to home">
-            <div className={styles.serviceName}>
-              <b>{backendState.serviceName}</b>
-            </div>
-          </a>
-        ) : (
-          <span>loading...</span>
-        )}
+
+        <a className={styles.logo} href={homeUrl} title="Go to home">
+          <div className={cx(styles.serviceName, gitHubHoverStyles.default)}>
+            {backendState.isValid ? <b>{backendState.serviceName}</b> : <span>loading...</span>}
+          </div>
+        </a>
+
         <OrganizationSwitcher />
       </TopSearchBarSection>
 
@@ -129,5 +129,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
     overflow: 'hidden',
     whiteSpace: 'nowrap',
     textOverflow: 'ellipsis',
+    padding: theme.spacing(0.5, 1, 0.5, 1),
   }),
 });

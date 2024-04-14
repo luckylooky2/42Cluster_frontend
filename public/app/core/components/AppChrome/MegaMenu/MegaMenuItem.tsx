@@ -2,6 +2,7 @@ import { css, cx } from '@emotion/css';
 import React, { useEffect, useRef } from 'react';
 // import { useLocation } from 'react-router-dom';
 // import { useLocalStorage } from 'react-use';
+import { GitHubHoverStyles } from 'style/GitHubHover';
 
 import { GrafanaTheme2, NavModelItem, toIconName } from '@grafana/data';
 import { useStyles2, Text, Icon } from '@grafana/ui';
@@ -38,6 +39,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
   const item = useRef<HTMLLIElement>(null);
 
   const styles = useStyles2(getStyles);
+  const gitHubHoverStyles = useStyles2(GitHubHoverStyles);
 
   // expand parent sections if child is active
   // useEffect(() => {
@@ -91,7 +93,7 @@ export function MegaMenuItem({ link, activeItem, level = 0, onClick }: Props) {
             url={link.url}
           >
             <div
-              className={cx(styles.labelWrapper, {
+              className={cx(styles.labelWrapper, gitHubHoverStyles.default, {
                 [styles.hasActiveChild]: hasActiveChild,
                 [styles.labelWrapperWithIcon]: Boolean(level === 0 && link.icon),
               })}
@@ -186,14 +188,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
     minWidth: 0,
     // paddingLeft: theme.spacing(1.5),
     paddingRight: theme.spacing(1),
-
-    '&:hover, &:focus-visible': {
-      // color: theme.colors.text.primary,
-      // textDecoration: 'underline',
-      backgroundColor: theme.colors.background.secondary,
-      borderRadius: '0.375rem',
-      padding: theme.spacing(0.5, 1, 0.5, 1),
-    },
   }),
   labelWrapperWithIcon: css({
     paddingLeft: theme.spacing(1),
