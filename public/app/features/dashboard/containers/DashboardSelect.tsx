@@ -61,7 +61,7 @@ const DashboardSelect = () => {
           className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton, styles.button)}
           aria-label="New"
         >
-          <div className={styles.ellipsis}>{currDashboard}</div>
+          <div className={styles.ellipsis}>{backendState.isValid ? currDashboard : ''}</div>
         </ToolbarButton>
       </div>
     </Dropdown>

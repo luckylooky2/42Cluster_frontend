@@ -19,7 +19,8 @@ interface Props {
 }
 
 const OptionSelect = ({ picker }: Props) => {
-  const dashboards = useSelector((state) => state.fourtyTwoClusterBackend).dashboards;
+  const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
+  const dashboards = backendState.dashboards;
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
@@ -77,7 +78,7 @@ const OptionSelect = ({ picker }: Props) => {
         className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
         aria-label="New"
       >
-        <div className={styles.ellipsis}>{currSubCategory}</div>
+        <div className={styles.ellipsis}>{backendState.isValid ? currSubCategory : ''}</div>
       </ToolbarButton>
     </Dropdown>
   );
