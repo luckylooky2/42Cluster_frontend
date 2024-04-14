@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
@@ -74,7 +74,7 @@ const OptionSelect = ({ picker }: Props) => {
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <ToolbarButton
         isOpen={isOpen}
-        className={`${gitHubButtonStyles.button} ${gitHubButtonStyles.greenButton}`}
+        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
         aria-label="New"
       >
         <div className={styles.ellipsis}>{currSubCategory}</div>

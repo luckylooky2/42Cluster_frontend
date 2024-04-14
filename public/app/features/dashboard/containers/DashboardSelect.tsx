@@ -1,4 +1,4 @@
-import { css } from '@emotion/css';
+import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
@@ -58,7 +58,7 @@ const DashboardSelect = () => {
       <div className={styles.select}>
         <ToolbarButton
           isOpen={isOpen}
-          className={`${gitHubButtonStyles.button} ${gitHubButtonStyles.basicButton} ${styles.button}`}
+          className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton, styles.button)}
           aria-label="New"
         >
           <div className={styles.ellipsis}>{currDashboard}</div>
