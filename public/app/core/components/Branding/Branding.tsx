@@ -43,7 +43,12 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src="public/img/42Cluster/42Cluster.png" alt="42Cluster" />;
+  const theme = useTheme2();
+
+  const filterLogo = css({
+    filter: theme.isDark ? '' : 'invert(100%)',
+  });
+  return <img className={cx(className, filterLogo)} src="public/img/42Cluster/42Cluster.png" alt="42Cluster" />;
 };
 
 const LoginBoxBackground = () => {
