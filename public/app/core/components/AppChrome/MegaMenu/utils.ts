@@ -66,11 +66,12 @@ const stripQueryParams = (url?: string) => {
   return url?.split('?')[0] ?? '';
 };
 
-const isBetterMatch = (newMatch: NavModelItem, currentMatch?: NavModelItem) => {
-  const currentMatchUrl = stripQueryParams(currentMatch?.url);
-  const newMatchUrl = stripQueryParams(newMatch.url);
-  return newMatchUrl && newMatchUrl.length > currentMatchUrl?.length;
-};
+// currentMatchUrl이 /d/efa86fd1d0c121a26444b636a3f509a8이 되면서 대부분 false가 되기 때문에 삭제
+// const isBetterMatch = (newMatch: NavModelItem, currentMatch?: NavModelItem) => {
+//   const currentMatchUrl = stripQueryParams(currentMatch?.url);
+//   const newMatchUrl = stripQueryParams(newMatch.url);
+//   return newMatchUrl && newMatchUrl.length > currentMatchUrl?.length;
+// };
 
 export const getActiveItem = (
   navTree: NavModelItem[],
@@ -90,9 +91,9 @@ export const getActiveItem = (
         break;
       } else if (linkPathname !== '/' && pathname.startsWith(linkPathname)) {
         // partial match
-        if (isBetterMatch(link, currentBestMatch)) {
-          currentBestMatch = link;
-        }
+        // if (isBetterMatch(link, currentBestMatch)) {
+        currentBestMatch = link;
+        // }
       } else if (linkPathname === '/alerting/list' && pathname.startsWith('/alerting/notification/')) {
         // alert channel match
         // TODO refactor routes such that we don't need this custom logic
