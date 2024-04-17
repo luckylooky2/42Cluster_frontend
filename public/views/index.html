@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="[[.User.Language]]">
   <head>
     [[ if and .CSPEnabled .IsDevelopmentEnv ]]
     <!-- Cypress overwrites CSP headers in HTTP requests, so this is required for e2e tests-->
-    <meta  http-equiv="Content-Security-Policy" content="[[.CSPContent]]"/>
+    <meta http-equiv="Content-Security-Policy" content="[[.CSPContent]]" />
     [[ end ]]
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -28,6 +28,35 @@
     <script nonce="[[.Nonce]]">
       performance.mark('frontend_boot_css_time_seconds');
     </script>
+
+    <!-- pace.js -->
+    <script src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@latest/pace-theme-default.min.css" />
+    <style>
+      .pace {
+        -webkit-pointer-events: none;
+        pointer-events: none;
+
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      .pace-inactive {
+        display: none;
+      }
+
+      .pace .pace-progress {
+        background: cornflowerblue;
+        position: fixed;
+        z-index: 2000;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 4px;
+        opacity: 1;
+      }
+    </style>
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
@@ -324,14 +353,8 @@
       })(window, document, 'script', 'dataLayer', '[[.GoogleTagManagerId]]');
     </script>
     <!-- End Google Tag Manager -->
-    [[end]]
-
-    [[range $asset := .Assets.JSFiles]]
-      <script
-      nonce="[[$.Nonce]]"
-      src="[[$asset.FilePath]]"
-      type="text/javascript"
-    ></script>
+    [[end]] [[range $asset := .Assets.JSFiles]]
+    <script nonce="[[$.Nonce]]" src="[[$asset.FilePath]]" type="text/javascript"></script>
     [[end]]
 
     <script nonce="[[.Nonce]]">
