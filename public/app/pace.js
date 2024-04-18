@@ -3,6 +3,7 @@
  * https://github.com/CodeByZach/pace/
  * Licensed MIT © HubSpot, Inc.
  */
+
 (function () {
   var AjaxMonitor,
     Bar,
@@ -56,6 +57,7 @@
     _replaceState,
     __slice = [].slice,
     __hasProp = {}.hasOwnProperty,
+    // child.__super__에 patent.__proto__ 연결
     __extends = function (child, parent) {
       for (var key in parent) {
         if (__hasProp.call(parent, key)) child[key] = parent[key];
@@ -81,6 +83,8 @@
         return fn.apply(me, arguments);
       };
     };
+
+  // debugger;
 
   defaultOptions = {
     className: '',
@@ -110,8 +114,11 @@
     },
   };
 
+  // null이 아닌 _ref 또는 new Date를 반환
   now = function () {
     var _ref;
+    // performance API(Web API) : window.performance
+    // performance.now() : It represents the time elapsed since Performance.timeOrigin (the time when navigation has started in window contexts, or the time when the worker is run in Worker and ServiceWorker contexts).
     return (_ref =
       typeof performance !== 'undefined' && performance !== null
         ? typeof performance.now === 'function'
@@ -130,10 +137,12 @@
 
   cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
+  // obj에 이벤트리스너를 등록하는 함수
   addEventListener = function (obj, event, callback) {
     if (typeof obj.addEventListener === 'function') {
       return obj.addEventListener(event, callback, false);
     } else {
+      // 다른 방식
       return (function () {
         if (typeof obj['on' + event] !== 'function' || typeof obj['on' + event].eventListeners !== 'object') {
           var eventListeners = new Events();
@@ -152,6 +161,7 @@
     }
   };
 
+  // window.requestAnimationFrame이 없는 경우, setTimeout을 실행하고 id를 리턴하는 함수로 교체
   if (requestAnimationFrame == null) {
     requestAnimationFrame = function (fn) {
       return setTimeout(fn, 50);
@@ -161,18 +171,28 @@
     };
   }
 
+  // 받은 callback에 frameTime을 계산해 넘겨 실행하는 tick을 실행한다
+  // frameTime은 여기서 계산하고, 나머지 로직은 callback에 맡기는 구조
   runAnimation = function (fn) {
     var last, tick;
     last = now();
+    // tick : callback에 frameTime을 계산해 넘겨 실행시키는 함수
     tick = function () {
       var diff;
       diff = now() - last;
+      // 결국 tick을 계속 실행시키기 위한 방법
+      // requestAnimationFrame과 setTimeout의 차이? 얼마나 자주 fn를 호출할 것인가?
+      // diff 값(간격)이 작을수록 이펙트가 부드러워짐
       if (diff >= 33) {
         last = now();
+        // argument : frameTime, enqueueNextFrame
+        // 자기자신을 다른 함수의 callback으로 설정
+        // requestAnimationFrame을 fn에서 "바로" 실행시키기 위해 함수로 감싸서 전달
         return fn(diff, function () {
           return requestAnimationFrame(tick);
         });
       } else {
+        // 위와 다르게 tick 실행을 지연시킴
         return setTimeout(tick, 33 - diff);
       }
     };
@@ -331,7 +351,13 @@
   }
 
   NoTargetError = (function (_super) {
+    // before
+    // Error.__proto__ : message(""), name("Error"), toString(f toString)
+    // NoTargetError.__proto__ : {}
     __extends(NoTargetError, _super);
+
+    // after
+    // NoTargetError.__proto__ : Error
 
     function NoTargetError() {
       _ref1 = NoTargetError.__super__.constructor.apply(this, arguments);
@@ -805,6 +831,7 @@
 
   ElementTracker = (function () {
     function ElementTracker(selector, completeCallback) {
+      console.log('element tracker');
       this.selector = selector;
       this.completeCallback = completeCallback;
       this.progress = 0;
@@ -839,6 +866,7 @@
     };
 
     function DocumentMonitor() {
+      console.log('document monitor');
       var _onreadystatechange,
         _ref2,
         _this = this;
@@ -877,10 +905,12 @@
           samples.shift();
         }
         avg = avgAmplitude(samples);
+        // console.log(samples, avg);
         if (++points >= options.eventLag.minSamples && avg < options.eventLag.lagThreshold) {
           _this.progress = 100;
           return clearInterval(interval);
         } else {
+          // console.log(100 * (3 / (avg + 3)));
           return (_this.progress = 100 * (3 / (avg + 3)));
         }
       }, 50);
@@ -977,6 +1007,7 @@
     eventLag: EventLagMonitor,
   };
 
+  // init : 초기화 및 세팅, init 변수에는 함수가 담기고 즉시 실행
   (init = function () {
     var type, _j, _k, _len1, _len2, _ref2, _ref3, _ref4;
     Pace.sources = sources = [];
@@ -1017,17 +1048,22 @@
     return Pace.start();
   };
 
+  // runAnimation
   Pace.go = function () {
     var start;
     Pace.running = true;
+    console.log('pace go');
     bar.render();
     start = now();
     cancelAnimation = false;
+    // runAnimation에서 실행할 callback을 정의 => runAnimation에서 계산된 frameTime을 가지고 1) bar 업데이트 2) 등 ...
+    // animation 변수에는 callbackId를 저장
     return (animation = runAnimation(function (frameTime, enqueueNextFrame) {
       var avg, count, done, element, elements, i, j, remaining, scaler, scalerList, sum, _j, _k, _len1, _len2, _ref2;
       remaining = 100 - bar.progress;
       count = sum = 0;
       done = true;
+      // sources, source는 가장 상위 컨텍스트에 있는 변수
       for (i = _j = 0, _len1 = sources.length; _j < _len1; i = ++_j) {
         source = sources[i];
         scalerList = scalers[i] != null ? scalers[i] : (scalers[i] = []);
@@ -1045,6 +1081,7 @@
       }
       avg = sum / count;
       bar.update(uniScaler.tick(frameTime, avg));
+      // 끝난 경우
       if (bar.done() || done || cancelAnimation) {
         bar.update(100);
         Pace.trigger('done');
@@ -1078,15 +1115,35 @@
     }
   };
 
+  // 진입점
+  // 어느 쪽으로 들어가는가에 따라, 비동기로 호출한 callback이 중간중간 불리는 지가 결정됨
+  // document 첫 번째 load 이후에는 아래 코드는 다시 호출되지 않음
+
+  // console.log(typeof define, define.amd, typeof exports); // function {} Object
   if (typeof define === 'function' && define.amd) {
+    console.log(1);
+    // This code checks for the presence of require.js
+    // https://stackoverflow.com/questions/30953589/what-is-typeof-define-function-defineamd-used-for
     define(function () {
       return Pace;
     });
   } else if (typeof exports === 'object') {
+    console.log(2);
+    // CommonJS 스펙에는 exports라는 자유롭게 접근할 수 있는 자유 변수가 존재 => 이걸 검사
+    // https://stackoverflow.com/questions/46708062/what-environment-is-expected-by-iftypeof-exports-object-in-umd-definit
     module.exports = Pace;
   } else {
+    console.log(3);
     if (options.startOnPageLoad) {
       Pace.start();
     }
   }
 }).call(this);
+
+// document : 처음 받아오는 시점
+// element : 특정 엘리먼트가 렌더링 되는 시점
+
+// https://github.com/CodeByZach/pace/blob/master/pace.js
+
+// 1. 첫 document loading 때는 runAnimation가 불리지 않는데, mega menu를 클릭하면 Pace.go => runAnimation가 호출됨
+// - 처음에는 왜 Pace.go가 호출되지 않는가?
