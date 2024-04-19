@@ -209,9 +209,13 @@
     }
   };
 
+  // 1. extend(Pace, Evented.prototype) : Evented.prototype를 Pace로 복사
+  // 2. extend({}, defaultOptions, window.paceOptions, getFromDOM())
   extend = function () {
+    // debugger;
     var key, out, source, sources, val, _i, _len;
     (out = arguments[0]), (sources = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
+    console.log(sources);
     for (_i = 0, _len = sources.length; _i < _len; _i++) {
       source = sources[_i];
       if (source) {
@@ -312,7 +316,10 @@
       }
     };
 
+    // 저장된 콜백 함수를 실행시키는 함수
     Evented.prototype.trigger = function () {
+      debugger;
+      console.log('Evented trigger');
       var args, ctx, event, handler, i, once, _ref, _ref1, _results;
       (event = arguments[0]), (args = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
       if ((_ref = this.bindings) != null ? _ref[event] : void 0) {
@@ -338,6 +345,7 @@
 
   window.Pace = Pace;
 
+  // Evented.prototype을 상속받음
   extend(Pace, Evented.prototype);
 
   options = Pace.options = extend({}, defaultOptions, window.paceOptions, getFromDOM());
@@ -451,16 +459,19 @@
     return Bar;
   })();
 
+  // 모듈 패턴? : IIFE와 클로저를 이용하여 생성자를 반환함으로써 스코프를 제한하면서 객체를 생성
   Events = (function () {
     function Events() {
       this.bindings = {};
     }
 
     Events.prototype.trigger = function (name, val) {
+      // console.log('Events trigger');
       var binding, _j, _len1, _ref2, _results;
       if (this.bindings[name] != null) {
         _ref2 = this.bindings[name];
         _results = [];
+        // 특정 name에 있는 on 콜백 함수를 모두 실행
         for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
           binding = _ref2[_j];
           _results.push(binding.call(this, val));
@@ -469,6 +480,7 @@
       }
     };
 
+    // this.binding에 함수를 추가하는 함수 => 왜?
     Events.prototype.on = function (name, fn) {
       var _base;
       if ((_base = this.bindings)[name] == null) {
@@ -519,6 +531,7 @@
 
   ignoreStack = [];
 
+  // Pace 객체에 새로운 프로퍼티 추가
   Pace.ignore = function () {
     var args, fn, ret;
     (fn = arguments[0]), (args = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
@@ -555,13 +568,20 @@
     return false;
   };
 
+  // 여기서는 Events 객체를 사용하고 Pace에서는 Evented 객체를 사용함
   RequestIntercept = (function (_super) {
+    // arguments(child, parent) : child.__super__ = parent.prototype
     __extends(RequestIntercept, _super);
 
+    // 내부 함수 RequestIntercept는 왜 실행되는가?
+    // anonymous에서 new RequestIntercept()를 호출
     function RequestIntercept() {
       var monitorXHR,
         _this = this;
+      // 상속 구현 : 특정 객체 생성자.apply(this, [ arg1, arg2, ... ])
+      // RequestIntercept.__super__ : Events.prototype 추가(this.bindings, trigger 등...)
       RequestIntercept.__super__.constructor.apply(this, arguments);
+
       monitorXHR = function (req) {
         var _open;
         _open = req.open;
@@ -576,15 +596,19 @@
           return _open.apply(req, arguments);
         });
       };
+
+      // interceptor
       window.XMLHttpRequest = function (flags) {
         var req;
         req = new _XMLHttpRequest(flags);
         monitorXHR(req);
         return req;
       };
+
       try {
         extendNative(window.XMLHttpRequest, _XMLHttpRequest);
       } catch (_error) {}
+
       if (_XDomainRequest != null) {
         window.XDomainRequest = function () {
           var req;
@@ -596,8 +620,14 @@
           extendNative(window.XDomainRequest, _XDomainRequest);
         } catch (_error) {}
       }
+
+      // 위에서 WebSocket 생성 함수 할당
       if (_WebSocket != null && options.ajax.trackWebSockets) {
+        console.log('here?');
+        // 원래 window.WebSocket에 로직(this.trigger) 추가를 위해 _WebSocket에 옮겨놓음 => intercept
+        // 아래 콜백 함수는 pace.js를 다 읽고 grafana의 index.ts를 실행할 때, CentrifugeService 컴포넌트에서 this.centrifuge.connect()를 실행하면 호출됨
         window.WebSocket = function (url, protocols) {
+          // debugger;
           var req;
           if (protocols != null) {
             req = new _WebSocket(url, protocols);
@@ -605,6 +635,7 @@
             req = new _WebSocket(url);
           }
           if (shouldTrack('socket')) {
+            console.log('here?2');
             _this.trigger('request', {
               type: 'socket',
               url: url,
@@ -625,8 +656,10 @@
 
   _intercept = null;
 
+  // Events 객체를 extends 함으로써 on 메서드를 사용할 수 있음
   getIntercept = function () {
     if (_intercept == null) {
+      // function RequestIntercept이 호출됨
       _intercept = new RequestIntercept();
     }
     return _intercept;
@@ -650,7 +683,11 @@
     return false;
   };
 
+  // request를 key로 Events.binding 객체에 콜백 함수를 저장
+  // Events 객체에서 콜백 함수를 실행
   getIntercept().on('request', function (_arg) {
+    // _arg : intercept한 { type: 'socket' } 객체
+    // console.log(_arg);
     var after, args, request, type, url;
     (type = _arg.type), (request = _arg.request), (url = _arg.url);
     if (shouldIgnoreURL(url)) {
@@ -664,11 +701,14 @@
       }
       return setTimeout(function () {
         var stillActive, _j, _len1, _ref2, _ref3, _results;
+        // request 객체 : socket 객체
         if (type === 'socket') {
           stillActive = request.readyState < 1;
         } else {
           stillActive = 0 < (_ref2 = request.readyState) && _ref2 < 4;
         }
+        // 어떤 조건에 의해 restart가 되지 않음
+        // console.log(request.readyState, _ref2, 'still', stillActive);
         if (stillActive) {
           Pace.restart();
           _ref3 = Pace.sources;
@@ -984,10 +1024,13 @@
     }
   };
 
+  // interceptor
   if (window.history.pushState != null) {
     _pushState = window.history.pushState;
     window.history.pushState = function () {
       handlePushState();
+      // apply를 이용해 arguments를 가지고 함수를 실행
+      // window.WebSocket은 함수가 아니기 때문에 객체로 반환했지만, 여기서는 함수이기 때문에 apply를 이용하여 함수를 실행
       return _pushState.apply(window.history, arguments);
     };
   }
@@ -999,6 +1042,21 @@
       return _replaceState.apply(window.history, arguments);
     };
   }
+
+  // 주소 표시줄 history만 바뀌고 페이지가 이동하지는 않음
+  // window.history.back();
+
+  // - 왜 popstate는 이벤트로 등록해야 하는가? 위의 방법처럼은 불가능한가?
+  // - TODO : history API 정리
+  // https://developer.mozilla.org/ko/docs/Web/API/History
+  window.addEventListener(
+    'popstate',
+    function (evt) {
+      console.log('popstate');
+      handlePushState();
+    },
+    false
+  );
 
   SOURCE_KEYS = {
     ajax: AjaxMonitor,
@@ -1029,6 +1087,7 @@
   })();
 
   Pace.stop = function () {
+    console.log('pace stop');
     Pace.trigger('stop');
     Pace.running = false;
     bar.destroy();
@@ -1043,6 +1102,8 @@
   };
 
   Pace.restart = function () {
+    console.log('pace restart');
+    // Pace.trigger는 어떤 용도인가? 어떻길래 이렇게 추상화가 가능했나?
     Pace.trigger('restart');
     Pace.stop();
     return Pace.start();
@@ -1100,6 +1161,7 @@
   };
 
   Pace.start = function (_options) {
+    console.log('pace start');
     extend(options, _options);
     Pace.running = true;
     try {
@@ -1147,3 +1209,8 @@
 
 // 1. 첫 document loading 때는 runAnimation가 불리지 않는데, mega menu를 클릭하면 Pace.go => runAnimation가 호출됨
 // - 처음에는 왜 Pace.go가 호출되지 않는가?
+// - 진입점에서 3번으로 들어가 Pace.start => Pace.go가 호출되지 않기 때문
+// - 나중에 window.WebSocket이 호출되어 RequestIntercept(socket)에 의해 Events.trigger가 호출되긴 하지만 조건문에 의해 Pace.restart 되지 않음
+
+// 2. 버튼을 누르면 어떻게 Pace.restart가 동작하는가?
+// - pushState를 감지하여 Pace.restart 호출
