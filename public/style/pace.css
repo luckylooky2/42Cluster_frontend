@@ -1,0 +1,31 @@
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-100 {
+  opacity: 1;
+}
+
+.pace-50 {
+  opacity: 0.5;
+}
+
+.pace-0 {
+  opacity: 0;
+}
+
+.pace .pace-progress {
+  background: cornflowerblue;
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 4px;
+  transition: opacity 0.5s ease-in-out;
+}
