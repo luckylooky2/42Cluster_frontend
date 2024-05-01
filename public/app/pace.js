@@ -318,7 +318,7 @@
 
     // 저장된 콜백 함수를 실행시키는 함수
     Evented.prototype.trigger = function () {
-      debugger;
+      // debugger;
       console.log('Evented trigger');
       var args, ctx, event, handler, i, once, _ref, _ref1, _results;
       (event = arguments[0]), (args = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
@@ -392,7 +392,7 @@
         document.body.className = document.body.className.replace(/(pace-done )|/, 'pace-running ');
         var _custom_class_name = options.className !== '' ? ' ' + options.className : '';
         this.el.innerHTML =
-          '<div class="pace-progress' +
+          '<div class="pace-100 pace-progress' +
           _custom_class_name +
           '">\n  <div class="pace-progress-inner"></div>\n</div>\n<div class="pace-activity"></div>';
         if (targetElement.firstChild != null) {
@@ -405,13 +405,22 @@
     };
 
     Bar.prototype.finish = function () {
-      var el;
-      el = this.getElement();
-      el.className = el.className.replace('pace-active', 'pace-inactive');
       return (document.body.className = document.body.className.replace('pace-running ', 'pace-done '));
     };
 
     Bar.prototype.update = function (prog) {
+      var el;
+      el = this.getElement();
+      const rounded = Math.round(prog);
+      const newList = el.childNodes[0].className.split(' ');
+      if (rounded > 50) {
+        newList[0] = 'pace-50';
+      }
+      if (rounded > 99) {
+        newList[0] = 'pace-0';
+      }
+      el.childNodes[0].className = newList.join(' ');
+
       this.progress = prog;
       Pace.trigger('progress', prog);
       return this.render();
