@@ -392,7 +392,7 @@
         document.body.className = document.body.className.replace(/(pace-done )|/, 'pace-running ');
         var _custom_class_name = options.className !== '' ? ' ' + options.className : '';
         this.el.innerHTML =
-          '<div class="pace-100 pace-progress' +
+          '<div class="pace-progress' +
           _custom_class_name +
           '">\n  <div class="pace-progress-inner"></div>\n</div>\n<div class="pace-activity"></div>';
         if (targetElement.firstChild != null) {
@@ -409,18 +409,8 @@
     };
 
     Bar.prototype.update = function (prog) {
-      var el;
-      el = this.getElement();
-      const rounded = Math.round(prog);
-      const newList = el.childNodes[0].className.split(' ');
-      if (rounded > 50) {
-        newList[0] = 'pace-50';
-      }
-      if (rounded > 99) {
-        newList[0] = 'pace-0';
-      }
-      el.childNodes[0].className = newList.join(' ');
-
+      // 특정 className으로 Element 직접 선택이 가능하다
+      document.querySelector('.pace-progress').style.opacity = (100 - Math.round(prog)) / 100;
       this.progress = prog;
       Pace.trigger('progress', prog);
       return this.render();
