@@ -18,5 +18,6 @@ if (window.nonce) {
 // This is an indication to the window.onLoad failure check that the app bundle has loaded.
 window.__grafana_app_bundle_loaded = true;
 
+import './pace';
 import app from './app';
 app.init();
