@@ -68,12 +68,11 @@ function PretendTextInput({ onClick }: PretendTextInputProps) {
 
         <button className={styles.fakeInput} onClick={onClick}>
           {t('nav.search.placeholderCommandPalette', 'Search or jump to...')}
+          <div className={styles.suffix}>
+            <Icon name="keyboard" />
+            <span className={styles.shortcut}>{modKey}+k</span>
+          </div>
         </button>
-
-        <div className={styles.suffix}>
-          <Icon name="keyboard" />
-          <span className={styles.shortcut}>{modKey}+k</span>
-        </div>
       </div>
     </div>
   );
