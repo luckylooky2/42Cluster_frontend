@@ -48,3 +48,14 @@ export const customButtonColor = {
     },
   },
 };
+
+export const customBackgroundColor = {
+  dark: {
+    default: '#111217',
+    primary: '#181b1f',
+  },
+  light: {
+    default: '#ffffff',
+    primary: '#f4f5f5',
+  },
+};
