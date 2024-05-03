@@ -15,7 +15,7 @@ export const GitHubButtonStyles = (theme: GrafanaTheme2) => ({
     textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     height: '32px',
     // minWidth: max-content,
     // box-shadow: var(--button-default-shadow-resting, var(--color-btn-shadow, 0 0 transparent)), var(--button-default-shadow-inset, var(--color-btn-inset-shadow, 0 0 transparent)),
