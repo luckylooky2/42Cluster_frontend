@@ -81,7 +81,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     backgroundColor: theme.isDark ? customBackgroundColor.dark.default : customBackgroundColor.light.primary,
     padding: '1rem',
     borderTop: '1px solid',
-    borderDown: '1px solid',
+    borderBottom: '1px solid',
     borderColor: theme.isDark ? '#30363d' : '#d0d7de',
   }),
   footer: css({
