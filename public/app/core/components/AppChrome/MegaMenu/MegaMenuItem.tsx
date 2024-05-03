@@ -2,7 +2,7 @@ import { css, cx } from '@emotion/css';
 import React, { useEffect, useRef } from 'react';
 // import { useLocation } from 'react-router-dom';
 // import { useLocalStorage } from 'react-use';
-import { GitHubHoverStyles } from 'style/GitHubHover';
+import { GitHubHoverStyles } from 'style/GitHubHoverStyles';
 
 import { GrafanaTheme2, NavModelItem, toIconName } from '@grafana/data';
 import { useStyles2, Text, Icon } from '@grafana/ui';

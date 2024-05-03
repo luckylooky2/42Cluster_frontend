@@ -6,7 +6,7 @@ import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
 import { useSelector } from 'app/types';
 
-import { GitHubButtonStyles } from '../../../../style/GitHubButton';
+import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
 const DashboardSelect = () => {
   const backendState = useSelector((state) => state.fourtyTwoClusterBackend);

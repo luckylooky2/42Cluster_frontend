@@ -2,7 +2,7 @@ import { css, cx } from '@emotion/css';
 // import { cloneDeep } from 'lodash';
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { GitHubHoverStyles } from 'style/GitHubHover';
+import { GitHubHoverStyles } from 'style/GitHubHoverStyles';
 
 import { GrafanaTheme2, locationUtil, textUtil } from '@grafana/data';
 import { Dropdown, ToolbarButton, useStyles2 } from '@grafana/ui';

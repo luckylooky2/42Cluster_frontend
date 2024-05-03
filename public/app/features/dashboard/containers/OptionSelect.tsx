@@ -7,7 +7,7 @@ import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
 // import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 import { FourtyTwoClusterBackendDashboard, useSelector } from 'app/types';
 
-import { GitHubButtonStyles } from '../../../../style/GitHubButton';
+import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
 type MockText = {
   text: string;
