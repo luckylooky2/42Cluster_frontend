@@ -19,9 +19,10 @@ import { OrganizationSwitcher } from '../OrganizationSwitcher/OrganizationSwitch
 import { QuickAdd } from '../QuickAdd/QuickAdd';
 import { TOP_BAR_LEVEL_HEIGHT } from '../types';
 
+import DarkModeToggle from './DarkModeToggle';
 import { SignInLink } from './SignInLink';
 import { TopNavBarMenu } from './TopNavBarMenu';
-import { TopSearchBarCommandPaletteTrigger } from './TopSearchBarCommandPaletteTrigger';
+// import { TopSearchBarCommandPaletteTrigger } from './TopSearchBarCommandPaletteTrigger';
 import { TopSearchBarSection } from './TopSearchBarSection';
 
 export const TopSearchBar = React.memo(function TopSearchBar() {
@@ -53,18 +54,19 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
         <a className={styles.logo} href={homeUrl} title="Go to home">
           <Branding.MenuLogo className={styles.img} />
         </a>
-
-        <a className={styles.logo} href={homeUrl} title="Go to home">
-          <div className={cx(styles.serviceName, gitHubHoverStyles.default)}>
-            {backendState.isValid ? <b>{backendState.serviceName}</b> : <span>loading...</span>}
-          </div>
-        </a>
-
-        <OrganizationSwitcher />
+        <div className={styles.servicePath}>
+          <a className={styles.logo} href={homeUrl} title="Go to home">
+            <div className={cx(styles.serviceName, gitHubHoverStyles.default)}>
+              {backendState.isValid ? <b>{backendState.serviceName}</b> : <span>loading...</span>}
+            </div>
+          </a>
+          <OrganizationSwitcher />
+        </div>
       </TopSearchBarSection>
 
       <TopSearchBarSection align="right">
-        <TopSearchBarCommandPaletteTrigger />
+        {/* <TopSearchBarCommandPaletteTrigger /> */}
+        <DarkModeToggle />
         <QuickAdd />
         {/* {enrichedHelpNode && (
           <Dropdown overlay={() => <TopNavBarMenu node={enrichedHelpNode} />} placement="bottom-end">
@@ -100,7 +102,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     justifyContent: 'space-between',
 
     [theme.breakpoints.up('sm')]: {
-      gridTemplateColumns: '1fr 2fr', // search should not be smaller than 240px
+      gridTemplateColumns: '2fr 1fr', // search should not be smaller than 240px
       display: 'grid',
 
       justifyContent: 'flex-start',
@@ -122,6 +124,9 @@ const getStyles = (theme: GrafanaTheme2) => ({
       marginRight: 0,
       width: '30px',
     },
+  }),
+  servicePath: css({
+    display: 'flex',
   }),
   serviceName: css({
     width: '100%',
