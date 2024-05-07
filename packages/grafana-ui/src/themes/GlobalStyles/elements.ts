@@ -120,6 +120,26 @@ export function getElementStyles(theme: GrafanaTheme2) {
       },
     },
 
+    b: {
+      cursor: 'pointer',
+      color: theme.colors.text.primary,
+      textDecoration: 'none',
+
+      '&:focus': {
+        outline: 'none',
+      },
+
+      '&:focus-visible': getFocusStyles(theme),
+
+      '&:[disabled]': {
+        cursor: 'default',
+        // Need type assertion here due to the use of !important
+        // see https://github.com/frenic/csstype/issues/114#issuecomment-697201978
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+        pointerEvents: 'none !important' as 'none',
+      },
+    },
+
     '.text-link': {
       textDecoration: 'underline',
     },
