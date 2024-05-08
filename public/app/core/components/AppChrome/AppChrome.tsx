@@ -118,7 +118,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     content: css({
       display: 'flex',
       flexDirection: 'column',
-      paddingTop: TOP_BAR_LEVEL_HEIGHT * 3,
+      // paddingTop: TOP_BAR_LEVEL_HEIGHT * 3,
       flexGrow: 1,
       height: '100%',
       alignItems: 'center',
@@ -137,7 +137,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     }),
     topNav: css({
       display: 'flex',
-      position: 'fixed',
+      // position: 'fixed',
       zIndex: theme.zIndex.navbarFixed,
       left: 0,
       right: 0,

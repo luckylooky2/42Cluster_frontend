@@ -104,7 +104,17 @@ export class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState
               >
                 <ModalsProvider>
                   <GlobalStyles />
-                  <div className="grafana-app">
+                  <div
+                    className="grafana-app"
+                    style={{
+                      position: 'relative',
+                      overflow: 'scroll',
+                      marginRight: '0px',
+                      marginBottom: '0px',
+                      minHeight: 'calc(100% + 0px)',
+                      maxHeight: 'calc(100% + 0px)',
+                    }}
+                  >
                     <Router history={locationService.getHistory()}>
                       <CompatRouter>
                         <AppChrome>
