@@ -57,7 +57,7 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
         <div className={styles.servicePath}>
           <a className={styles.logo} href={homeUrl} title="Go to home">
             <div className={cx(styles.serviceName, gitHubHoverStyles.default)}>
-              {backendState.isValid ? <b>{backendState.serviceName}</b> : <span>loading...</span>}
+              <b>42Cluster</b>
             </div>
           </a>
           <OrganizationSwitcher />
