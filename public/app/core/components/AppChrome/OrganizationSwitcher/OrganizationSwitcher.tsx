@@ -42,9 +42,9 @@ export function OrganizationSwitcher() {
   //   },
   // });
 
-  if (orgs?.length <= 1) {
-    return null;
-  }
+  // if (orgs?.length <= 1) {
+  //   return null;
+  // }
 
   // const Switcher = isSmallScreen ? OrganizationPicker : OrganizationSelect;
 
@@ -58,7 +58,7 @@ export function OrganizationSwitcher() {
 
 const getStyles = (theme: GrafanaTheme2) => ({
   slash: css({
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(0.5, 0, 0.5, 0),
     color: '#777',
   }),
 });
