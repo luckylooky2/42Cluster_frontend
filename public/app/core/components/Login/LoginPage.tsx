@@ -11,7 +11,6 @@ import { t, Trans } from 'app/core/internationalization';
 
 import { ChangePassword } from '../ForgottenPassword/ChangePassword';
 
-import { LoginButton42Auth } from './LoginButton42Auth';
 import LoginCtrl from './LoginCtrl';
 import { LoginForm } from './LoginForm';
 import { LoginLayout, InnerBox } from './LoginLayout';
@@ -67,7 +66,9 @@ export const LoginPage = () => {
           <div className={styles.loginField}>
             {radioValue === 'user' && (
               <InnerBox>
-                <LoginButton42Auth />
+                <div className={styles.userLogin}>
+                  <LoginServiceButtons />
+                </div>
               </InnerBox>
             )}
             {radioValue === 'administrator' && !isChangingPassword && (
@@ -97,7 +98,7 @@ export const LoginPage = () => {
                     </HorizontalGroup>
                   </LoginForm>
                 )}
-                <LoginServiceButtons />
+
                 {!disableUserSignUp && <UserSignup />}
               </InnerBox>
             )}
@@ -126,6 +127,11 @@ const getStyles = (theme: GrafanaTheme2) => {
 
     alert: css({
       width: '100%',
+    }),
+
+    userLogin: css({
+      width: '100%',
+      alignItems: 'center',
     }),
 
     radioGroup: css({

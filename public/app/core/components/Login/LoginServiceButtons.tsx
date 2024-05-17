@@ -106,25 +106,25 @@ const getServiceStyles = (theme: GrafanaTheme2) => {
   };
 };
 
-const LoginDivider = () => {
-  const styles = useStyles2(getServiceStyles);
-  return (
-    <>
-      <div className={styles.divider.base}>
-        <div>
-          <div className={styles.divider.line} />
-        </div>
-        <div>
-          <span>{!config.disableLoginForm && <span>or</span>}</span>
-        </div>
-        <div>
-          <div className={styles.divider.line} />
-        </div>
-      </div>
-      <div className="clearfix" />
-    </>
-  );
-};
+// const LoginDivider = () => {
+//   const styles = useStyles2(getServiceStyles);
+//   return (
+//     <>
+//       <div className={styles.divider.base}>
+//         <div>
+//           <div className={styles.divider.line} />
+//         </div>
+//         <div>
+//           <span>{!config.disableLoginForm && <span>or</span>}</span>
+//         </div>
+//         <div>
+//           <div className={styles.divider.line} />
+//         </div>
+//       </div>
+//       <div className="clearfix" />
+//     </>
+//   );
+// };
 
 function getButtonStyleFor(service: LoginService, styles: ReturnType<typeof getServiceStyles>, theme: GrafanaTheme2) {
   return cx(
@@ -150,7 +150,7 @@ export const LoginServiceButtons = () => {
   if (hasServices) {
     return (
       <VerticalGroup>
-        <LoginDivider />
+        {/* <LoginDivider /> */}
         {Object.entries(enabledServices).map(([key, service]) => {
           const serviceName = service.name;
           return (
