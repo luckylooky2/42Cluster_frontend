@@ -10,9 +10,23 @@ export const initialState: NavModelItem[] = config.bootData?.navTree ?? [];
 function customNavTree(navTree: NavModelItem[]): NavModelItem[] {
   return navTree.concat([
     {
+      id: 'logs',
+      text: 'Logs',
+      icon: 'list-ui-alt',
+      url: '/logs',
+      sortWeight: 0,
+    },
+    {
+      id: 'vulnerability',
+      text: 'Vulnerability',
+      icon: 'shield-exclamation',
+      url: '/vulnerability',
+      sortWeight: 0,
+    },
+    {
       id: 'deployment',
       text: 'Deployment',
-      icon: 'compass',
+      icon: 'rocket',
       url: '/deployment',
       sortWeight: 0,
     },

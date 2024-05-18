@@ -25,12 +25,14 @@ const addPriority = (menuName: string) => {
       return 1;
     case 'Dashboards':
       return 2;
-    case 'Alerting':
+    case 'Logs':
       return 3;
-    case 'Deployment':
+    case 'Vulnerability':
       return 4;
-    case 'Administration':
+    case 'Deployment':
       return 5;
+    case 'Administration':
+      return 6;
     default:
       return 9;
   }
@@ -55,6 +57,7 @@ export const MegaMenu = React.memo(
       .sort((a, b) => a.priority - b.priority)
       .filter(
         (item) =>
+          item.id !== 'alerting' &&
           item.id !== 'profile' &&
           item.id !== 'help' &&
           item.id !== 'explore' &&
