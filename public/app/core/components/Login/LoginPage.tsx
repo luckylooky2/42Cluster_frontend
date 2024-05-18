@@ -4,10 +4,10 @@ import React, { useState } from 'react';
 
 // Components
 import { GrafanaTheme2 } from '@grafana/data';
-import { config } from '@grafana/runtime';
-import { Alert, HorizontalGroup, LinkButton, useStyles2 } from '@grafana/ui';
+// import { config } from '@grafana/runtime';
+import { Alert, useStyles2 } from '@grafana/ui';
 import { Branding } from 'app/core/components/Branding/Branding';
-import { t, Trans } from 'app/core/internationalization';
+import { t } from 'app/core/internationalization';
 
 import { ChangePassword } from '../ForgottenPassword/ChangePassword';
 
@@ -39,6 +39,11 @@ export const LoginPage = () => {
         loginErrorMessage,
       }) => (
         <LoginLayout isChangingPassword={isChangingPassword}>
+          {loginErrorMessage && (
+            <Alert className={styles.alert} severity="error" title={t('login.error.title', 'Login failed')}>
+              {loginErrorMessage}
+            </Alert>
+          )}
           {!isChangingPassword && ( // login radio group
             <fieldset className={styles.radioGroup}>
               <div className={styles.radioEach}>
@@ -73,11 +78,6 @@ export const LoginPage = () => {
             )}
             {radioValue === 'administrator' && !isChangingPassword && (
               <InnerBox>
-                {loginErrorMessage && (
-                  <Alert className={styles.alert} severity="error" title={t('login.error.title', 'Login failed')}>
-                    {loginErrorMessage}
-                  </Alert>
-                )}
                 {!disableLoginForm && (
                   <LoginForm
                     onSubmit={login}
@@ -85,7 +85,7 @@ export const LoginPage = () => {
                     passwordHint={passwordHint}
                     isLoggingIn={isLoggingIn}
                   >
-                    <HorizontalGroup justify="flex-end">
+                    {/* <HorizontalGroup justify="flex-end">
                       {!config.auth.disableLogin && (
                         <LinkButton
                           className={styles.forgottenPassword}
@@ -95,7 +95,8 @@ export const LoginPage = () => {
                           <Trans i18nKey="login.forgot-password">Forgot your password?</Trans>
                         </LinkButton>
                       )}
-                    </HorizontalGroup>
+                    </HorizontalGroup> */}
+                    <></>
                   </LoginForm>
                 )}
 
@@ -126,7 +127,7 @@ const getStyles = (theme: GrafanaTheme2) => {
     }),
 
     alert: css({
-      width: '100%',
+      width: '80%',
     }),
 
     userLogin: css({
@@ -147,6 +148,7 @@ const getStyles = (theme: GrafanaTheme2) => {
 
     loginField: css({
       display: 'flex',
+      flexDirection: 'column',
       width: '80%',
       justifyContent: 'center',
     }),
