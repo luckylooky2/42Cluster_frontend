@@ -231,6 +231,7 @@ shellcheck: $(SH_FILES) ## Run checks for shell scripts.
 
 TAG_SUFFIX=$(if $(WIRE_TAGS)!=oss,-$(WIRE_TAGS))
 PLATFORM=linux/amd64
+TAG_NUMBER=0.0.1
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
@@ -257,7 +258,7 @@ build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	--build-arg BUILD_BRANCH=$$(git rev-parse --abbrev-ref HEAD) \
 	--build-arg BASE_IMAGE=ubuntu:22.04 \
 	--build-arg GO_IMAGE=golang:1.21.8 \
-	--tag chanhyle/grafana$(TAG_SUFFIX):dev-ubuntu \
+	--tag chanhyle/grafana$(TAG_SUFFIX):$(TAG_NUMBER) \
 	$(DOCKER_BUILD_ARGS)
 
 ##@ Services
