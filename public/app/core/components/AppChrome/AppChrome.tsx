@@ -120,7 +120,7 @@ const getStyles = (theme: GrafanaTheme2) => {
       flexDirection: 'column',
       // paddingTop: TOP_BAR_LEVEL_HEIGHT * 3,
       flexGrow: 1,
-      height: '100%',
+      height: '100vh',
       alignItems: 'center',
     }),
     contentNoSearchBar: css({
