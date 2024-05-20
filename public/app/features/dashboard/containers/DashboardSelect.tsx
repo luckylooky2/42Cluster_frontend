@@ -4,27 +4,32 @@ import React, { useState } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
-import { useSelector } from 'app/types';
+import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
 const DashboardSelect = () => {
-  const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
-  const currDashboard = backendState.dashboards.length
-    ? backendState.dashboards.filter((v) => v.uid === window.location.pathname.split('/')[2])[0].namespace
-    : '';
+  const dashboardList = useDashboardList();
+  console.log(dashboardList);
+  const isValid = dashboardList !== undefined;
+  const currDashboard =
+    isValid && dashboardList.length
+      ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0].title
+      : '';
 
-  const createActions = backendState.dashboards.map((dashboard) => ({
-    id: dashboard.uid,
-    text: dashboard.namespace,
-    icon: 'plus',
-    url: dashboard.url,
-    hideFromTabs: true,
-    isCreateAction: true,
-  }));
+  const createActions = isValid
+    ? dashboardList.map((dashboard) => ({
+        id: dashboard.uid,
+        text: dashboard.title,
+        icon: 'plus',
+        url: dashboard.url,
+        hideFromTabs: true,
+        isCreateAction: true,
+      }))
+    : [];
 
   //   useEffect(() => {
   //     if (backendState.dashboards.length) {
@@ -61,7 +66,7 @@ const DashboardSelect = () => {
           className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton, styles.button)}
           aria-label="New"
         >
-          <div className={styles.ellipsis}>{backendState.isValid ? currDashboard : ''}</div>
+          <div className={styles.ellipsis}>{currDashboard}</div>
         </ToolbarButton>
       </div>
     </Dropdown>

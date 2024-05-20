@@ -3,11 +3,13 @@ import { DOMAttributes } from '@react-types/shared';
 import React, { forwardRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { GrafanaTheme2 } from '@grafana/data';
+import { GrafanaTheme2, NavModelItem } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { CustomScrollbar, useStyles2, Stack } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 import { t } from 'app/core/internationalization';
+import { useDashboardList } from 'app/features/browse-dashboards/state';
+import { DashboardViewItem } from 'app/features/search/types';
 import { useSelector } from 'app/types';
 
 import { MegaMenuItem } from './MegaMenuItem';
@@ -41,18 +43,35 @@ const addPriority = (menuName: string) => {
 export const MegaMenu = React.memo(
   forwardRef<HTMLDivElement, Props>(({ onClose, ...restProps }, ref) => {
     const navTree = useSelector((state) => state.navBarTree);
-    const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
     const styles = useStyles2(getStyles);
     const location = useLocation();
     const { chrome } = useGrafana();
     const state = chrome.useState();
+    const dashboardList = useDashboardList();
+    console.log(dashboardList);
+
+    const determinePath = function (navItem: NavModelItem, dashboardList: DashboardViewItem[] | undefined) {
+      if (navItem.id === 'dashboards/browse') {
+        if (dashboardList === undefined) {
+          return 'dashboards/not-found';
+        } else {
+          if (dashboardList.length > 0) {
+            return `d/${dashboardList[0].uid}`;
+          } else {
+            return 'dashboards/not-found';
+          }
+        }
+      } else {
+        return navItem.url;
+      }
+    };
 
     // Remove profile + help from tree
     const navItems = navTree
       .map((navItem) => ({
         ...navItem,
         priority: addPriority(navItem.text),
-        url: navItem.id === 'dashboards/browse' && backendState.isValid ? backendState.dashboards[0].url : navItem.url,
+        url: determinePath(navItem, dashboardList),
       }))
       .sort((a, b) => a.priority - b.priority)
       .filter(
