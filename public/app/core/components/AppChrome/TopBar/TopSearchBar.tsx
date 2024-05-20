@@ -1,6 +1,6 @@
 import { css, cx } from '@emotion/css';
 // import { cloneDeep } from 'lodash';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { GitHubHoverStyles } from 'style/GitHubHoverStyles';
 
@@ -8,10 +8,8 @@ import { GrafanaTheme2, locationUtil, textUtil } from '@grafana/data';
 import { Dropdown, ToolbarButton, useStyles2 } from '@grafana/ui';
 import { config } from 'app/core/config';
 import { contextSrv } from 'app/core/core';
-import { fourtyTwoClusterBackendFetching } from 'app/features/fourtyTwoClusterBackend/state/reducers';
-import { useSelector, useDispatch } from 'app/types';
+import { useSelector } from 'app/types';
 
-import { FourtyTwoClusterBackendMockData } from '../../../../mocks/FourtyTwoClusterBackend';
 import { Branding } from '../../Branding/Branding';
 // import { enrichHelpItem } from '../MegaMenu/utils';
 // import { NewsContainer } from '../News/NewsContainer';
@@ -29,15 +27,7 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
   const styles = useStyles2(getStyles);
   const gitHubHoverStyles = useStyles2(GitHubHoverStyles);
   const navIndex = useSelector((state) => state.navIndex);
-  const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
   const location = useLocation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    setTimeout(() => {
-      dispatch(fourtyTwoClusterBackendFetching(FourtyTwoClusterBackendMockData.serviceInfo));
-    }, 500);
-  }, [dispatch]);
 
   // const helpNode = cloneDeep(navIndex['help']);
   // const enrichedHelpNode = helpNode ? enrichHelpItem(helpNode) : undefined;
