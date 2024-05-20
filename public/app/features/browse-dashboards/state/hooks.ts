@@ -85,6 +85,10 @@ export function useBrowseLoadingStatus(folderUID: string | undefined): 'pending'
   });
 }
 
+export function useDashboardList() {
+  return useSelector(rootItemsSelector)?.items;
+}
+
 export function useFlatTreeState(folderUID: string | undefined) {
   return useSelector((state) => flatTreeSelector(state, folderUID));
 }
