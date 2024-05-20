@@ -63,6 +63,7 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
   ) => {
     const styles = useStyles2(getStyles);
 
+    // TODO : 기본 드롭다운 메뉴 CSS가 설정되어 있음 : white mode에서 hover할 때, 중복 적용되는 문제
     const buttonStyles = cx(
       {
         [styles.button]: true,
@@ -163,9 +164,9 @@ const getStyles = (theme: GrafanaTheme2) => {
 
       '&:focus:not(:focus-visible)': getMouseFocusStyles(theme),
 
-      '&:hover': {
-        boxShadow: theme.shadows.z1,
-      },
+      // '&:hover': {
+      //   boxShadow: theme.shadows.z1,
+      // },
 
       '&[disabled], &:disabled': {
         cursor: 'not-allowed',
@@ -185,10 +186,10 @@ const getStyles = (theme: GrafanaTheme2) => {
       background: 'transparent',
       border: `1px solid transparent`,
 
-      '&:hover': {
-        color: theme.colors.text.primary,
-        background: theme.colors.background.secondary,
-      },
+      // '&:hover': {
+      // color: theme.colors.text.primary,
+      // background: theme.colors.background.secondary,
+      // },
     }),
     canvas: defaultOld,
     active: cx(
