@@ -215,7 +215,7 @@
     // debugger;
     var key, out, source, sources, val, _i, _len;
     (out = arguments[0]), (sources = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
-    console.log(sources);
+    // // // console.log(sources);
     for (_i = 0, _len = sources.length; _i < _len; _i++) {
       source = sources[_i];
       if (source) {
@@ -319,7 +319,7 @@
     // 저장된 콜백 함수를 실행시키는 함수
     Evented.prototype.trigger = function () {
       // debugger;
-      console.log('Evented trigger');
+      // // // console.log('Evented trigger');
       var args, ctx, event, handler, i, once, _ref, _ref1, _results;
       (event = arguments[0]), (args = 2 <= arguments.length ? __slice.call(arguments, 1) : []);
       if ((_ref = this.bindings) != null ? _ref[event] : void 0) {
@@ -622,7 +622,7 @@
 
       // 위에서 WebSocket 생성 함수 할당
       if (_WebSocket != null && options.ajax.trackWebSockets) {
-        console.log('here?');
+        // // // console.log('here?');
         // 원래 window.WebSocket에 로직(this.trigger) 추가를 위해 _WebSocket에 옮겨놓음 => intercept
         // 아래 콜백 함수는 pace.js를 다 읽고 grafana의 index.ts를 실행할 때, CentrifugeService 컴포넌트에서 this.centrifuge.connect()를 실행하면 호출됨
         window.WebSocket = function (url, protocols) {
@@ -634,7 +634,7 @@
             req = new _WebSocket(url);
           }
           if (shouldTrack('socket')) {
-            console.log('here?2');
+            // // // console.log('here?2');
             _this.trigger('request', {
               type: 'socket',
               url: url,
@@ -870,7 +870,7 @@
 
   ElementTracker = (function () {
     function ElementTracker(selector, completeCallback) {
-      console.log('element tracker');
+      // // // console.log('element tracker');
       this.selector = selector;
       this.completeCallback = completeCallback;
       this.progress = 0;
@@ -905,7 +905,7 @@
     };
 
     function DocumentMonitor() {
-      console.log('document monitor');
+      // // // console.log('document monitor');
       var _onreadystatechange,
         _ref2,
         _this = this;
@@ -1051,7 +1051,7 @@
   window.addEventListener(
     'popstate',
     function (evt) {
-      console.log('popstate');
+      // // // console.log('popstate');
       handlePushState();
     },
     false
@@ -1086,7 +1086,7 @@
   })();
 
   Pace.stop = function () {
-    console.log('pace stop');
+    // // // console.log('pace stop');
     Pace.trigger('stop');
     Pace.running = false;
     bar.destroy();
@@ -1101,7 +1101,7 @@
   };
 
   Pace.restart = function () {
-    console.log('pace restart');
+    // // // console.log('pace restart');
     // Pace.trigger는 어떤 용도인가? 어떻길래 이렇게 추상화가 가능했나?
     Pace.trigger('restart');
     Pace.stop();
@@ -1112,7 +1112,7 @@
   Pace.go = function () {
     var start;
     Pace.running = true;
-    console.log('pace go');
+    // // // console.log('pace go');
     bar.render();
     start = now();
     cancelAnimation = false;
@@ -1160,7 +1160,7 @@
   };
 
   Pace.start = function (_options) {
-    console.log('pace start');
+    // // // console.log('pace start');
     extend(options, _options);
     Pace.running = true;
     try {
@@ -1182,19 +1182,19 @@
 
   // console.log(typeof define, define.amd, typeof exports); // function {} Object
   if (typeof define === 'function' && define.amd) {
-    console.log(1);
+    // // // console.log(1);
     // This code checks for the presence of require.js
     // https://stackoverflow.com/questions/30953589/what-is-typeof-define-function-defineamd-used-for
     define(function () {
       return Pace;
     });
   } else if (typeof exports === 'object') {
-    console.log(2);
+    // // // console.log(2);
     // CommonJS 스펙에는 exports라는 자유롭게 접근할 수 있는 자유 변수가 존재 => 이걸 검사
     // https://stackoverflow.com/questions/46708062/what-environment-is-expected-by-iftypeof-exports-object-in-umd-definit
     module.exports = Pace;
   } else {
-    console.log(3);
+    // // // console.log(3);
     if (options.startOnPageLoad) {
       Pace.start();
     }
