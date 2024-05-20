@@ -5,7 +5,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
 // import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
-import { FourtyTwoClusterBackendDashboard, useSelector } from 'app/types';
+import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
@@ -18,27 +18,40 @@ interface Props {
   picker: { options: MockText[] };
 }
 
-const OptionSelect = ({ picker }: Props) => {
-  const backendState = useSelector((state) => state.fourtyTwoClusterBackend);
-  const dashboards = backendState.dashboards;
+const OptionDropdown = ({ picker }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
+
+  const dashboardList = useDashboardList();
+  const isValid = dashboardList !== undefined;
+  const subCaterogyName = function (title: string | null) {
+    switch (title) {
+      case 'node':
+        return 'node';
+      case 'pod':
+        return 'namespace';
+      default:
+        return '';
+    }
+  };
+
   // 1. 현재 대시보드 uid 가져오기
-  const currDashboard: FourtyTwoClusterBackendDashboard = dashboards.length
-    ? dashboards.filter((v) => v.uid === window.location.pathname.split('/')[2])[0]
-    : { uid: '', namespace: '', url: '', subCategory: null };
+  const currDashboard =
+    isValid && dashboardList.length
+      ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0]
+      : { kind: '', uid: '', title: '', url: '' };
 
   const createActions = picker.options.map((option, index) => ({
     id: index,
     text: option.text,
     icon: 'plus',
-    url: `/d/${currDashboard.uid}/${currDashboard.namespace}?var-${currDashboard.subCategory}=${option.text}`,
+    url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${subCaterogyName(currDashboard.title)}=${option.text}`,
     hideFromTabs: true,
     isCreateAction: true,
   }));
   // 2. 현재 체크된 것 가져오기
-  const findIndex = window.location.href.indexOf(`var-${currDashboard.subCategory}`);
+  const findIndex = window.location.href.indexOf(`var-${subCaterogyName(currDashboard.title)}`);
   const currSubCategory =
     findIndex > 0
       ? createActions.filter((v) => window.location.href.slice(findIndex + 1).includes(v.text))[0].text
@@ -78,7 +91,7 @@ const OptionSelect = ({ picker }: Props) => {
         className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
         aria-label="New"
       >
-        <div className={styles.ellipsis}>{backendState.isValid ? currSubCategory : ''}</div>
+        <div className={styles.ellipsis}>{currSubCategory}</div>
       </ToolbarButton>
     </Dropdown>
   );
@@ -97,4 +110,4 @@ const getStyles = (theme: GrafanaTheme2) => ({
   ellipsis: css({ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
 });
 
-export default OptionSelect;
+export default OptionDropdown;
