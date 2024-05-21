@@ -3,6 +3,7 @@
 ## For more information, refer to https://suva.sh/posts/well-documented-makefiles/
 
 WIRE_TAGS = "oss"
+TAG_NUMBER = "0.0.2"
 
 -include local/Makefile
 include .bingo/Variables.mk
@@ -230,8 +231,8 @@ shellcheck: $(SH_FILES) ## Run checks for shell scripts.
 ##@ Docker
 
 TAG_SUFFIX=$(if $(WIRE_TAGS)!=oss,-$(WIRE_TAGS))
-PLATFORM=linux/amd64
-TAG_NUMBER=0.0.1
+# PLATFORM=linux/amd64
+PLATFORM=linux/arm64/v8
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
