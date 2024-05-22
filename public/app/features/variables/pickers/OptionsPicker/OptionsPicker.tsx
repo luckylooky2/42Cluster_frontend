@@ -118,7 +118,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
 
       return (
         <div className="variable-link-wrapper">
-          <OptionDropdown picker={{ options: [{ text: 'master' }, { text: 'node1' }] }} />
+          <OptionDropdown options={variable.options} />
           {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}
         </div>
       );

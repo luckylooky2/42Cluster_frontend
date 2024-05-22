@@ -2,23 +2,19 @@ import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
+import { VariableOption } from '@grafana/data/src/types/templateVars';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
-// import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
-type MockText = {
-  text: string;
-};
-
 interface Props {
   // picker: OptionsPickerState;
-  picker: { options: MockText[] };
+  options: VariableOption[];
 }
 
-const OptionDropdown = ({ picker }: Props) => {
+const OptionDropdown = ({ options }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
@@ -42,9 +38,9 @@ const OptionDropdown = ({ picker }: Props) => {
       ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0]
       : { kind: '', uid: '', title: '', url: '' };
 
-  const createActions = picker.options.map((option, index) => ({
+  const createActions = options.map((option, index) => ({
     id: index,
-    text: option.text,
+    text: option.text as string, // can't be string[] due to disabled multi-select
     icon: 'plus',
     url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${subCaterogyName(currDashboard.title)}=${option.text}`,
     hideFromTabs: true,
