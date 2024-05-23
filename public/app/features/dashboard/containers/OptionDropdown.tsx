@@ -47,17 +47,7 @@ const OptionDropdown = ({ options }: Props) => {
     isCreateAction: true,
   }));
   // 2. 현재 체크된 것 가져오기
-  const findIndex = window.location.href.indexOf(`var-${subCaterogyName(currDashboard.title)}`);
-  const currSubCategory =
-    findIndex > 0
-      ? createActions.filter((v) => window.location.href.slice(findIndex + 1).includes(v.text))[0].text
-      : createActions[0].text;
-
-  //   useEffect(() => {
-  //     if (backendState.dashboards.length) {
-  //       setCurrDashboard(backendState.dashboards[0].namespace);
-  //     }
-  //   }, [backendState.dashboards]);
+  const currSubCategory = options.filter((v) => v.selected === true)[0].text;
 
   const MenuActions = () => {
     return (
