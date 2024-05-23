@@ -93,7 +93,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
       display: 'none',
     },
   }),
-  ellipsis: css({ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
+  ellipsis: css({ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
 });
 
 export default OptionDropdown;
