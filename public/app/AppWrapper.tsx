@@ -107,7 +107,7 @@ export class AppWrapper extends React.Component<AppWrapperProps, AppWrapperState
                   <div
                     className="grafana-app"
                     style={{
-                      position: 'relative',
+                      // position: 'relative',
                       overflow: 'scroll',
                       marginRight: '0px',
                       marginBottom: '0px',
