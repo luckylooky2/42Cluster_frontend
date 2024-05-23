@@ -84,7 +84,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     },
   }),
   select: css({ margin: '0px 8px 10px 0px' }),
-  ellipsis: css({ maxWidth: '100px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
+  ellipsis: css({ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
   button: css({ maxWidth: '150px' }),
 });
 
