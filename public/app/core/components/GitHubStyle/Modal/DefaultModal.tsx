@@ -43,7 +43,9 @@ const DefaultModal = ({ isOpen, handleClose }: Props) => {
           </p>
         </section>
         <footer className={styles.footer}>
-          <DefaultButton text="test" type="green" onClick={() => {}} className={css({ width: '95%' })} />
+          <DefaultButton type="green" onClick={() => {}} className={css({ width: '95%' })}>
+            test
+          </DefaultButton>
         </footer>
       </div>
       <Overlay />

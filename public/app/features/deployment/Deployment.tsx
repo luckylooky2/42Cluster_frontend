@@ -1,13 +1,15 @@
 import { css } from '@emotion/css';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { PageLayoutType, GrafanaTheme2 } from '@grafana/data';
 import { useStyles2 } from '@grafana/ui';
 import DefaultButton from 'app/core/components/GitHubStyle/Button/DefaultButton';
+import DefaultModal from 'app/core/components/GitHubStyle/Modal/DefaultModal';
 
 import { Page } from '../../core/components/Page/Page';
 
 const Deployment = () => {
+  const [isOpen, setIsOpen] = useState(false);
   const styles = useStyles2(getStyles);
 
   return (
@@ -16,10 +18,23 @@ const Deployment = () => {
         <div className={styles.left}>
           <div className={styles.topBar}>
             <div>
-              <DefaultButton text="button1" />
+              <DefaultButton onClick={() => {}}>button1</DefaultButton>
             </div>
             <div>
-              <DefaultButton text="button2" type="green" />
+              <DefaultButton
+                type="green"
+                onClick={() => {
+                  setIsOpen(true);
+                }}
+              >
+                button2
+              </DefaultButton>
+              <DefaultModal
+                isOpen={isOpen}
+                handleClose={() => {
+                  setIsOpen(!isOpen);
+                }}
+              />
             </div>
           </div>
         </div>
