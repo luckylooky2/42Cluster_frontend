@@ -52,27 +52,27 @@ export const Page: PageType = ({
   return (
     <div className={cx(styles.wrapper, className)} {...otherProps}>
       {layout === PageLayoutType.Standard && (
-        <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
-          <div className={styles.pageInner}>
-            {pageHeaderNav && (
-              <PageHeader
-                actions={actions}
-                onEditTitle={onEditTitle}
-                navItem={pageHeaderNav}
-                renderTitle={renderTitle}
-                info={info}
-                subTitle={subTitle}
-              />
-            )}
-            {pageNav && pageNav.children && <PageTabs navItem={pageNav} />}
-            <div className={styles.pageContent}>{children}</div>
-          </div>
-        </CustomScrollbar>
+        // <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
+        <div className={styles.pageInner}>
+          {pageHeaderNav && (
+            <PageHeader
+              actions={actions}
+              onEditTitle={onEditTitle}
+              navItem={pageHeaderNav}
+              renderTitle={renderTitle}
+              info={info}
+              subTitle={subTitle}
+            />
+          )}
+          {pageNav && pageNav.children && <PageTabs navItem={pageNav} />}
+          <div className={styles.pageContent}>{children}</div>
+        </div>
+        // </CustomScrollbar>
       )}
       {layout === PageLayoutType.Canvas && (
-        <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
-          <div className={styles.canvasContent}>{children}</div>
-        </CustomScrollbar>
+        // <CustomScrollbar autoHeightMin={'100%'} scrollTop={scrollTop} scrollRefCallback={scrollRef}>
+        <div className={styles.canvasContent}>{children}</div>
+        // </CustomScrollbar>
       )}
       {layout === PageLayoutType.Custom && children}
     </div>

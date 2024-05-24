@@ -30,6 +30,7 @@ export function AppChrome({ children }: Props) {
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
 
+  // for fetching current users's accessible dashboards
   useLoadNextChildrenPage()(undefined);
 
   const dockedMenuBreakpoint = theme.breakpoints.values.xl;
@@ -165,7 +166,7 @@ const getStyles = (theme: GrafanaTheme2) => {
       flexGrow: 1,
       minHeight: 0,
       minWidth: 0,
-      overflow: 'auto',
+      // overflow: 'auto',
       '@media print': {
         overflow: 'visible',
       },
