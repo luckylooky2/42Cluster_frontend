@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { GrafanaTheme2 } from '@grafana/data';
 import { VariableOption } from '@grafana/data/src/types/templateVars';
 import { reportInteraction } from '@grafana/runtime';
-import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
+import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
@@ -74,10 +74,15 @@ const OptionDropdown = ({ options }: Props) => {
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <ToolbarButton
         isOpen={isOpen}
-        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
+        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton, styles.button)}
         aria-label="New"
       >
-        <div className={styles.ellipsis}>{currSubCategory}</div>
+        <div className={styles.ellipsis}>
+          <div>
+            <Icon name="filter" />
+          </div>
+          <div className={styles.text}>{currSubCategory}</div>
+        </div>
       </ToolbarButton>
     </Dropdown>
   );
@@ -93,7 +98,17 @@ const getStyles = (theme: GrafanaTheme2) => ({
       display: 'none',
     },
   }),
-  ellipsis: css({ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
+  ellipsis: css({
+    display: 'flex',
+    maxWidth: '200px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }),
+  button: css({ maxWidth: '200px' }),
+  text: css({
+    paddingLeft: '10px',
+  }),
 });
 
 export default OptionDropdown;
