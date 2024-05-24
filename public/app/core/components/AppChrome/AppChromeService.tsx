@@ -207,14 +207,14 @@ export class AppChromeService {
   private getNextKioskMode() {
     const { kioskMode, searchBarHidden } = this.state.getValue();
 
-    if (searchBarHidden || kioskMode === KioskMode.TV) {
+    if (searchBarHidden || kioskMode === null) {
       appEvents.emit(AppEvents.alertSuccess, [t('navigation.kiosk.tv-alert', 'Press ESC to exit kiosk mode')]);
       return KioskMode.Full;
     }
 
-    if (!kioskMode) {
-      return KioskMode.TV;
-    }
+    // if (!kioskMode) {
+    //   return KioskMode.TV;
+    // }
 
     return null;
   }
