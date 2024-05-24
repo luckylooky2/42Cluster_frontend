@@ -36,7 +36,7 @@ const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
       </div>
       <div className={styles.kiosk}>
         <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
-          <Icon name="monitor" size="md" />
+          <Icon name="presentation-play" />
           <span>Kiosk mode</span>
         </DefaultButton>
       </div>
