@@ -347,7 +347,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
               />
             </header>
           )}
-          {!isHome && (
+          {!isHome && !kioskMode && (
             <>
               <DashboardSelectBar
                 showSubMenu={showSubMenu}
