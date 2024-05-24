@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
-import { Menu, Dropdown, useStyles2, ToolbarButton } from '@grafana/ui';
+import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
@@ -66,7 +66,12 @@ const DashboardSelect = () => {
           className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton, styles.button)}
           aria-label="New"
         >
-          <div className={styles.ellipsis}>{currDashboard}</div>
+          <div className={styles.ellipsis}>
+            <div>
+              <Icon name="horizontal-align-left" />
+            </div>
+            <div className={styles.text}>{currDashboard}</div>
+          </div>
         </ToolbarButton>
       </div>
     </Dropdown>
@@ -84,8 +89,17 @@ const getStyles = (theme: GrafanaTheme2) => ({
     },
   }),
   select: css({ margin: '0px 8px 10px 0px' }),
-  ellipsis: css({ maxWidth: '150px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }),
-  button: css({ maxWidth: '150px' }),
+  ellipsis: css({
+    display: 'flex',
+    maxWidth: '200px',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  }),
+  button: css({ maxWidth: '200px' }),
+  text: css({
+    paddingLeft: '10px',
+  }),
 });
 
 export default DashboardSelect;
