@@ -171,11 +171,7 @@ export const MenuItem = React.memo(
       >
         <Stack direction="row" justifyContent="flex-start" alignItems="center">
           {icon && <Icon name={icon} className={styles.icon} aria-hidden />}
-          {checkType && isChecked ? (
-            <img src="public/img/42Cluster/check.svg" alt="check" className={styles.checkImg} />
-          ) : (
-            <div className={styles.checkImg} />
-          )}
+          {checkType && isChecked ? <Icon name="check" /> : <div className={styles.imageBox} />}
           <span className={styles.ellipsis}>{label}</span>
           <div className={cx(styles.rightWrapper, { [styles.withShortcut]: hasShortcut })}>
             {hasShortcut && (
@@ -298,10 +294,9 @@ const getStyles = (theme: GrafanaTheme2) => {
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
     }),
-    checkImg: css({
-      width: '10px',
-      height: '10px',
-      filter: theme.isDark ? 'invert(100%)' : '',
+    imageBox: css({
+      width: '16px',
+      height: '16px',
     }),
   };
 };
