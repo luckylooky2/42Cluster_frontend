@@ -111,8 +111,10 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
     };
 
     render() {
-      const { variable, picker } = this.props;
-      const showOptions = picker.id === variable.id; // true: dropdown 열림(picker), false: dropdown 닫힘(variable)
+      const { variable } = this.props;
+
+      // const { variable, picker } = this.props;
+      // const showOptions = picker.id === variable.id; // true: dropdown 열림(picker), false: dropdown 닫힘(variable)
 
       return (
         <div className="variable-link-wrapper">
