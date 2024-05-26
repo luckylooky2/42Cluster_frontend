@@ -300,6 +300,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
   render() {
     const { dashboard, initError, queryParams } = this.props;
     const { editPanel, viewPanel, updateScrollTop, pageNav, sectionNav } = this.state;
+    // based on location url
     const kioskMode = getKioskMode(this.props.queryParams);
 
     if (!dashboard || !pageNav || !sectionNav) {
@@ -347,7 +348,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
               />
             </header>
           )}
-          {!isHome && !kioskMode && (
+          {!isHome && (
             <>
               <DashboardSelectBar
                 showSubMenu={showSubMenu}
