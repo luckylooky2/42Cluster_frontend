@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { NavModel, NavModelItem, TimeRange, PageLayoutType, locationUtil } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { config, locationService } from '@grafana/runtime';
-import { Divider, Themeable2, withTheme2 } from '@grafana/ui';
+import { Themeable2, withTheme2 } from '@grafana/ui';
 import { notifyApp } from 'app/core/actions';
 import { Page } from 'app/core/components/Page/Page';
 import { EntityNotFound } from 'app/core/components/PageNotFound/EntityNotFound';
@@ -349,14 +349,11 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
             </header>
           )}
           {!isHome && (
-            <>
-              <DashboardSelectBar
-                showSubMenu={showSubMenu}
-                dashboard={dashboard}
-                ariaLabel={selectors.pages.Dashboard.SubMenu.submenu}
-              />
-              <Divider spacing={1} />
-            </>
+            <DashboardSelectBar
+              showSubMenu={showSubMenu}
+              dashboard={dashboard}
+              ariaLabel={selectors.pages.Dashboard.SubMenu.submenu}
+            />
           )}
           <DashboardPrompt dashboard={dashboard} />
           {initError && <DashboardFailed />}
