@@ -38,7 +38,7 @@ import { getTimeSrv } from '../services/TimeSrv';
 import { cleanUpDashboardAndVariables } from '../state/actions';
 import { initDashboard } from '../state/initDashboard';
 
-import DashboardSelectBar from './DashboardSelectBar';
+import DashboardControls from './DashboardControls';
 import { DashboardPageRouteParams, DashboardPageRouteSearchParams } from './types';
 
 export const mapStateToProps = (state: StoreState) => ({
@@ -349,7 +349,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
             </header>
           )}
           {!isHome && (
-            <DashboardSelectBar
+            <DashboardControls
               showSubMenu={showSubMenu}
               dashboard={dashboard}
               ariaLabel={selectors.pages.Dashboard.SubMenu.submenu}

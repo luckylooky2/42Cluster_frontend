@@ -17,14 +17,6 @@ interface Props {
   ariaLabel: string;
 }
 
-const OptionSelect = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
-  return showSubMenu ? (
-    <section aria-label={ariaLabel}>
-      <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
-    </section>
-  ) : null;
-};
-
 const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
   const styles = useStyles2(getStyles);
   const { chrome } = useGrafana();
@@ -34,19 +26,39 @@ const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
     return;
   }
 
+  const OptionSelect = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
+    return showSubMenu ? (
+      <section aria-label={ariaLabel}>
+        <SubMenu dashboard={dashboard} annotations={dashboard.annotations.list} links={dashboard.links} />
+      </section>
+    ) : null;
+  };
+
+  const DashboardControls = () => {
+    return (
+      <div className={styles.dashboard}>
+        <DashboardSelect />
+        <OptionSelect showSubMenu={showSubMenu} dashboard={dashboard} ariaLabel={ariaLabel} />
+      </div>
+    );
+  };
+
+  const KioskControls = () => {
+    return (
+      <div className={styles.kiosk}>
+        <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
+          <Icon name="presentation-play" />
+          <span>Kiosk mode</span>
+        </DefaultButton>
+      </div>
+    );
+  };
+
   return (
     <>
       <div className={styles.bar}>
-        <div className={styles.dashboard}>
-          <DashboardSelect />
-          <OptionSelect showSubMenu={showSubMenu} dashboard={dashboard} ariaLabel={ariaLabel} />
-        </div>
-        <div className={styles.kiosk}>
-          <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
-            <Icon name="presentation-play" />
-            <span>Kiosk mode</span>
-          </DefaultButton>
-        </div>
+        <DashboardControls />
+        <KioskControls />
       </div>
       <Divider spacing={1} />
     </>
