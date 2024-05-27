@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
-import { useStyles2, Icon } from '@grafana/ui';
+import { Divider, useStyles2, Icon } from '@grafana/ui';
 import DefaultButton from 'app/core/components/GitHubStyle/Button/DefaultButton';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 
@@ -28,19 +28,28 @@ const OptionSelect = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
 const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
   const styles = useStyles2(getStyles);
   const { chrome } = useGrafana();
+  const state = chrome.useState();
+
+  if (state.kioskMode) {
+    return;
+  }
+
   return (
-    <div className={styles.bar}>
-      <div className={styles.dashboard}>
-        <DashboardSelect />
-        <OptionSelect showSubMenu={showSubMenu} dashboard={dashboard} ariaLabel={ariaLabel} />
+    <>
+      <div className={styles.bar}>
+        <div className={styles.dashboard}>
+          <DashboardSelect />
+          <OptionSelect showSubMenu={showSubMenu} dashboard={dashboard} ariaLabel={ariaLabel} />
+        </div>
+        <div className={styles.kiosk}>
+          <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
+            <Icon name="presentation-play" />
+            <span>Kiosk mode</span>
+          </DefaultButton>
+        </div>
       </div>
-      <div className={styles.kiosk}>
-        <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
-          <Icon name="presentation-play" />
-          <span>Kiosk mode</span>
-        </DefaultButton>
-      </div>
-    </div>
+      <Divider spacing={1} />
+    </>
   );
 };
 

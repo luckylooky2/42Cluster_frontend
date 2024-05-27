@@ -29,6 +29,10 @@ export function AppChrome({ children }: Props) {
   const searchBarHidden = state.searchBarHidden || state.kioskMode === KioskMode.TV;
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
+  const isDashboardPage = window.location.pathname.startsWith('/d/');
+  const isLogin = window.location.pathname.startsWith('/login');
+  // should render when kiosk mode is full while only at dashboard page
+  const shouldRenderContent = !isLogin && (!isDashboardPage || (isDashboardPage && !state.kioskMode));
 
   // for fetching current users's accessible dashboards
   useLoadNextChildrenPage()(undefined);
@@ -81,14 +85,14 @@ export function AppChrome({ children }: Props) {
         'main-view--chrome-hidden': state.chromeless,
       })}
     >
-      {!state.chromeless && (
+      {shouldRenderContent && (
         <>
           <LinkButton className={styles.skipLink} href="#pageContent">
             Skip to main content
           </LinkButton>
           <div className={cx(styles.topNav)}>
-            {!searchBarHidden && <TopSearchBar />}
-            {!state.chromeless && <MegaMenu className={styles.dockedMegaMenu} onClose={() => {}} />}
+            <TopSearchBar />
+            <MegaMenu className={styles.dockedMegaMenu} onClose={() => {}} />
             {/* <NavToolbar
               searchBarHidden={searchBarHidden}
               sectionNav={state.sectionNav.node}
