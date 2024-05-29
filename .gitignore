@@ -219,3 +219,5 @@ public/app/plugins/**/dist/
 # /scripts/docs/generate-transformations.js
 
 todo.md
+secret
+test.sh
