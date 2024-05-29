@@ -47,16 +47,17 @@ curl -s -X POST \
 echo ""
 
 # 4. 대시보드 추가
-# bash create_dashboard.sh v2/cluster.json
-# bash create_dashboard.sh v2/cluster-node.json
-# bash create_dashboard.sh v2/cluster-namespace.json
-# bash create_dashboard.sh v2/namespace-detail.json
-# bash create_dashboard.sh v2/service-overview.json
+# bash create_dashboard.sh v1/node.json
+# bash create_dashboard.sh v1/namespace.json
+# bash create_dashboard.sh v1/pod.json
+# bash create_dashboard.sh v1/service.json
 
-bash create_dashboard.sh node.json
-bash create_dashboard.sh namespace.json
-bash create_dashboard.sh pod.json
-bash create_dashboard.sh service.json
+bash create_dashboard.sh v2/cluster.json
+bash create_dashboard.sh v2/cluster-node.json
+bash create_dashboard.sh v2/cluster-namespace.json
+bash create_dashboard.sh v2/namespace-detail.json
+bash create_dashboard.sh v2/service-overview.json
+
 
 # 5. datasource 추가
 curl -s -X POST \

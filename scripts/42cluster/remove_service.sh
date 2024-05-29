@@ -170,4 +170,4 @@ echo ""
 
 bash update_service_json.sh remove ${service_name}
 
-rm ${service_name}.json
+rm new/${service_name}.json

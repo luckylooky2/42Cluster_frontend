@@ -93,7 +93,7 @@ echo ""
 # Get dashboard by uid : https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/#get-dashboard-by-uid
 # Create / Update dashboard : https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/#create--update-dashboard
 bash create_json.sh ${service_name}
-dashboardId=$(bash create_dashboard.sh "${service_name}.json")
+dashboardId=$(bash create_dashboard.sh "new/${service_name}.json")
 
 # 6. 팀 생성(마찬가지로 admin 자동 추가) 및 생성된 유저 추가
 # 현재 org을 기준으로 생성 및 조회

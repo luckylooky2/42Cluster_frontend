@@ -17,9 +17,9 @@ generate_hash() {
 }
 
 create_json() {
-	input_file="create_json.template"
-	temp_file="${service_name}.tmp"
-	output_file="${service_name}.json"
+	input_file="templates/create_json.template"
+	temp_file="tmp/${service_name}.tmp"
+	output_file="new/${service_name}.json"
 
 	old_word='$namespace'
 	new_word="${service_name}"
