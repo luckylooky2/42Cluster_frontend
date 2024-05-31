@@ -221,3 +221,4 @@ public/app/plugins/**/dist/
 todo.md
 secret
 test.sh
+env.sh
