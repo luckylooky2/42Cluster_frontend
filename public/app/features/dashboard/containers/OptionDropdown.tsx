@@ -23,12 +23,8 @@ const OptionDropdown = ({ options }: Props) => {
   const isValid = dashboardList !== undefined;
   const subCaterogyName = function (title: string | null) {
     switch (title) {
-      case 'node':
-        return 'node';
-      case 'pod':
-        return 'namespace';
       default:
-        return '';
+        return 'namespace';
     }
   };
 
