@@ -1,31 +1,45 @@
 import { css, cx } from '@emotion/css';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
-import { VariableOption } from '@grafana/data/src/types/templateVars';
+import { VariableOption, VariableWithMultiSupport, VariableWithOptions } from '@grafana/data/src/types/templateVars';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
+import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 
 interface Props {
-  // picker: OptionsPickerState;
-  options: VariableOption[];
+  variable: VariableWithMultiSupport | VariableWithOptions;
+  picker: OptionsPickerState;
+  onToggle: (option: VariableOption, clearOthers: boolean) => void;
+  showOptions: () => void;
 }
 
-const OptionDropdown = ({ options }: Props) => {
+const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
-
   const dashboardList = useDashboardList();
   const isValid = dashboardList !== undefined;
+  const isMulti = variable.multi;
   const subCaterogyName = function (title: string | null) {
     switch (title) {
       default:
         return 'namespace';
     }
+  };
+
+  const handleOnToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
+    event.preventDefault();
+    event.stopPropagation();
+    onToggle(option, clearOthers);
+  };
+
+  const handleNavigate = (createAction: any) => () => {
+    reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
   };
 
   // 1. 현재 대시보드 uid 가져오기
@@ -34,16 +48,32 @@ const OptionDropdown = ({ options }: Props) => {
       ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0]
       : { kind: '', uid: '', title: '', url: '' };
 
-  const createActions = options.map((option, index) => ({
+  const createActions = variable.options.map((option, index) => ({
+    // const createActions = mock.map((option, index) => ({
     id: index,
     text: option.text as string, // can't be string[] due to disabled multi-select
     icon: 'plus',
     url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${subCaterogyName(currDashboard.title)}=${option.text}`,
     hideFromTabs: true,
     isCreateAction: true,
+    option: option,
   }));
+
   // 2. 현재 체크된 것 가져오기
-  const currSubCategory = options.filter((v) => v.selected === true)[0].text;
+  const check = (selectedValues: VariableOption[], title: string) => {
+    for (const value of selectedValues) {
+      if (value.text === title) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    if (isMulti) {
+      showOptions();
+    }
+  }, [showOptions, isMulti]);
 
   const MenuActions = () => {
     return (
@@ -51,15 +81,15 @@ const OptionDropdown = ({ options }: Props) => {
         {createActions.map((createAction, index) => (
           <Menu.Item
             key={index}
-            url={createAction.url}
+            url={isMulti ? undefined : createAction.url}
             label={createAction.text}
             checkType={true}
-            isChecked={currSubCategory === createAction.text}
-            onClick={() => {
-              //   const target = e.target as HTMLButtonElement;
-              reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
-              //   setCurrDashboard(target.textContent === null ? '' : target.textContent);
-            }}
+            isChecked={
+              isMulti
+                ? check(picker.selectedValues, createAction.text)
+                : createAction.text === variable.options.filter((v) => v.selected === true)[0].text
+            }
+            onClick={isMulti ? handleOnToggle(createAction.option) : handleNavigate(createAction)}
           />
         ))}
       </Menu>
@@ -77,7 +107,9 @@ const OptionDropdown = ({ options }: Props) => {
           <div>
             <Icon name="filter" />
           </div>
-          <div className={styles.text}>{currSubCategory}</div>
+          <div className={styles.text}>
+            {isMulti ? 'multi-select' : variable.options.filter((v) => v.selected === true)[0].text}
+          </div>
         </div>
       </ToolbarButton>
     </Dropdown>
