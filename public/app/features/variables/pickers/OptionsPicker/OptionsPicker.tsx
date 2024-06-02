@@ -115,19 +115,17 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
       // const showOptions = picker.id === variable.id; // true: dropdown 열림(picker), false: dropdown 닫힘(variable)
 
       return (
-        <>
-          <div className="variable-link-wrapper">
-            <ClickOutsideWrapper onClick={this.onHideOptions}>
-              <OptionDropdown
-                variable={variable}
-                picker={picker}
-                onToggle={this.onToggleOption}
-                showOptions={this.onShowOptions}
-              />
-            </ClickOutsideWrapper>
-            {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}
-          </div>
-        </>
+        <div className="variable-link-wrapper">
+          <ClickOutsideWrapper onClick={this.onHideOptions}>
+            <OptionDropdown
+              variable={variable}
+              picker={picker}
+              onToggle={this.onToggleOption}
+              showOptions={this.onShowOptions}
+            />
+          </ClickOutsideWrapper>
+          {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}
+        </div>
       );
     }
 
