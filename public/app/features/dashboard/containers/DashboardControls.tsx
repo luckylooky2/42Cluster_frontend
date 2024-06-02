@@ -10,6 +10,7 @@ import { SubMenu } from '../components/SubMenu/SubMenu';
 import { DashboardModel } from '../state';
 
 import DashboardSelect from './DashboardSelect';
+import OptionSelectedChips from './OptionSelectedChips';
 
 interface Props {
   showSubMenu: boolean;
@@ -60,6 +61,7 @@ const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
         <DashboardControls />
         <KioskControls />
       </div>
+      <OptionSelectedChips />
       <Divider spacing={1} />
     </>
   );
