@@ -9,6 +9,7 @@ import { useDashboardList } from 'app/features/browse-dashboards/state';
 import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
+import { getDashboardUidFromUrl } from '../utils/42cluster';
 
 interface Props {
   variable: VariableWithMultiSupport | VariableWithOptions;
@@ -45,7 +46,7 @@ const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
   // 1. 현재 대시보드 uid 가져오기
   const currDashboard =
     isValid && dashboardList.length
-      ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0]
+      ? dashboardList.filter((v) => v.uid === getDashboardUidFromUrl())[0]
       : { kind: '', uid: '', title: '', url: '' };
 
   const createActions = variable.options.map((option, index) => ({

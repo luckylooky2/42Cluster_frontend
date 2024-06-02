@@ -7,6 +7,7 @@ import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
+import { getDashboardUidFromUrl } from '../utils/42cluster';
 
 const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +17,7 @@ const DashboardSelect = () => {
   console.log(dashboardList);
   const isValid = dashboardList !== undefined;
   const currDashboard =
-    isValid && dashboardList.length
-      ? dashboardList.filter((v) => v.uid === window.location.pathname.split('/')[2])[0].title
-      : '';
+    isValid && dashboardList.length ? dashboardList.filter((v) => v.uid === getDashboardUidFromUrl())[0].title : '';
 
   const createActions = isValid
     ? dashboardList.map((dashboard) => ({
