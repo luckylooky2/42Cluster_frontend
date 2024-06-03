@@ -2,8 +2,8 @@
 
 ARG BASE_IMAGE=alpine:3.18.5
 ARG JS_IMAGE=node:20-alpine3.18
-# ARG JS_PLATFORM=linux/amd64
-ARG JS_PLATFORM=linux/arm64
+ARG JS_PLATFORM=linux/amd64
+#ARG JS_PLATFORM=linux/arm64
 ARG GO_IMAGE=golang:1.21.8-alpine3.18
 
 ARG GO_SRC=go-builder
@@ -110,6 +110,8 @@ ENV PATH="/usr/share/grafana/bin:$PATH" \
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
 WORKDIR $GF_PATHS_HOME
+
+RUN sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list
 
 # Install dependencies
 RUN if grep -i -q alpine /etc/issue; then \
