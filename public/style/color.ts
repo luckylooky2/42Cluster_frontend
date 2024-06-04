@@ -27,11 +27,11 @@ export const customButtonColor = {
     default: {
       color: '#24292f',
       basic: {
-        background: '#f6f8fa',
+        background: '#ffffff', // f6f8fa
         borderColor: '#cccccc',
       },
       hover: {
-        background: '#f3f4f6',
+        background: '#fafbfc', // f3f4f6
         borderColor: '#cccccc',
       },
     },
