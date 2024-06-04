@@ -67,11 +67,50 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
   class OptionsPickerUnconnected extends PureComponent<Props> {
     onShowOptions = () =>
       this.props.openOptions(toKeyedVariableIdentifier(this.props.variable), this.props.onVariableChange);
+
     onHideOptions = () => {
       if (!this.props.variable.rootStateKey) {
         console.error('Variable has no rootStateKey');
         return;
       }
+
+      let variableList = [];
+      let pickerList = [];
+      const variable = this.props.variable.current.value;
+      const picker = this.props.picker.selectedValues;
+
+      if (Array.isArray(variable)) {
+        for (const elem of variable) {
+          variableList.push(elem);
+        }
+      } else {
+        variableList.push(variable);
+      }
+
+      for (const elem of picker) {
+        pickerList.push(elem.value);
+      }
+
+      variableList = variableList.sort();
+      pickerList = pickerList.sort();
+
+      if (pickerList.length === 0) {
+        return ;
+      }
+
+      if (variableList.length === pickerList.length) {
+        let count = 0;
+        for (let i = 0; i < variableList.length; i++) {
+          if (variableList[i] === pickerList[i]) {
+            count++;
+          }
+        }
+
+        if (count === variableList.length) {
+          return ;
+        }
+      }
+      
 
       this.props.commitChangesToVariable(this.props.variable.rootStateKey, this.props.onVariableChange);
     };
@@ -116,12 +155,13 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
 
       return (
         <div className="variable-link-wrapper">
-          <ClickOutsideWrapper onClick={this.onHideOptions}>
+          <ClickOutsideWrapper onClick={variable.multi ? this.onHideOptions : () => {}}>
             <OptionDropdown
               variable={variable}
               picker={picker}
-              onToggle={this.onToggleOption}
+              toggleOption={this.onToggleOption}
               showOptions={this.onShowOptions}
+              hideOptions={this.onHideOptions}
             />
           </ClickOutsideWrapper>
           {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}
@@ -129,50 +169,50 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
       );
     }
 
-    renderLink(variable: VariableWithOptions) {
-      const linkText = formatVariableLabel(variable);
-      const loading = variable.state === LoadingState.Loading;
+    // renderLink(variable: VariableWithOptions) {
+    //   const linkText = formatVariableLabel(variable);
+    //   const loading = variable.state === LoadingState.Loading;
 
-      return (
-        <VariableLink
-          id={VARIABLE_PREFIX + variable.id}
-          text={linkText}
-          onClick={this.onShowOptions}
-          loading={loading}
-          onCancel={this.onCancel}
-          disabled={this.props.readOnly}
-        />
-      );
-    }
+    //   return (
+    //     <VariableLink
+    //       id={VARIABLE_PREFIX + variable.id}
+    //       text={linkText}
+    //       onClick={this.onShowOptions}
+    //       loading={loading}
+    //       onCancel={this.onCancel}
+    //       disabled={this.props.readOnly}
+    //     />
+    //   );
+    // }
 
     onCancel = () => {
       getVariableQueryRunner().cancelRequest(toKeyedVariableIdentifier(this.props.variable));
     };
 
-    renderOptions(picker: OptionsPickerState) {
-      const { id } = this.props.variable;
-      return (
-        <ClickOutsideWrapper onClick={this.onHideOptions}>
-          <VariableInput
-            id={VARIABLE_PREFIX + id}
-            value={picker.queryValue}
-            onChange={this.onFilterOrSearchOptions}
-            onNavigate={this.onNavigate}
-            aria-expanded={true}
-            aria-controls={`options-${id}`}
-          />
-          <VariableOptions
-            values={picker.options}
-            onToggle={this.onToggleOption}
-            onToggleAll={this.onToggleAllOptions}
-            highlightIndex={picker.highlightIndex}
-            multi={picker.multi}
-            selectedValues={picker.selectedValues}
-            id={`options-${id}`}
-          />
-        </ClickOutsideWrapper>
-      );
-    }
+    // renderOptions(picker: OptionsPickerState) {
+    //   const { id } = this.props.variable;
+    //   return (
+    //     <ClickOutsideWrapper onClick={this.onHideOptions}>
+    //       <VariableInput
+    //         id={VARIABLE_PREFIX + id}
+    //         value={picker.queryValue}
+    //         onChange={this.onFilterOrSearchOptions}
+    //         onNavigate={this.onNavigate}
+    //         aria-expanded={true}
+    //         aria-controls={`options-${id}`}
+    //       />
+    //       <VariableOptions
+    //         values={picker.options}
+    //         onToggle={this.onToggleOption}
+    //         onToggleAll={this.onToggleAllOptions}
+    //         highlightIndex={picker.highlightIndex}
+    //         multi={picker.multi}
+    //         selectedValues={picker.selectedValues}
+    //         id={`options-${id}`}
+    //       />
+    //     </ClickOutsideWrapper>
+    //   );
+    // }
   }
 
   const OptionsPicker = connector(OptionsPickerUnconnected);
