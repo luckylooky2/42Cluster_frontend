@@ -34,6 +34,7 @@ type CommonProps = {
   iconOnly?: boolean;
   /** Show highlight dot */
   isHighlighted?: boolean;
+  onClick?: () => void;
 };
 
 export type ToolbarButtonProps = CommonProps & ButtonHTMLAttributes<HTMLButtonElement>;
@@ -57,6 +58,7 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
       iconOnly,
       'aria-label': ariaLabel,
       isHighlighted,
+      onClick,
       ...rest
     },
     ref
@@ -80,10 +82,13 @@ export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(
       [styles.contentWithRightIcon]: isOpen !== undefined,
     });
 
+    console.log(onClick)
+
     const body = (
       <button
         ref={ref}
         className={buttonStyles}
+        onClick={onClick}
         aria-label={getButtonAriaLabel(ariaLabel, tooltip)}
         aria-expanded={isOpen}
         {...rest}

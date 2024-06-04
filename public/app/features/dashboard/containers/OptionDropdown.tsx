@@ -9,34 +9,29 @@ import { useDashboardList } from 'app/features/browse-dashboards/state';
 import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
-import { getDashboardUidFromUrl } from '../utils/42cluster';
+import { getDashboardUidFromUrl, getTemplateVariableName } from '../utils/42cluster';
 
 interface Props {
   variable: VariableWithMultiSupport | VariableWithOptions;
   picker: OptionsPickerState;
-  onToggle: (option: VariableOption, clearOthers: boolean) => void;
+  toggleOption: (option: VariableOption, clearOthers: boolean) => void;
   showOptions: () => void;
+  hideOptions: () => void;
 }
 
-const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
+const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptions }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
   const dashboardList = useDashboardList();
   const isValid = dashboardList !== undefined;
   const isMulti = variable.multi;
-  const subCaterogyName = function (title: string | null) {
-    switch (title) {
-      default:
-        return 'namespace';
-    }
-  };
 
   const handleOnToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
     const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
     event.preventDefault();
     event.stopPropagation();
-    onToggle(option, clearOthers);
+    toggleOption(option, clearOthers);
   };
 
   const handleNavigate = (createAction: any) => () => {
@@ -54,14 +49,14 @@ const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
     id: index,
     text: option.text as string, // can't be string[] due to disabled multi-select
     icon: 'plus',
-    url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${subCaterogyName(currDashboard.title)}=${option.text}`,
+    url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${getTemplateVariableName(currDashboard.title)}=${option.text}`,
     hideFromTabs: true,
     isCreateAction: true,
     option: option,
   }));
 
   // 2. 현재 체크된 것 가져오기
-  const check = (selectedValues: VariableOption[], title: string) => {
+  const isChecked = (selectedValues: VariableOption[], title: string) => {
     for (const value of selectedValues) {
       if (value.text === title) {
         return true;
@@ -87,7 +82,7 @@ const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
             checkType={true}
             isChecked={
               isMulti
-                ? check(picker.selectedValues, createAction.text)
+                ? isChecked(picker.selectedValues, createAction.text)
                 : createAction.text === variable.options.filter((v) => v.selected === true)[0].text
             }
             onClick={isMulti ? handleOnToggle(createAction.option) : handleNavigate(createAction)}
@@ -103,13 +98,17 @@ const OptionDropdown = ({ variable, picker, onToggle, showOptions }: Props) => {
         isOpen={isOpen}
         className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton, styles.button)}
         aria-label="New"
+        onClick={isOpen ? hideOptions : () => {
+          console.log('opened');
+        }}
       >
         <div className={styles.ellipsis}>
           <div>
             <Icon name="filter" />
           </div>
           <div className={styles.text}>
-            {isMulti ? 'multi-select' : variable.options.filter((v) => v.selected === true)[0].text}
+            {isMulti && 'multi select'}
+            {!isMulti && variable.options.filter((v) => v.selected === true)[0].text}
           </div>
         </div>
       </ToolbarButton>
