@@ -9,7 +9,6 @@ import { useDashboardList } from 'app/features/browse-dashboards/state';
 import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
-import { getDashboardUidFromUrl, getTemplateVariableName } from '../utils/42cluster';
 
 interface Props {
   variable: VariableWithMultiSupport | VariableWithOptions;
@@ -24,32 +23,30 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
   const dashboardList = useDashboardList();
-  const isValid = dashboardList !== undefined;
-  const isMulti = variable.multi;
 
-  const handleOnToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  if (!variable || dashboardList === undefined) {
+    return;
+  }
+  
+  const isMulti = variable.multi;
+  const uid = variable.rootStateKey;
+  
+  const handleToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
     const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
     event.preventDefault();
     event.stopPropagation();
     toggleOption(option, clearOthers);
   };
-
+  
   const handleNavigate = (createAction: any) => () => {
     reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
   };
 
-  // 1. 현재 대시보드 uid 가져오기
-  const currDashboard =
-    isValid && dashboardList.length
-      ? dashboardList.filter((v) => v.uid === getDashboardUidFromUrl())[0]
-      : { kind: '', uid: '', title: '', url: '' };
-
   const createActions = variable.options.map((option, index) => ({
-    // const createActions = mock.map((option, index) => ({
     id: index,
     text: option.text as string, // can't be string[] due to disabled multi-select
     icon: 'plus',
-    url: `/d/${currDashboard.uid}/${currDashboard.title}?var-${getTemplateVariableName(currDashboard.title)}=${option.text}`,
+    url: `/d/${uid}/?var-${variable.id}=${option.text}`,
     hideFromTabs: true,
     isCreateAction: true,
     option: option,
@@ -85,7 +82,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
                 ? isChecked(picker.selectedValues, createAction.text)
                 : createAction.text === variable.options.filter((v) => v.selected === true)[0].text
             }
-            onClick={isMulti ? handleOnToggle(createAction.option) : handleNavigate(createAction)}
+            onClick={isMulti ? handleToggle(createAction.option) : handleNavigate(createAction)}
           />
         ))}
       </Menu>
@@ -108,7 +105,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
           </div>
           <div className={styles.text}>
             {isMulti && 'multi select'}
-            {!isMulti && variable.options.filter((v) => v.selected === true)[0].text}
+            {!isMulti && variable.options.filter((v) => v.selected === true)[0].value}
           </div>
         </div>
       </ToolbarButton>
