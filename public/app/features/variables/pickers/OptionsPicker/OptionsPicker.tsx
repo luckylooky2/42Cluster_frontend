@@ -2,23 +2,23 @@ import React, { ComponentType, PureComponent } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { LoadingState } from '@grafana/data';
+// import { LoadingState } from '@grafana/data';
 import { ClickOutsideWrapper } from '@grafana/ui';
 import OptionDropdown from 'app/features/dashboard/containers/OptionDropdown';
 import { StoreState, ThunkDispatch } from 'app/types';
 
-import { VARIABLE_PREFIX } from '../../constants';
+// import { VARIABLE_PREFIX } from '../../constants';
 import { isMulti } from '../../guard';
 import { getVariableQueryRunner } from '../../query/VariableQueryRunner';
-import { formatVariableLabel } from '../../shared/formatVariable';
+// import { formatVariableLabel } from '../../shared/formatVariable';
 import { toKeyedAction } from '../../state/keyedVariablesReducer';
 import { getVariablesState } from '../../state/selectors';
 import { KeyedVariableIdentifier } from '../../state/types';
 import { VariableOption, VariableWithMultiSupport, VariableWithOptions } from '../../types';
 import { toKeyedVariableIdentifier } from '../../utils';
-import { VariableInput } from '../shared/VariableInput';
-import { VariableLink } from '../shared/VariableLink';
-import VariableOptions from '../shared/VariableOptions';
+// import { VariableInput } from '../shared/VariableInput';
+// import { VariableLink } from '../shared/VariableLink';
+// import VariableOptions from '../shared/VariableOptions';
 import { NavigationKey, VariablePickerProps } from '../types';
 
 import { commitChangesToVariable, filterOrSearchOptions, navigateOptions, openOptions } from './actions';
@@ -95,7 +95,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
       pickerList = pickerList.sort();
 
       if (pickerList.length === 0) {
-        return ;
+        return;
       }
 
       if (variableList.length === pickerList.length) {
@@ -107,10 +107,9 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
         }
 
         if (count === variableList.length) {
-          return ;
+          return;
         }
       }
-      
 
       this.props.commitChangesToVariable(this.props.variable.rootStateKey, this.props.onVariableChange);
     };
@@ -161,7 +160,6 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
               picker={picker}
               toggleOption={this.onToggleOption}
               showOptions={this.onShowOptions}
-              hideOptions={this.onHideOptions}
             />
           </ClickOutsideWrapper>
           {/* {showOptions ? this.renderOptions(picker) : this.renderLink(variable)} */}

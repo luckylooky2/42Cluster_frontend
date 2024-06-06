@@ -15,7 +15,6 @@ interface Props {
   picker: OptionsPickerState;
   toggleOption: (option: VariableOption, clearOthers: boolean) => void;
   showOptions: () => void;
-  hideOptions: () => void;
 }
 
 const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptions }: Props) => {
@@ -27,17 +26,24 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
   if (!variable || dashboardList === undefined) {
     return;
   }
-  
+
   const isMulti = variable.multi;
   const uid = variable.rootStateKey;
-  
+
+  // variable이 undefined가 되는 경우가 있는가? 그렇지 않다면 return 위로 올리자
+  useEffect(() => {
+    if (isMulti) {
+      showOptions();
+    }
+  }, [showOptions, isMulti]);
+
   const handleToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
     const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
     event.preventDefault();
     event.stopPropagation();
     toggleOption(option, clearOthers);
   };
-  
+
   const handleNavigate = (createAction: any) => () => {
     reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
   };
@@ -61,12 +67,6 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
     }
     return false;
   };
-
-  useEffect(() => {
-    if (isMulti) {
-      showOptions();
-    }
-  }, [showOptions, isMulti]);
 
   const MenuActions = () => {
     return (
@@ -95,9 +95,6 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
         isOpen={isOpen}
         className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton, styles.button)}
         aria-label="New"
-        onClick={isOpen ? hideOptions : () => {
-          console.log('opened');
-        }}
       >
         <div className={styles.ellipsis}>
           <div>
