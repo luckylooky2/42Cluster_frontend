@@ -1,10 +1,13 @@
 import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
+import { StoreState, useSelector } from 'app/types';
 
 import { GrafanaTheme2 } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
+
 import { useDashboardList } from 'app/features/browse-dashboards/state';
+import { getVariablesState } from 'app/features/variables/state/selectors';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
 import { getDashboardUidFromUrl } from '../utils/42cluster';
@@ -13,28 +16,41 @@ const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
+  const uid = getDashboardUidFromUrl();
   const dashboardList = useDashboardList();
-  console.log(dashboardList);
-  const isValid = dashboardList !== undefined;
-  const currDashboard =
-    isValid && dashboardList.length ? dashboardList.filter((v) => v.uid === getDashboardUidFromUrl())[0].title : '';
+  const result = useSelector((state : StoreState) => getVariablesState(uid));
+  const variable = result.variables.namespace;
+  const picker = result.optionsPicker;
+  const selectedValues = picker.selectedValues;
+  
+  if (dashboardList === undefined) {
+    return ;
+  }
+  
+  const currDashboard = dashboardList.filter((v) => v.uid === uid)[0].title;
 
-  const createActions = isValid
-    ? dashboardList.map((dashboard) => ({
+  const handleNavigate = (createAction: any) => () => {
+    //   const target = e.target as HTMLButtonElement;
+    reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
+    //   setCurrDashboard(target.textContent === null ? '' : target.textContent);
+  }
+
+  const variableQueryString = (variable : any, selectedValues: any) => {
+    const prefix = '/?';
+    if (selectedValues.length) {
+      return prefix + selectedValues.map((v) => `var-${variable.id}=${v.value}`).join("&");
+    }
+    return '';
+  }
+
+  const createActions = dashboardList.map((dashboard) => ({
         id: dashboard.uid,
         text: dashboard.title,
         icon: 'plus',
-        url: dashboard.url,
+        url: `${dashboard.url}${variableQueryString(variable, selectedValues)}`,
         hideFromTabs: true,
         isCreateAction: true,
-      }))
-    : [];
-
-  //   useEffect(() => {
-  //     if (backendState.dashboards.length) {
-  //       setCurrDashboard(backendState.dashboards[0].namespace);
-  //     }
-  //   }, [backendState.dashboards]);
+      }));
 
   const MenuActions = () => {
     return (
@@ -46,11 +62,7 @@ const DashboardSelect = () => {
             label={createAction.text}
             checkType={true}
             isChecked={currDashboard === createAction.text}
-            onClick={() => {
-              //   const target = e.target as HTMLButtonElement;
-              reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
-              //   setCurrDashboard(target.textContent === null ? '' : target.textContent);
-            }}
+            onClick={handleNavigate(createAction)}
           />
         ))}
       </Menu>
