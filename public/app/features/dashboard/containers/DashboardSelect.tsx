@@ -73,7 +73,7 @@ const DashboardSelect = () => {
       <div className={styles.select}>
         <ToolbarButton
           isOpen={isOpen}
-          className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton, styles.button)}
+          className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton)}
           aria-label="New"
         >
           <div className={styles.ellipsis}>
@@ -106,7 +106,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   }),
-  button: css({ maxWidth: '200px' }),
+  // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
   }),
