@@ -7,7 +7,7 @@ import { ClickOutsideWrapper } from '@grafana/ui';
 import { notifyApp } from 'app/core/actions';
 import { createErrorNotification } from 'app/core/copy/appNotification';
 import OptionDropdown from 'app/features/dashboard/containers/OptionDropdown';
-import { StoreState, ThunkDispatch } from 'app/types';
+import { StoreState, ThunkDispatch, AppNotification } from 'app/types';
 
 // import { VARIABLE_PREFIX } from '../../constants';
 import { isMulti } from '../../guard';
@@ -29,6 +29,11 @@ import { initialOptionPickerState, toggleAllOptions, toggleOption } from './redu
 export const optionPickerFactory = <Model extends VariableWithOptions | VariableWithMultiSupport>(): ComponentType<
   VariablePickerProps<Model>
 > => {
+
+  // Redux thunk를 사용한 코드
+  // - mapDispatchToProps가 내부적으로 액션 객체를 처리하는 thunk 함수들로 이루어진 객체를 반환하는 함수이다
+  // - dispatch를 원하는 시점에 할 수 있기 때문에 1) 추가 매개변수가 필요하거나 2) 비동기 작업 3) 추가 로직을 처리할 수 있다
+  // - 각각의 함수 안에서 dispatch를 반드시 호출해야 store에 반영이 된다
   const mapDispatchToProps = (dispatch: ThunkDispatch) => {
     return {
       ...bindActionCreators({ openOptions, commitChangesToVariable, navigateOptions }, dispatch),
@@ -43,7 +48,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
         clearOthers: boolean,
         forceSelect: boolean
       ) => dispatch(toKeyedAction(identifier.rootStateKey, toggleOption({ option, clearOthers, forceSelect }))),
-      notifyApp,
+      notifyApp: (notification: AppNotification) => dispatch(notifyApp(notification)),
     };
   };
 
@@ -98,7 +103,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
       pickerList = pickerList.sort();
 
       if (pickerList.length === 0) {
-        this.props.notifyApp(createErrorNotification('Permission to edit panel denied'));
+        this.props.notifyApp(createErrorNotification('Please select at least 1 option'));
         return;
       }
 

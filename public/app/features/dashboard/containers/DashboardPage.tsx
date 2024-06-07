@@ -48,6 +48,10 @@ export const mapStateToProps = (state: StoreState) => ({
   navIndex: state.navIndex,
 });
 
+// 일반 Redux를 사용한 코드
+// - mapDispatchToProps가 액션 객체를 반환하는 함수들로 이루어진 객체이다
+// - 함수를 호출하는 시점이 곧 dispatch를 호출하는 시점과 같다
+// - dispatch를 따로 하지 않아도, 해당 함수를 호출하면 내부적으로 dispatch를 수행한다
 const mapDispatchToProps = {
   initDashboard,
   cleanUpDashboardAndVariables,
