@@ -101,7 +101,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
             <Icon name="filter" />
           </div>
           <div className={styles.text}>
-            {isMulti && 'multi select'}
+            {isMulti && variable.id}
             {!isMulti && variable.options.filter((v) => v.selected === true)[0].value}
           </div>
         </div>
