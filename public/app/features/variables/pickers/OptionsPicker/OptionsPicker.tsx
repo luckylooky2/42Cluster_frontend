@@ -4,6 +4,8 @@ import { bindActionCreators } from 'redux';
 
 // import { LoadingState } from '@grafana/data';
 import { ClickOutsideWrapper } from '@grafana/ui';
+import { notifyApp } from 'app/core/actions';
+import { createErrorNotification } from 'app/core/copy/appNotification';
 import OptionDropdown from 'app/features/dashboard/containers/OptionDropdown';
 import { StoreState, ThunkDispatch } from 'app/types';
 
@@ -22,7 +24,7 @@ import { toKeyedVariableIdentifier } from '../../utils';
 import { NavigationKey, VariablePickerProps } from '../types';
 
 import { commitChangesToVariable, filterOrSearchOptions, navigateOptions, openOptions } from './actions';
-import { initialOptionPickerState, OptionsPickerState, toggleAllOptions, toggleOption } from './reducer';
+import { initialOptionPickerState, toggleAllOptions, toggleOption } from './reducer';
 
 export const optionPickerFactory = <Model extends VariableWithOptions | VariableWithMultiSupport>(): ComponentType<
   VariablePickerProps<Model>
@@ -41,6 +43,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
         clearOthers: boolean,
         forceSelect: boolean
       ) => dispatch(toKeyedAction(identifier.rootStateKey, toggleOption({ option, clearOthers, forceSelect }))),
+      notifyApp,
     };
   };
 
@@ -95,6 +98,7 @@ export const optionPickerFactory = <Model extends VariableWithOptions | Variable
       pickerList = pickerList.sort();
 
       if (pickerList.length === 0) {
+        this.props.notifyApp(createErrorNotification('Permission to edit panel denied'));
         return;
       }
 

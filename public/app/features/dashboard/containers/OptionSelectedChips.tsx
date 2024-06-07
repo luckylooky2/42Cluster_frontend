@@ -3,6 +3,7 @@ import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
 import { useStyles2 } from '@grafana/ui';
+import { useAppNotification } from 'app/core/copy/appNotification';
 import { commitChangesToVariable } from 'app/features/variables/pickers/OptionsPicker/actions';
 import { toggleOption } from 'app/features/variables/pickers/OptionsPicker/reducer';
 import { toKeyedAction } from 'app/features/variables/state/keyedVariablesReducer';
@@ -15,13 +16,14 @@ import { getDashboardUidFromUrl } from '../utils/42cluster';
 
 const OptionSelectedChips = () => {
   const uid = getDashboardUidFromUrl();
-  // should make variable result a state
+  // should make "result" a state variable
   const result = useSelector((state: StoreState) => getVariablesState(uid));
   const dispatch = useDispatch();
   const variable = result.variables.namespace;
   const picker = result.optionsPicker;
   const renderList: string[] = picker.selectedValues.map((v) => v.value as string).sort();
   const styles = useStyles2(getStyles);
+  const notifyApp = useAppNotification();
 
   if (!variable || !variable.multi) {
     return;
@@ -32,7 +34,7 @@ const OptionSelectedChips = () => {
     const option = picker.selectedValues.filter((v) => v.value === value)[0];
 
     if (picker.selectedValues.length === 1) {
-      // TODO : 알림 띄우기
+      notifyApp.error('Please select at least 1 option');
       return;
     }
     dispatch(toKeyedAction(uid, toggleOption({ option, clearOthers: false, forceSelect: false }))); // 이거는 토글만 한 것이고 variable에 반영을 해야 함
