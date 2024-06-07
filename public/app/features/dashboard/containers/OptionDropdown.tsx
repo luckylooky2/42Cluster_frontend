@@ -93,7 +93,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <ToolbarButton
         isOpen={isOpen}
-        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton, styles.button)}
+        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
         aria-label="New"
       >
         <div className={styles.ellipsis}>
@@ -127,7 +127,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
   }),
-  button: css({ maxWidth: '200px' }),
+  // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
   }),
