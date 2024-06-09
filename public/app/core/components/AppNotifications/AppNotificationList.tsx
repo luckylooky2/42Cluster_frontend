@@ -53,7 +53,8 @@ function getStyles(theme: GrafanaTheme2) {
     wrapper: css({
       label: 'app-notifications-list',
       zIndex: theme.zIndex.portal,
-      minWidth: 400,
+      // minWidth: 400,
+      minWidth: 350,
       maxWidth: 600,
       position: 'fixed',
       right: 6,
