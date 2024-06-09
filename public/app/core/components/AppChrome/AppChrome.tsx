@@ -157,7 +157,7 @@ const getStyles = (theme: GrafanaTheme2) => {
       display: 'flex',
       height: '100%',
       width: '95%',
-      maxWidth: '1100px',
+      // maxWidth: '1100px',
       flexGrow: 1,
       minHeight: 0,
       flexDirection: 'column',
