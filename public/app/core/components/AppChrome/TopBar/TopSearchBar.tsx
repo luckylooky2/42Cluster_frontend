@@ -1,19 +1,15 @@
-import { css, cx } from '@emotion/css';
+import { css } from '@emotion/css';
 // import { cloneDeep } from 'lodash';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { GitHubHoverStyles } from 'style/GitHubHoverStyles';
 
-import { GrafanaTheme2, locationUtil, textUtil } from '@grafana/data';
+import { GrafanaTheme2 } from '@grafana/data';
 import { Dropdown, ToolbarButton, useStyles2 } from '@grafana/ui';
-import { config } from 'app/core/config';
 import { contextSrv } from 'app/core/core';
 import { useSelector } from 'app/types';
 
-import { Branding } from '../../Branding/Branding';
 // import { enrichHelpItem } from '../MegaMenu/utils';
 // import { NewsContainer } from '../News/NewsContainer';
-import { OrganizationSwitcher } from '../OrganizationSwitcher/OrganizationSwitcher';
+import { NavigateControls } from '../OrganizationSwitcher/NavigateControls';
 import { QuickAdd } from '../QuickAdd/QuickAdd';
 import { TOP_BAR_LEVEL_HEIGHT } from '../types';
 
@@ -25,39 +21,22 @@ import { TopSearchBarSection } from './TopSearchBarSection';
 
 export const TopSearchBar = React.memo(function TopSearchBar() {
   const styles = useStyles2(getStyles);
-  const gitHubHoverStyles = useStyles2(GitHubHoverStyles);
   const navIndex = useSelector((state) => state.navIndex);
-  const location = useLocation();
 
   // const helpNode = cloneDeep(navIndex['help']);
   // const enrichedHelpNode = helpNode ? enrichHelpItem(helpNode) : undefined;
   const profileNode = navIndex['profile'];
 
-  let homeUrl = config.appSubUrl || '/';
-  if (!config.bootData.user.isSignedIn && !config.anonymousEnabled) {
-    homeUrl = textUtil.sanitizeUrl(locationUtil.getUrlForPartial(location, { forceLogin: 'true' }));
-  }
-
   return (
     <div className={styles.layout}>
       <TopSearchBarSection>
-        <a className={styles.logo} href={homeUrl} title="Go to home">
-          <Branding.MenuLogo className={styles.img} />
-        </a>
-        <div className={styles.servicePath}>
-          <a className={styles.logo} href={homeUrl} title="Go to home">
-            <div className={cx(styles.serviceName, gitHubHoverStyles.default)}>
-              <b>42Cluster</b>
-            </div>
-          </a>
-          <OrganizationSwitcher />
-        </div>
+        <NavigateControls />
       </TopSearchBarSection>
 
       <TopSearchBarSection align="right">
         {/* <TopSearchBarCommandPaletteTrigger /> */}
         <DarkModeToggle />
-        <QuickAdd />
+        {/* <QuickAdd /> */}
         {/* {enrichedHelpNode && (
           <Dropdown overlay={() => <TopNavBarMenu node={enrichedHelpNode} />} placement="bottom-end">
             <ToolbarButton iconOnly icon="question-circle" aria-label="Help" />
@@ -98,14 +77,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
       justifyContent: 'flex-start',
     },
   }),
-  img: css({
-    height: theme.spacing(3),
-    width: theme.spacing(3),
-  }),
-  logo: css({
-    display: 'flex',
-    gap: theme.spacing(1.5),
-  }),
   profileButton: css({
     padding: theme.spacing(0, 0.25),
     img: {
@@ -114,16 +85,5 @@ const getStyles = (theme: GrafanaTheme2) => ({
       marginRight: 0,
       width: '30px',
     },
-  }),
-  servicePath: css({
-    display: 'flex',
-  }),
-  serviceName: css({
-    width: '100%',
-    minWidth: '50px',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    padding: theme.spacing(0.5, 1, 0.5, 1),
   }),
 });
