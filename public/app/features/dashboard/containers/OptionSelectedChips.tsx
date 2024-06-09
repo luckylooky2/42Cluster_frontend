@@ -58,13 +58,15 @@ const OptionSelectedChips = () => {
 const getStyles = (theme: GrafanaTheme2) => ({
   chipWrapper: css({
     display: 'flex',
+    flexWrap: 'wrap', // 자식 요소들이 상위 요소의 너비를 초과하면 다음 줄로 넘김
   }),
   chip: css({
     display: 'flex',
-    marginRight: '10px',
+    margin: '5px 10px 0px 0px',
     padding: '0px 15px',
     borderRadius: '1em',
     // display: 'inline-block',
+    whiteSpace: 'nowrap', // 텍스트가 줄 바꿈 없이 한 줄로 유지
     fontSize: '16px',
     height: '30px',
     lineHeight: '30px',
