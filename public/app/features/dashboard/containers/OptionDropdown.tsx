@@ -100,7 +100,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
           <div>
             <Icon name="filter" />
           </div>
-          <div className={styles.text}>
+          <div className={css(styles.text, styles.hideBelowMedium)}>
             {isMulti && variable.id}
             {!isMulti && variable.options.filter((v) => v.selected === true)[0].value}
           </div>
@@ -130,6 +130,11 @@ const getStyles = (theme: GrafanaTheme2) => ({
   // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
+  }),
+  hideBelowMedium: css({
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   }),
 });
 

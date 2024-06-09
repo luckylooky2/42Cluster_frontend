@@ -80,7 +80,7 @@ const DashboardSelect = () => {
             <div>
               <Icon name="horizontal-align-left" />
             </div>
-            <div className={styles.text}>{currDashboard}</div>
+            <div className={cx(styles.text, styles.hideBelowSmall)}>{currDashboard}</div>
           </div>
         </ToolbarButton>
       </div>
@@ -109,6 +109,11 @@ const getStyles = (theme: GrafanaTheme2) => ({
   // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
+  }),
+  hideBelowSmall: css({
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   }),
 });
 

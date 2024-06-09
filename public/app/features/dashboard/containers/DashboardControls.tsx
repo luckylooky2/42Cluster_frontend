@@ -49,7 +49,7 @@ const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
       <div className={styles.kiosk}>
         <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
           <Icon name="presentation-play" />
-          <span>Kiosk mode</span>
+          <span className={styles.hideBelowMedium}>Kiosk mode</span>
         </DefaultButton>
       </div>
     );
@@ -81,6 +81,11 @@ const getStyles = (theme: GrafanaTheme2) => {
       display: 'flex',
       flexGrow: '1',
       justifyContent: 'flex-end',
+    }),
+    hideBelowMedium: css({
+      [theme.breakpoints.down('md')]: {
+        display: 'none',
+      },
     }),
   };
 };
