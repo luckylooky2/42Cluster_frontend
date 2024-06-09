@@ -18,7 +18,7 @@ interface Props {
   ariaLabel: string;
 }
 
-const DashboardSelectBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
+const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
   const styles = useStyles2(getStyles);
   const { chrome } = useGrafana();
   const state = chrome.useState();
@@ -90,4 +90,4 @@ const getStyles = (theme: GrafanaTheme2) => {
   };
 };
 
-export default DashboardSelectBar;
+export default DashboardControlBar;
