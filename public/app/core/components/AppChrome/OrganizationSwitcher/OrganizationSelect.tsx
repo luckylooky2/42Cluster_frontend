@@ -53,7 +53,7 @@ export function OrganizationSelect({ orgs, onSelectChange }: OrganizationBasePro
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <div>
         <ToolbarButton isOpen={isOpen} className={cx(styles.button, gitHubHoverStyles.default)} aria-label="New">
-          <b>{value.label}</b>
+          <strong>{value.label}</strong>
         </ToolbarButton>
       </div>
     </Dropdown>
@@ -62,6 +62,7 @@ export function OrganizationSelect({ orgs, onSelectChange }: OrganizationBasePro
 
 const getStyles = (theme: GrafanaTheme2) => ({
   button: css({
+    color: theme.isDark ? '#fff' : '#000',
     width: '100%',
     overflow: 'hidden',
     whiteSpace: 'nowrap',
