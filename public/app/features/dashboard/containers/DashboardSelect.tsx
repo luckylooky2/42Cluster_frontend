@@ -2,15 +2,14 @@ import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
 import { mediaQueryStyles } from 'style/mediaQuery';
 
-import { GrafanaTheme2, TypedVariableModel, VariableOption } from '@grafana/data';
+import { GrafanaTheme2 } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
-import { getVariablesState } from 'app/features/variables/state/selectors';
-import { StoreState, useSelector } from 'app/types';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
-import { getDashboardUidFromUrl } from '../utils/42cluster';
+import { getDashboardUidFromUrl, variableQueryString } from '../utils/42cluster';
+import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,20 +27,12 @@ const DashboardSelect = () => {
     return;
   }
 
-  const currDashboard = dashboardList.filter((v) => v.uid === uid)[0].title;
+  const currDashboard = dashboardList.filter((v) => v.uid === uid)[0]?.title;
 
   const handleNavigate = (createAction: any) => () => {
     //   const target = e.target as HTMLButtonElement;
     reportInteraction('grafana_menu_item_clicked', { url: createAction.url, from: 'quickadd' });
     //   setCurrDashboard(target.textContent === null ? '' : target.textContent);
-  };
-
-  const variableQueryString = (variable: TypedVariableModel, selectedValues: VariableOption[]) => {
-    const prefix = '/?';
-    if (selectedValues.length) {
-      return prefix + selectedValues.map((v: VariableOption) => `var-${variable.id}=${v.value}`).join('&');
-    }
-    return '';
   };
 
   const createActions = dashboardList.map((dashboard) => ({
