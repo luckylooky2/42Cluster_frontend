@@ -7,21 +7,18 @@ import { useAppNotification } from 'app/core/copy/appNotification';
 import { commitChangesToVariable } from 'app/features/variables/pickers/OptionsPicker/actions';
 import { toggleOption } from 'app/features/variables/pickers/OptionsPicker/reducer';
 import { toKeyedAction } from 'app/features/variables/state/keyedVariablesReducer';
-import { getVariablesState } from 'app/features/variables/state/selectors';
 import { getState } from 'app/store/store';
-import { StoreState, useSelector, useDispatch } from 'app/types';
+import { useDispatch } from 'app/types';
 
 import { customButtonColor } from '../../../../style/color';
 import { getDashboardUidFromUrl } from '../utils/42cluster';
+import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 const OptionSelectedChips = () => {
-  const uid = getDashboardUidFromUrl();
   // should make "result" a state variable
-  const result = useSelector((state: StoreState) => getVariablesState(uid));
+  const [variable, selectedValues] = useTemplateVariable();
   const dispatch = useDispatch();
-  const variable = result.variables.namespace;
-  const picker = result.optionsPicker;
-  const renderList: string[] = picker.selectedValues.map((v) => v.value as string).sort();
+  const renderList: string[] = selectedValues.map((v) => v.value as string).sort();
   const styles = useStyles2(getStyles);
   const notifyApp = useAppNotification();
 
@@ -31,9 +28,10 @@ const OptionSelectedChips = () => {
 
   const onRemoveFromRenderList = (e) => {
     const value = e.target.getAttribute('data-value');
-    const option = picker.selectedValues.filter((v) => v.value === value)[0];
+    const option = selectedValues.filter((v) => v.value === value)[0];
+    const uid = getDashboardUidFromUrl();
 
-    if (picker.selectedValues.length === 1) {
+    if (selectedValues.length === 1) {
       notifyApp.error('Please select at least 1 option');
       return;
     }

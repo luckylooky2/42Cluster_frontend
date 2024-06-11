@@ -18,10 +18,7 @@ const DashboardSelect = () => {
   const mqstyles = useStyles2(mediaQueryStyles);
   const uid = getDashboardUidFromUrl();
   const dashboardList = useDashboardList();
-  const result = useSelector((state: StoreState) => getVariablesState(uid));
-  const variable = result.variables.namespace;
-  const picker = result.optionsPicker;
-  const selectedValues = picker.selectedValues;
+  const [variable, selectedValues] = useTemplateVariable();
 
   if (dashboardList === undefined) {
     return;
