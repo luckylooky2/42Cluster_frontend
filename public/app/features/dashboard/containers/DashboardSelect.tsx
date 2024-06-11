@@ -1,5 +1,6 @@
 import { css, cx } from '@emotion/css';
 import React, { useState } from 'react';
+import { mediaQueryStyles } from 'style/mediaQuery';
 
 import { GrafanaTheme2, TypedVariableModel, VariableOption } from '@grafana/data';
 import { reportInteraction } from '@grafana/runtime';
@@ -15,6 +16,7 @@ const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
+  const mqstyles = useStyles2(mediaQueryStyles);
   const uid = getDashboardUidFromUrl();
   const dashboardList = useDashboardList();
   const result = useSelector((state: StoreState) => getVariablesState(uid));
@@ -73,14 +75,14 @@ const DashboardSelect = () => {
       <div className={styles.select}>
         <ToolbarButton
           isOpen={isOpen}
-          className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton)}
+          className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
           aria-label="New"
         >
           <div className={styles.ellipsis}>
             <div>
               <Icon name="horizontal-align-left" />
             </div>
-            <div className={cx(styles.text, styles.hideBelowSmall)}>{currDashboard}</div>
+            <div className={cx(styles.text, mqstyles.hideBelowSmall)}>{currDashboard}</div>
           </div>
         </ToolbarButton>
       </div>
@@ -109,11 +111,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
   // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
-  }),
-  hideBelowSmall: css({
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
   }),
 });
 

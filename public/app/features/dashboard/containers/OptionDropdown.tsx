@@ -1,5 +1,6 @@
 import { css, cx } from '@emotion/css';
 import React, { useEffect, useState } from 'react';
+import { mediaQueryStyles } from 'style/mediaQuery';
 
 import { GrafanaTheme2 } from '@grafana/data';
 import { VariableOption, VariableWithMultiSupport, VariableWithOptions } from '@grafana/data/src/types/templateVars';
@@ -21,6 +22,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
+  const mqstyles = useStyles2(mediaQueryStyles);
   const dashboardList = useDashboardList();
 
   if (!variable || dashboardList === undefined) {
@@ -93,14 +95,14 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
     <Dropdown overlay={MenuActions} placement="bottom-start" onVisibleChange={setIsOpen}>
       <ToolbarButton
         isOpen={isOpen}
-        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.greenButton)}
+        className={cx(gitHubButtonStyles.button, gitHubButtonStyles.basicButton)}
         aria-label="New"
       >
         <div className={styles.ellipsis}>
           <div>
             <Icon name="filter" />
           </div>
-          <div className={css(styles.text, styles.hideBelowMedium)}>
+          <div className={css(styles.text, mqstyles.hideBelowMedium)}>
             {isMulti && variable.id}
             {!isMulti && variable.options.filter((v) => v.selected === true)[0].value}
           </div>
@@ -130,11 +132,6 @@ const getStyles = (theme: GrafanaTheme2) => ({
   // button: css({ maxWidth: '200px' }),
   text: css({
     paddingLeft: '10px',
-  }),
-  hideBelowMedium: css({
-    [theme.breakpoints.down('md')]: {
-      display: 'none',
-    },
   }),
 });
 
