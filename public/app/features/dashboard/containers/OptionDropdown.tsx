@@ -18,7 +18,7 @@ interface Props {
   showOptions: () => void;
 }
 
-const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptions }: Props) => {
+const OptionDropdown = ({ variable, picker, toggleOption, showOptions }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const gitHubButtonStyles = useStyles2(GitHubButtonStyles);
   const styles = useStyles2(getStyles);
@@ -82,7 +82,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
             isChecked={
               isMulti
                 ? isChecked(picker.selectedValues, createAction.text)
-                : createAction.text === variable.options.filter((v) => v.selected === true)[0].text
+                : createAction.text === variable.options.filter((v) => v.selected === true)[0]?.text
             }
             onClick={isMulti ? handleToggle(createAction.option) : handleNavigate(createAction)}
           />
@@ -104,7 +104,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions, hideOptio
           </div>
           <div className={css(styles.text, mqstyles.hideBelowMedium)}>
             {isMulti && variable.id}
-            {!isMulti && variable.options.filter((v) => v.selected === true)[0].value}
+            {!isMulti && variable.options.filter((v) => v.selected === true)[0]?.value}
           </div>
         </div>
       </ToolbarButton>
