@@ -2,14 +2,17 @@ import { css } from '@emotion/css';
 import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
-import { Divider, useStyles2, Icon } from '@grafana/ui';
-import DefaultButton from 'app/core/components/GitHubStyle/Button/DefaultButton';
+import { locationService } from '@grafana/runtime';
+import { Divider, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 
 import { SubMenu } from '../components/SubMenu/SubMenu';
 import { DashboardModel } from '../state';
+import { variableQueryString, getDashboardUidFromUrl } from '../utils/42cluster';
+import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 import DashboardSelect from './DashboardSelect';
+import DashboardUtilityButton from './DashboardUtilityButton';
 import OptionSelectedChips from './OptionSelectedChips';
 
 interface Props {
@@ -37,20 +40,26 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
 
   const DashboardControls = () => {
     return (
-      <div className={styles.dashboard}>
+      <div className={styles.controls}>
         <DashboardSelect />
         <OptionSelect showSubMenu={showSubMenu} dashboard={dashboard} ariaLabel={ariaLabel} />
       </div>
     );
   };
 
-  const KioskControls = () => {
+  const UtilityControls = () => {
+    const [variable, selectedValues] = useTemplateVariable();
+
     return (
-      <div className={styles.kiosk}>
-        <DefaultButton onClick={chrome.onToggleKioskMode} type="green">
-          <Icon name="presentation-play" />
-          <span className={styles.hideBelowMedium}>Kiosk mode</span>
-        </DefaultButton>
+      <div className={styles.controls}>
+        <DashboardUtilityButton
+          title="Reset"
+          icon="sync"
+          onClick={() => {
+            locationService.push(`/d/${getDashboardUidFromUrl()}/${variableQueryString(variable, selectedValues)}`);
+          }}
+        />
+        <DashboardUtilityButton title="Kiosk Mode" icon="presentation-play" onClick={chrome.onToggleKioskMode} />
       </div>
     );
   };
@@ -59,7 +68,7 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
     <>
       <div className={styles.bar}>
         <DashboardControls />
-        <KioskControls />
+        <UtilityControls />
       </div>
       <OptionSelectedChips />
       <Divider spacing={1} />
@@ -71,21 +80,10 @@ const getStyles = (theme: GrafanaTheme2) => {
   return {
     bar: css({
       display: 'flex',
-      // justifyContent: 'space-between',
+      justifyContent: 'space-between',
     }),
-    dashboard: css({
+    controls: css({
       display: 'flex',
-      flexGrow: '2',
-    }),
-    kiosk: css({
-      display: 'flex',
-      flexGrow: '1',
-      justifyContent: 'flex-end',
-    }),
-    hideBelowMedium: css({
-      [theme.breakpoints.down('md')]: {
-        display: 'none',
-      },
     }),
   };
 };
