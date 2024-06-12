@@ -21,37 +21,32 @@ curl -s -X PUT \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	-d "{\"name\":\"Guest\"}" \
+	-d "{\"name\":\"Admin\"}" \
 	http://$GRAFANA_APISERVER/api/orgs/1
 
 echo ""
 
-# 2. Admin Org 추가
-# Create Organization : https://grafana.com/docs/grafana/latest/developers/http_api/org/#create-organization
-message=$(curl -s -X POST \
-	-H "Accept: application/json" \
-	-H "Content-Type: application/json" \
-	-H "Authorization: Basic ${basic_token}" \
-	-d "{\"name\":\"Admin\"}" \
-	http://$GRAFANA_APISERVER/api/orgs)
-orgId=$(echo ${message} | jq -r '.orgId') 
+# # 2. Admin Org 추가
+# # Create Organization : https://grafana.com/docs/grafana/latest/developers/http_api/org/#create-organization
+# message=$(curl -s -X POST \
+# 	-H "Accept: application/json" \
+# 	-H "Content-Type: application/json" \
+# 	-H "Authorization: Basic ${basic_token}" \
+# 	-d "{\"name\":\"Admin\"}" \
+# 	http://$GRAFANA_APISERVER/api/orgs)
+# orgId=$(echo ${message} | jq -r '.orgId') 
 
-echo "${message}"
+# echo "${message}"
 
-# 3. Admin Org로 변경(이후 고정)
-# Switch user context for signed in user : https://grafana.com/docs/grafana/latest/developers/http_api/user/
-curl -s -X POST \
-	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/user/using/${orgId}
+# # 3. Admin Org로 변경(이후 고정)
+# # Switch user context for signed in user : https://grafana.com/docs/grafana/latest/developers/http_api/user/
+# curl -s -X POST \
+# 	-H "Authorization: Basic ${basic_token}" \
+# 	http://$GRAFANA_APISERVER/api/user/using/${orgId}
 
-echo ""
+# echo ""
 
 # 4. 대시보드 추가
-# bash create_dashboard.sh v1/node.json
-# bash create_dashboard.sh v1/namespace.json
-# bash create_dashboard.sh v1/pod.json
-# bash create_dashboard.sh v1/service.json
-
 bash create_dashboard.sh v2/cluster.json
 bash create_dashboard.sh v2/cluster-node.json
 bash create_dashboard.sh v2/cluster-namespace.json
@@ -67,3 +62,24 @@ curl -s -X POST \
 	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"http://prom-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
 	http://$GRAFANA_APISERVER/api/datasources
 
+# 6. Team 생성
+message=$(curl -s -X POST \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-H "Authorization: Basic ${basic_token}" \
+	-d "{\"name\":\"Admin\"}" \
+	http://$GRAFANA_APISERVER/api/teams)
+teamId=$(echo ${message} | jq -r '.teamId')
+
+echo "${message}"
+
+# 7. 홈 대시보드 설정
+# Update Team Preferences : https://grafana.com/docs/grafana/latest/developers/http_api/team/#get-team-preferences
+curl -s -X PUT \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-H "Authorization: Basic ${basic_token}" \
+	-d "{\"homeDashboardId\": 1}" \
+	http://$GRAFANA_APISERVER/api/teams/${teamId}/preferences
+
+echo ""
