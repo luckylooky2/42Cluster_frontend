@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import React from 'react';
 
-import { GrafanaTheme2 } from '@grafana/data';
+import { GrafanaTheme2, TypedVariableModel, VariableOption } from '@grafana/data';
 import { locationService } from '@grafana/runtime';
 import { Divider, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
@@ -50,15 +50,63 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
   const UtilityControls = () => {
     const [variable, selectedValues] = useTemplateVariable();
 
+    const isTimeRangeChanged = () => {
+      const qs = window.location.search;
+      if (qs) {
+        const splitted = qs
+          .slice(1)
+          .split('&')
+          .map((v) => v.split('='));
+        let [isFromChanged, isToChanged] = [true, true];
+        const keys = splitted.map((v) => v[0]);
+
+        if (!keys.includes('from') && !keys.includes('to')) {
+          return false;
+        }
+
+        for (const [key, value] of splitted) {
+          if (key === 'from' && value === 'now-1h') {
+            isFromChanged = false;
+          }
+          if (key === 'to' && value === 'now') {
+            isToChanged = false;
+          }
+        }
+
+        return isFromChanged || isToChanged ? true : false;
+      }
+
+      return true;
+    };
+
+    const determinePath = (variable: TypedVariableModel, selectedValues: VariableOption[]) => {
+      const uid = getDashboardUidFromUrl();
+      let variableString = '';
+
+      // 템플릿 변수가 없는 경우
+      if (!variable) {
+        return `/d/${uid}/?from=now-1h&to=now`;
+      }
+
+      // 템플릿 변수가 있는 경우
+      if (variable.multi) {
+        variableString = variableQueryString(variable, selectedValues);
+      } else {
+        console.log(variable, variable.current, variable.current.value);
+        variableString = `?var-${variable.id}=${variable.current.value}`;
+      }
+      return `/d/${uid}/${variableString}&from=now-1h&to=now`;
+    };
+
     return (
       <div className={styles.controls}>
-        <DashboardUtilityButton
-          title="Reset"
-          icon="sync"
-          onClick={() => {
-            locationService.push(`/d/${getDashboardUidFromUrl()}/${variableQueryString(variable, selectedValues)}`);
-          }}
-        />
+        {isTimeRangeChanged() && (
+          <DashboardUtilityButton
+            title="Reset"
+            icon="sync"
+            onClick={() => locationService.push(determinePath(variable, selectedValues))}
+          />
+        )}
         <DashboardUtilityButton title="Kiosk Mode" icon="presentation-play" onClick={chrome.onToggleKioskMode} />
       </div>
     );
