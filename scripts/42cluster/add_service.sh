@@ -14,7 +14,7 @@ fi
 
 source "$SECRET_PATH"
 basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
-org_admin=2
+org_admin=1
 
 # 1. org 생성(자동으로 admin은 추가)
 # https://stackoverflow.com/questions/22853406/how-can-i-quiet-all-the-extra-text-when-using-curl-within-a-shell-script

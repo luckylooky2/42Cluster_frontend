@@ -15,7 +15,7 @@ fi
 source "$SECRET_PATH"
 basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
 urlencode=$(echo -n "${service_name}" | jq -sRr @uri)
-org_admin=2
+org_admin=1
 
 # 1. orgId 받아오기
 # Get Organization by Name : https://grafana.com/docs/grafana/latest/developers/http_api/org/#get-organization-by-name
