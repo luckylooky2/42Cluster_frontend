@@ -48,7 +48,6 @@ export const MegaMenu = React.memo(
     const { chrome } = useGrafana();
     const state = chrome.useState();
     const dashboardList = useDashboardList();
-    console.log(dashboardList);
 
     const determinePath = function (navItem: NavModelItem, dashboardList: DashboardViewItem[] | undefined) {
       if (navItem.id === 'dashboards/browse') {
@@ -67,6 +66,7 @@ export const MegaMenu = React.memo(
     };
 
     // Remove profile + help from tree
+    const excludedMenu = ['home', 'alerting', 'profile', 'help', 'explore', 'connections', 'starred'];
     const navItems = navTree
       .map((navItem) => ({
         ...navItem,
@@ -74,15 +74,7 @@ export const MegaMenu = React.memo(
         url: determinePath(navItem, dashboardList),
       }))
       .sort((a, b) => a.priority - b.priority)
-      .filter(
-        (item) =>
-          item.id !== 'alerting' &&
-          item.id !== 'profile' &&
-          item.id !== 'help' &&
-          item.id !== 'explore' &&
-          item.id !== 'connections' &&
-          item.id !== 'starred'
-      )
+      .filter((item) => !excludedMenu.includes(item.id as string))
       .map((item) => enrichWithInteractionTracking(item, state.megaMenuDocked));
 
     const activeItem = getActiveItem(navItems, location.pathname);
