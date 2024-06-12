@@ -6,6 +6,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 import { VariableOption, VariableWithMultiSupport, VariableWithOptions } from '@grafana/data/src/types/templateVars';
 import { reportInteraction } from '@grafana/runtime';
 import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
+import { useAppNotification } from 'app/core/copy/appNotification';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 import { OptionsPickerState } from 'app/features/variables/pickers/OptionsPicker/reducer';
 
@@ -24,6 +25,9 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions }: Props) 
   const styles = useStyles2(getStyles);
   const mqstyles = useStyles2(mediaQueryStyles);
   const dashboardList = useDashboardList();
+  const notifyApp = useAppNotification();
+
+  console.log(variable, picker);
 
   if (!variable || dashboardList === undefined) {
     return;
@@ -40,9 +44,16 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions }: Props) 
   }, [showOptions, isMulti]);
 
   const handleToggle = (option: VariableOption) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
     event.preventDefault();
     event.stopPropagation();
+
+    // 1개 이하라면 토글하지 않기
+    if (picker.selectedValues.length === 1 && option.value === picker.selectedValues[0].value) {
+      notifyApp.error('Please select at least 1 option');
+      return;
+    }
+
+    const clearOthers = event.shiftKey || event.ctrlKey || event.metaKey;
     toggleOption(option, clearOthers);
   };
 
