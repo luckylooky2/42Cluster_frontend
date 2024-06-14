@@ -93,7 +93,7 @@ const OptionDropdown = ({ variable, picker, toggleOption, showOptions }: Props) 
             isChecked={
               isMulti
                 ? isChecked(picker.selectedValues, createAction.text)
-                : createAction.text === variable.options.filter((v) => v.selected === true)[0]?.text
+                : createAction.text === variable.options.find((v) => v.selected === true)?.text
             }
             onClick={isMulti ? handleToggle(createAction.option) : handleNavigate(createAction)}
           />

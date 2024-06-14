@@ -24,7 +24,7 @@ const DashboardSelect = () => {
     return;
   }
 
-  const currDashboard = dashboardList.filter((v) => v.uid === uid)[0]?.title;
+  const currDashboard = dashboardList.find((v) => v.uid === uid);
 
   const handleNavigate = (createAction: any) => () => {
     //   const target = e.target as HTMLButtonElement;
@@ -50,7 +50,7 @@ const DashboardSelect = () => {
             url={createAction.url}
             label={createAction.text}
             checkType={true}
-            isChecked={currDashboard === createAction.text}
+            isChecked={currDashboard?.title === createAction.text}
             onClick={handleNavigate(createAction)}
           />
         ))}
@@ -70,7 +70,7 @@ const DashboardSelect = () => {
             <div>
               <Icon name="horizontal-align-left" />
             </div>
-            <div className={cx(styles.text, mqstyles.hideBelowSmall)}>{currDashboard}</div>
+            <div className={cx(styles.text, mqstyles.hideBelowSmall)}>{currDashboard?.title}</div>
           </div>
         </ToolbarButton>
       </div>
