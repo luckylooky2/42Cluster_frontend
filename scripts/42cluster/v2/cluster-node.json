@@ -114,7 +114,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "kubelet_running_pods{cluster=\"\", job=\"kubelet\", metrics_path=\"/metrics\",node=~\".+\"}",
+            "expr": "sum by (node) (kubelet_running_pods{job=\"kubelet\", metrics_path=\"/metrics\", node=~\".+\"}) OR sum by (node) (kubelet_running_pod_count{job=\"kubelet\", metrics_path=\"/metrics\", node=~\".+\"})",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -122,7 +122,7 @@
             "refId": "A"
           }
         ],
-        "title": "Running Pods",
+        "title": "실행중인 파드 수(개)",
         "type": "timeseries"
       },
       {
@@ -131,40 +131,40 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 10,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
+              "showPoints": "never",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
-                "mode": "off"
+                "mode": "dashed"
               }
+            },
+            "color": {
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -175,12 +175,16 @@
                   "value": null
                 },
                 {
+                  "value": 0.7,
+                  "color": "#EAB839"
+                },
+                {
                   "color": "red",
-                  "value": 80
+                  "value": 0.8
                 }
               ]
             },
-            "unit": "short"
+            "unit": "percentunit"
           },
           "overrides": []
         },
@@ -192,15 +196,15 @@
         },
         "id": 24,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
           "tooltip": {
             "mode": "multi",
             "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": []
           }
         },
         "pluginVersion": "10.4.1",
@@ -209,14 +213,14 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "rate(process_cpu_seconds_total{cluster=\"\",job=\"kubelet\", metrics_path=\"/metrics\",node=~\".+\"}[$__rate_interval])",
+            "expr": "sum by (instance) (rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) / sum by (instance) (rate(node_cpu_seconds_total[5m]))",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "CPU usage",
+        "title": "CPU 이용률(%)",
         "type": "timeseries"
       },
       {
@@ -226,41 +230,41 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "fixedColor": "blue",
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 10,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
+              "showPoints": "never",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
-                "mode": "off"
+                "mode": "dashed"
               }
+            },
+            "color": {
+              "mode": "palette-classic",
+              "fixedColor": "blue"
             },
             "mappings": [],
             "thresholds": {
@@ -271,12 +275,16 @@
                   "value": null
                 },
                 {
+                  "value": 0.7,
+                  "color": "#EAB839"
+                },
+                {
                   "color": "red",
-                  "value": 80
+                  "value": 0.8
                 }
               ]
             },
-            "unit": "bytes"
+            "unit": "percentunit"
           },
           "overrides": []
         },
@@ -288,15 +296,15 @@
         },
         "id": 34,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
           "tooltip": {
             "mode": "multi",
             "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": []
           }
         },
         "pluginVersion": "10.4.1",
@@ -306,7 +314,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "process_resident_memory_bytes{cluster=\"\",job=\"kubelet\", metrics_path=\"/metrics\",node=~\".+\"}",
+            "expr": "sum by (instance) (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -314,7 +322,7 @@
             "refId": "A"
           }
         ],
-        "title": "Memory",
+        "title": "메모리 이용률(%)",
         "type": "timeseries"
       },
       {
@@ -376,14 +384,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Receive Bandwidth",
+        "title": "수신 대역폭 합계(bps)",
         "type": "bargauge"
       },
       {
@@ -445,14 +453,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Transmit Bandwidth",
+        "title": "송신 대역폭 합계(bps)",
         "type": "bargauge"
       },
       {
@@ -514,14 +522,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "avg(irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "avg by (node) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Average Container Bandwidth by Namespace: Received",
+        "title": "수신 대역폭 평균(bps)",
         "type": "bargauge"
       },
       {
@@ -581,13 +589,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "avg(irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "avg by (node) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "Average Container Bandwidth by Namespace: Transmitted",
+        "title": "송신 대역폭 평균(bps)",
         "type": "bargauge"
       },
       {
@@ -676,13 +684,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum(irate(container_network_receive_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_receive_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "Rate of Received Packets",
+        "title": "초당 수신 패킷 수(pps)",
         "type": "timeseries"
       },
       {
@@ -771,13 +779,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum(irate(container_network_transmit_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_transmit_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "Rate of Transmitted Packets",
+        "title": "초당 송신 패킷 수(pps)",
         "type": "timeseries"
       },
       {
@@ -866,13 +874,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum(irate(container_network_receive_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_receive_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "Rate of Received Packets Dropped",
+        "title": "초당 수신 실패 패킷 수(pps)",
         "type": "timeseries"
       },
       {
@@ -961,13 +969,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum(irate(container_network_transmit_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", cluster=\"\", node=~\".+\"}[$__rate_interval])) by (node)",
+            "expr": "sum by (node) (irate(container_network_transmit_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{node}}",
             "refId": "A"
           }
         ],
-        "title": "Rate of Transmitted Packets Dropped",
+        "title": "초당 송신 실패 패킷 수(pps)",
         "type": "timeseries"
       },
       {
@@ -1058,14 +1066,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "ceil(sum by(node) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", cluster=\"\", node!=\"\"}[$__rate_interval]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"\", node!=\"\"}[$__rate_interval])))",
+            "expr": "ceil(sum by (node) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node!=\"\"}[5m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node!=\"\"}[5m])))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "IOPS(Reads+Writes)",
+        "title": "초당 읽기 및 쓰기 작업 수(iops)",
         "type": "timeseries"
       },
       {
@@ -1156,14 +1164,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by(node) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", cluster=\"\", node!=\"\"}[$__rate_interval]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", cluster=\"\", node!=\"\"}[$__rate_interval]))",
+            "expr": "sum by(node) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node!=\"\"}[5m]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node!=\"\"}[5m]))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "ThroughPut(Read+Write)",
+        "title": "초당 읽기 및 쓰기 처리량(bps)",
         "type": "timeseries"
       }
     ],
@@ -1175,18 +1183,7 @@
     },
     "time": { "from": "now-1h", "to": "now" },
     "timepicker": {
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
-      ],
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",

@@ -75,13 +75,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "cluster:node_cpu:ratio_rate5m{cluster=\"\"}",
+            "expr": "cluster:node_cpu:ratio_rate5m",
             "format": "time_series",
             "instant": true,
             "refId": "A"
           }
         ],
-        "title": "CPU Utilisation",
+        "title": "CPU 이용률(%)",
         "type": "gauge"
       },
       {
@@ -142,13 +142,13 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "1 - sum(:node_memory_MemAvailable_bytes:sum{cluster=\"\"}) / sum(node_memory_MemTotal_bytes{job=\"node-exporter\",cluster=\"\"})",
+            "expr": "1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)",
             "format": "time_series",
             "instant": true,
             "refId": "A"
           }
         ],
-        "title": "Memory Utilisation",
+        "title": "메모리 이용률(%)",
         "type": "gauge"
       },
       {
@@ -312,7 +312,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(kube_pod_owner{job=\"kube-state-metrics\", cluster=\"\"}) by (namespace)",
+            "expr": "sum by (namespace) (kube_pod_status_phase{phase=\"Running\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -321,7 +321,7 @@
             "refId": "A"
           }
         ],
-        "title": "Pod Count",
+        "title": "네임스페이스별 실행중인 파드 수(개)",
         "transformations": [
           {
             "id": "merge",
@@ -426,7 +426,7 @@
             "refId": "B"
           }
         ],
-        "title": "Node Status",
+        "title": "노드 상태",
         "type": "bargauge"
       },
       {
@@ -492,7 +492,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum(kubelet_running_pods{cluster=\"\", job=\"kubelet\", metrics_path=\"/metrics\"}) by (node) OR sum(kubelet_running_pod_count{cluster=\"\", job=\"kubelet\", metrics_path=\"/metrics\"}) by (node)",
+            "expr": "sum by (node) (kubelet_running_pods{job=\"kubelet\", metrics_path=\"/metrics\"}) OR sum by (node) (kubelet_running_pod_count{job=\"kubelet\", metrics_path=\"/metrics\"}) ",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -511,7 +511,7 @@
             "refId": "B"
           }
         ],
-        "title": "Running Pods",
+        "title": "노드별 실행중인 파드 수(개)",
         "type": "bargauge"
       },
       {
@@ -570,7 +570,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum(kube_pod_status_phase) by (phase)",
+            "expr": "sum by (phase) (kube_pod_status_phase)",
             "format": "time_series",
             "instant": false,
             "interval": "",
@@ -580,7 +580,7 @@
             "refId": "A"
           }
         ],
-        "title": "Running Pods",
+        "title": "상태별 파드 수(개)",
         "type": "bargauge"
       }
     ],
@@ -592,18 +592,7 @@
     },
     "time": { "from": "now-1h", "to": "now" },
     "timepicker": {
-      "refresh_intervals": [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d"
-      ],
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"],
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",
