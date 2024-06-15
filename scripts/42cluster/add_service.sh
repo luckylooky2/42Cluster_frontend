@@ -26,7 +26,7 @@ message=$(curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"${service_name}\"}" \
-	http://$GRAFANA_APISERVER/api/orgs)
+	$GRAFANA_APISERVER/api/orgs)
 orgId=$(echo ${message} | jq -r '.orgId')
 
 if [ "${orgId}" = "null" ]; then
@@ -40,7 +40,7 @@ echo "${message}"
 # Switch user context for signed in user : https://grafana.com/docs/grafana/latest/developers/http_api/user/
 curl -s -X POST \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/user/using/${orgId}
+	$GRAFANA_APISERVER/api/user/using/${orgId}
 
 echo ""
 
@@ -53,7 +53,7 @@ message=$(curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"${service_name}\",\"email\":\"${service_name}@graf.com\",\"login\":\"${service_name}\",\"password\":\"1234\"}" \
-	http://$GRAFANA_APISERVER/api/admin/users)
+	$GRAFANA_APISERVER/api/admin/users)
 userId=$(echo ${message} | jq -r '.id')
 
 echo "${message}"
@@ -65,7 +65,7 @@ curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"role\":\"Viewer\",\"loginOrEmail\":\"${service_name}\"}" \
-	http://$GRAFANA_APISERVER/api/org/users
+	$GRAFANA_APISERVER/api/org/users
 
 echo ""
 
@@ -74,7 +74,7 @@ curl -s -X DELETE \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/orgs/${org_admin}/users/${userId}
+	$GRAFANA_APISERVER/api/orgs/${org_admin}/users/${userId}
 
 echo ""
 
@@ -84,8 +84,8 @@ curl -s -X POST \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"http://prom-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
-	http://$GRAFANA_APISERVER/api/datasources
+	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"prom-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
+	$GRAFANA_APISERVER/api/datasources
 
 echo ""
 
@@ -103,7 +103,7 @@ message=$(curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"${service_name}\"}" \
-	http://$GRAFANA_APISERVER/api/teams)
+	$GRAFANA_APISERVER/api/teams)
 teamId=$(echo ${message} | jq -r '.teamId')
 
 echo "${message}"
@@ -114,7 +114,7 @@ curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"userId\":${userId}}" \
-	http://$GRAFANA_APISERVER/api/teams/${teamId}/members
+	$GRAFANA_APISERVER/api/teams/${teamId}/members
 
 echo ""
 
@@ -125,7 +125,7 @@ curl -s -X PUT \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"homeDashboardId\":${dashboardId}}" \
-	http://$GRAFANA_APISERVER/api/teams/${teamId}/preferences
+	$GRAFANA_APISERVER/api/teams/${teamId}/preferences
 
 echo ""
 
@@ -134,7 +134,7 @@ echo ""
 # Switch user context for signed in user : https://grafana.com/docs/grafana/latest/developers/http_api/user/
 curl -s -X POST \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/user/using/${org_admin}
+	$GRAFANA_APISERVER/api/user/using/${org_admin}
 
 echo ""
 

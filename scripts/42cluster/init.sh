@@ -5,7 +5,7 @@
 # - 실행 시점 : 모든 Grafana 컨테이너가 올라간 뒤
 
 # provisioning으로 대시보드를 구성하지 않는다
-# dashboard를 생성할 때는 "id": null로 반드시 설정해주어야 한다
+# dashboard를 생성할 때는 반드시 "id": null를 설정하고, { dashboard: {} } 로 감싸주어야 한다
 
 if [[ ! -r "$SECRET_PATH" ]]; then
 	echo "Permission denied: init 42cluster"
@@ -22,7 +22,7 @@ curl -s -X PUT \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"Admin\"}" \
-	http://$GRAFANA_APISERVER/api/orgs/1
+	$GRAFANA_APISERVER/api/orgs/1
 
 echo ""
 
@@ -33,7 +33,7 @@ echo ""
 # 	-H "Content-Type: application/json" \
 # 	-H "Authorization: Basic ${basic_token}" \
 # 	-d "{\"name\":\"Admin\"}" \
-# 	http://$GRAFANA_APISERVER/api/orgs)
+# 	$GRAFANA_APISERVER/api/orgs)
 # orgId=$(echo ${message} | jq -r '.orgId') 
 
 # echo "${message}"
@@ -42,7 +42,7 @@ echo ""
 # # Switch user context for signed in user : https://grafana.com/docs/grafana/latest/developers/http_api/user/
 # curl -s -X POST \
 # 	-H "Authorization: Basic ${basic_token}" \
-# 	http://$GRAFANA_APISERVER/api/user/using/${orgId}
+# 	$GRAFANA_APISERVER/api/user/using/${orgId}
 
 # echo ""
 
@@ -53,14 +53,17 @@ bash create_dashboard.sh v2/cluster-namespace.json
 bash create_dashboard.sh v2/namespace-detail.json
 bash create_dashboard.sh v2/service-overview.json
 
+bash create_dashboard.sh v2/deployments/argocd.json
+bash create_dashboard.sh v2/deployments/argocd-application-overview.json
+bash create_dashboard.sh v2/deployments/argocd-operation-overview.json
 
 # 5. datasource 추가
 curl -s -X POST \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"http://prom-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
-	http://$GRAFANA_APISERVER/api/datasources
+	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"$PROMETHEUS_SERVER\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
+	$GRAFANA_APISERVER/api/datasources
 
 # 6. Team 생성
 message=$(curl -s -X POST \
@@ -68,7 +71,7 @@ message=$(curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"Admin\"}" \
-	http://$GRAFANA_APISERVER/api/teams)
+	$GRAFANA_APISERVER/api/teams)
 teamId=$(echo ${message} | jq -r '.teamId')
 
 echo "${message}"
@@ -80,6 +83,6 @@ curl -s -X PUT \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"homeDashboardId\": 1}" \
-	http://$GRAFANA_APISERVER/api/teams/${teamId}/preferences
+	$GRAFANA_APISERVER/api/teams/${teamId}/preferences
 
 echo ""

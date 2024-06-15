@@ -29,6 +29,6 @@ dashboardId=$(curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "$(cat ${file_name})" \
-	http://$GRAFANA_APISERVER/api/dashboards/db | jq -r '.id')
+	$GRAFANA_APISERVER/api/dashboards/db | jq -r '.id')
 
 echo "${dashboardId}"
