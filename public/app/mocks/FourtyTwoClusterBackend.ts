@@ -22,9 +22,9 @@ export const FourtyTwoClusterBackendMockData = {
         subCategory: null,
       },
       {
-        uid: '85a562078cdf77779eaa1add43ccec1e',
+        uid: '5a562078cdf77779eaa1add43ccec1e8',
         namespace: 'pod',
-        url: '/d/85a562078cdf77779eaa1add43ccec1e',
+        url: '/d/5a562078cdf77779eaa1add43ccec1e8',
         subCategory: 'namespace',
       },
     ],

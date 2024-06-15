@@ -13,7 +13,7 @@
         }
       ]
     },
-    "editable": false,
+    "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": null,
@@ -223,7 +223,7 @@
                     {
                       "targetBlank": false,
                       "title": "Drill down to workloads",
-                      "url": "/d/85a562078cdf77779eaa1add43ccec1e/pod?var-namespace=${__data.fields[1]}"
+                      "url": "/d/5a562078cdf77779eaa1add43ccec1e8/pod?var-namespace=${__data.fields[1]}"
                     }
                   ]
                 },
@@ -275,7 +275,7 @@
                     {
                       "targetBlank": false,
                       "title": "Drill down to pods",
-                      "url": "/d/85a562078cdf77779eaa1add43ccec1e/pod?var-namespace=${__data.fields[1]}"
+                      "url": "/d/5a562078cdf77779eaa1add43ccec1e8/pod?var-namespace=${__data.fields[1]}"
                     }
                   ]
                 },
