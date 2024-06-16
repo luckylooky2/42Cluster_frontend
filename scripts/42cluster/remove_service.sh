@@ -24,7 +24,7 @@ message=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/orgs/name/${urlencode})
+	$GRAFANA_APISERVER/api/orgs/name/${urlencode})
 orgId=$(echo ${message} | jq -r '.id')
 
 if [ "${orgId}" = "null" ]; then
@@ -40,7 +40,7 @@ curl -s -X POST \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/user/using/${orgId}
+	$GRAFANA_APISERVER/api/user/using/${orgId}
 
 echo ""
 
@@ -50,7 +50,7 @@ message=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/teams/search?name=${urlencode})
+	$GRAFANA_APISERVER/api/teams/search?name=${urlencode})
 teamId=$(echo ${message} | jq -r '.teams | .[0] | .id')
 
 echo "${message}"
@@ -61,7 +61,7 @@ curl -s -X DELETE \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/teams/${teamId}
+	$GRAFANA_APISERVER/api/teams/${teamId}
 
 echo ""
 
@@ -72,7 +72,7 @@ dashboards=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/search?query=${service_name})
+	$GRAFANA_APISERVER/api/search?query=${service_name})
 
 trimmed=${dashboards#"["}
 trimmed=${trimmed%"]"}
@@ -88,7 +88,7 @@ for element in "${elements[@]}"; do
 		-H "Accept: application/json" \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Basic ${basic_token}" \
-		http://$GRAFANA_APISERVER/api/dashboards/uid/${uid}
+		$GRAFANA_APISERVER/api/dashboards/uid/${uid}
 	
 	echo ""
 done
@@ -99,7 +99,7 @@ user_name=$(curl -s -X GET \
   -H "Accept: application/json" \
   -H "Content-Type: application/json" \
   -H "Authorization: Basic ${basic_token}" \
-  http://$GRAFANA_APISERVER/api/orgs/${orgId}/users)
+  $GRAFANA_APISERVER/api/orgs/${orgId}/users)
 
 echo "user_name : ${user_name}"
 
@@ -122,7 +122,7 @@ for element in "${elements[@]}"; do
 		-H "Accept: application/json" \
 		-H "Content-Type: application/json" \
 		-H "Authorization: Basic ${basic_token}" \
-		http://$GRAFANA_APISERVER/api/admin/users/${userId}
+		$GRAFANA_APISERVER/api/admin/users/${userId}
 	
 	echo ""
 done
@@ -133,7 +133,7 @@ message=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/datasources/name/prometheus)
+	$GRAFANA_APISERVER/api/datasources/name/prometheus)
 # -r 옵션은 ""을 떼- 준다
 uid=$(echo ${message} | jq -r '.uid')
 
@@ -144,7 +144,7 @@ curl -s -X DELETE \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/datasources/uid/${uid}
+	$GRAFANA_APISERVER/api/datasources/uid/${uid}
 
 echo ""
 
@@ -154,7 +154,7 @@ curl -s -X POST \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/user/using/${org_admin}
+	$GRAFANA_APISERVER/api/user/using/${org_admin}
 
 echo ""
 
@@ -164,7 +164,7 @@ curl -s -X DELETE \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/orgs/${orgId}
+	$GRAFANA_APISERVER/api/orgs/${orgId}
 
 echo ""
 

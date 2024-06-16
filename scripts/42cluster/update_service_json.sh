@@ -26,7 +26,7 @@ message=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/dashboards/uid/b0d919ec0ea5f6543124e16c42a5a87f)
+	$GRAFANA_APISERVER/api/dashboards/uid/mb0d919ec0ea5f6543124e16c42a5a87)
 
 id=$(echo ${message} | jq -r '.dashboard.id')
 uid=$(echo ${message} | jq -r '.dashboard.uid')
@@ -37,7 +37,7 @@ orgs=$(curl -s -X GET \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	http://$GRAFANA_APISERVER/api/orgs)
+	$GRAFANA_APISERVER/api/orgs)
 
 if [ ${command} == 'add' ]; then
 	org_names=(${service_name})
@@ -133,4 +133,4 @@ curl -s -X POST \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "$(cat ${output_file})" \
-	http://$GRAFANA_APISERVER/api/dashboards/db
+	$GRAFANA_APISERVER/api/dashboards/db
