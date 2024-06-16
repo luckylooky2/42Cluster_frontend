@@ -54,10 +54,22 @@ export const MegaMenu = React.memo(
         if (dashboardList === undefined) {
           return 'dashboards/not-found';
         } else {
-          if (dashboardList.length > 0) {
-            return `d/${dashboardList[0].uid}`;
+          const sorted = dashboardList.filter((v) => v.uid.startsWith('m'));
+          if (sorted.length > 0) {
+            return `d/${sorted[0].uid}`;
           } else {
             return 'dashboards/not-found';
+          }
+        }
+      } else if (navItem.id === 'deployment') {
+        if (dashboardList === undefined) {
+          return 'deployment/not-found';
+        } else {
+          const sorted = dashboardList.filter((v) => v.uid.startsWith('a'));
+          if (sorted.length > 0) {
+            return `d/${sorted[0].uid}`;
+          } else {
+            return 'deployment/not-found';
           }
         }
       } else {
