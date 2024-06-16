@@ -11,6 +11,7 @@ import { useMediaQueryChange } from 'app/core/hooks/useMediaQueryChange';
 import store from 'app/core/store';
 import { useLoadNextChildrenPage } from 'app/features/browse-dashboards/state';
 import { CommandPalette } from 'app/features/commandPalette/CommandPalette';
+import { determineUrl } from 'app/features/dashboard/utils/42cluster';
 import { KioskMode } from 'app/types';
 
 import { AppChromeMenu } from './AppChromeMenu';
@@ -29,8 +30,9 @@ export function AppChrome({ children }: Props) {
   const searchBarHidden = state.searchBarHidden || state.kioskMode === KioskMode.TV;
   const theme = useTheme2();
   const styles = useStyles2(getStyles);
-  const isDashboardPage = window.location.pathname.startsWith('/d/');
-  const isLogin = window.location.pathname.startsWith('/login');
+  const [dashboardUrl, loginUrl] = determineUrl();
+  const isDashboardPage = window.location.pathname.startsWith(dashboardUrl);
+  const isLogin = window.location.pathname.startsWith(loginUrl);
   // should render when kiosk mode is full while only at dashboard page
   const shouldRenderContent = !isLogin && (!isDashboardPage || (isDashboardPage && !state.kioskMode));
 
