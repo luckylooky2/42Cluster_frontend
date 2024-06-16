@@ -99,6 +99,10 @@ export const getActiveItem = (
         // TODO refactor routes such that we don't need this custom logic
         currentBestMatch = link;
         break;
+      } else if (pathname.startsWith('/d/a') || pathname.startsWith('/deployment')) {
+        if (link.id === 'deployment') {
+          currentBestMatch = link;
+        }
       } else if (linkPathname.startsWith('/d/') || pathname.startsWith('/d/') || pathname.startsWith('/dashboards')) {
         // dashboard match
         // TODO refactor routes such that we don't need this custom logic
