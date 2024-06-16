@@ -15,7 +15,7 @@ fi
 source "$SECRET_PATH"
 basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
 
-# 1. 첫 번째 Org 이름을 Guest로 변경
+# 1. 첫 번째 Org 이름을 Admin으로 변경
 # Update Organization : https://grafana.com/docs/grafana/latest/developers/http_api/org/#update-organization
 curl -s -X PUT \
 	-H "Accept: application/json" \
@@ -47,11 +47,11 @@ echo ""
 # echo ""
 
 # 4. 대시보드 추가
-bash create_dashboard.sh v2/cluster.json
-bash create_dashboard.sh v2/cluster-node.json
-bash create_dashboard.sh v2/cluster-namespace.json
-bash create_dashboard.sh v2/namespace-detail.json
-bash create_dashboard.sh v2/service-overview.json
+bash create_dashboard.sh v2/metrics/cluster.json
+bash create_dashboard.sh v2/metrics/cluster-node.json
+bash create_dashboard.sh v2/metrics/cluster-namespace.json
+bash create_dashboard.sh v2/metrics/namespace-detail.json
+bash create_dashboard.sh v2/metrics/service-overview.json
 
 bash create_dashboard.sh v2/deployments/argocd.json
 bash create_dashboard.sh v2/deployments/argocd-application-overview.json
