@@ -223,7 +223,7 @@
                     {
                       "targetBlank": false,
                       "title": "Drill down to workloads",
-                      "url": "/d/5a562078cdf77779eaa1add43ccec1e8/pod?var-namespace=${__data.fields[1]}"
+                      "url": "/d/m5a562078cdf77779eaa1add43ccec1e/pod?var-namespace=${__data.fields[1]}"
                     }
                   ]
                 },
@@ -275,7 +275,7 @@
                     {
                       "targetBlank": false,
                       "title": "Drill down to pods",
-                      "url": "/d/5a562078cdf77779eaa1add43ccec1e8/pod?var-namespace=${__data.fields[1]}"
+                      "url": "/d/m5a562078cdf77779eaa1add43ccec1e/pod?var-namespace=${__data.fields[1]}"
                     }
                   ]
                 },
@@ -441,21 +441,14 @@
             },
             "fieldMinMax": false,
             "mappings": [],
-            "max": 58,
+            "min": 0,
+            "max": 29,
             "thresholds": {
               "mode": "absolute",
               "steps": [
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "#EAB839",
-                  "value": 40
-                },
-                {
-                  "color": "red",
-                  "value": 50
                 }
               ]
             }
@@ -584,7 +577,7 @@
         "type": "bargauge"
       }
     ],
-    "refresh": "10s",
+    "refresh": "5s",
     "schemaVersion": 39,
     "tags": ["kubernetes-mixin"],
     "templating": {
@@ -597,7 +590,7 @@
     },
     "timezone": "browser",
     "title": "(1) clutser",
-    "uid": "fd1d0c121a264efa8644b636a3f509a8",
+    "uid": "mfd1d0c121a264efa8644b636a3f509a",
     "version": 1,
     "weekStart": ""
   }

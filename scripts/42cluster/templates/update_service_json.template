@@ -21,7 +21,7 @@
     "liveNow": false,
     "panels": [
     ],
-    "refresh": "10s",
+    "refresh": "5s",
     "schemaVersion": 39,
     "tags": ["kubernetes-mixin"],
     "templating": { "list": [] },
@@ -43,7 +43,7 @@
     },
     "timezone": "browser",
     "title": "(5) service overview",
-    "uid": "b0d919ec0ea5f6543124e16c42a5a87f",
+    "uid": "mb0d919ec0ea5f6543124e16c42a5a87",
     "version": "$version",
     "weekStart": ""
   }
