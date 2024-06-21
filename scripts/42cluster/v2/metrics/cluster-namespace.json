@@ -22,50 +22,18 @@
     "panels": [
       {
         "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "line",
-              "fillOpacity": 0,
-              "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
               },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineStyle": {
-                "fill": "solid"
-              },
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "line"
-              }
+              "inspect": false
             },
-            "fieldMinMax": false,
             "mappings": [],
             "thresholds": {
               "mode": "absolute",
@@ -75,54 +43,168 @@
                   "value": null
                 },
                 {
-                  "color": "#EAB839",
-                  "value": 40
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            },
+            "displayName": "",
+            "unit": "short"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "생성된 파드"
                 },
                 {
-                  "color": "red",
-                  "value": 50
+                  "id": "custom.align"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 200
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "namespace"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "네임스페이스"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": false,
+                      "title": "Drill down to pods",
+                      "url": "/d/m5a562078cdf77779eaa1add43ccec1e/pod?var-namespace=${__data.fields[0]}"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.align",
+                  "value": "auto"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "오류가 발생한 파드"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 200
                 }
               ]
             }
-          },
-          "overrides": []
+          ]
         },
         "gridPos": {
           "h": 7,
-          "w": 12,
+          "w": 24,
           "x": 0,
           "y": 0
         },
-        "id": 30,
+        "id": 36,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
+          "showHeader": true,
+          "cellHeight": "sm",
+          "footer": {
+            "show": true,
+            "reducer": ["sum"],
+            "countRows": false,
+            "fields": ""
           }
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (namespace) (kube_pod_status_phase{phase=\"Running\", namespace=~\"$namespace\"})",
-            "format": "time_series",
-            "intervalFactor": 2,
-            "legendFormat": "{{namespace}}",
-            "range": true,
+            "exemplar": false,
+            "expr": "sum by (namespace) (kube_pod_status_ready{condition!=\"true\", namespace=~\"$namespace\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
             "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (namespace) (kube_pod_status_phase{namespace=~\"$namespace\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
           }
         ],
-        "title": "실행 중인 파드 수(개)",
-        "type": "timeseries"
+        "title": "네임스페이스별 파드 현황(개)",
+        "type": "table",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {
+              "reducers": []
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "interval": "1m"
       },
       {
         "datasource": {
@@ -130,43 +212,43 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 0,
               "gradientMode": "opacity",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineStyle": {
-                "fill": "solid"
-              },
-              "lineWidth": 1,
+              "showPoints": "never",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
                 "mode": "area"
+              },
+              "lineStyle": {
+                "fill": "solid"
               }
+            },
+            "color": {
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -191,22 +273,22 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 12,
-          "y": 0
+          "h": 14,
+          "w": 8,
+          "x": 0,
+          "y": 7
         },
         "id": 24,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
           "tooltip": {
             "mode": "multi",
             "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": []
           }
         },
         "pluginVersion": "10.4.1",
@@ -215,7 +297,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum by (namespace) (rate(container_cpu_usage_seconds_total{namespace=~\"$namespace\"}[5m])) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"cpu\", namespace=~\"$namespace\"})",
+            "expr": "sum by (namespace) (rate(container_cpu_usage_seconds_total{namespace=~\"$namespace\", container!~\"^(|exporter)$\"}[1m])) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"cpu\", namespace=~\"$namespace\", container!~\"^(|exporter)$\"})",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "refId": "A"
@@ -231,41 +313,41 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "fixedColor": "blue",
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 10,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
+              "showPoints": "never",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
                 "mode": "off"
               }
+            },
+            "color": {
+              "mode": "palette-classic",
+              "fixedColor": "blue"
             },
             "mappings": [],
             "thresholds": {
@@ -290,24 +372,24 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 0,
+          "h": 14,
+          "w": 8,
+          "x": 8,
           "y": 7
         },
         "id": 34,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
           "tooltip": {
             "mode": "multi",
             "sort": "none"
-          }
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
         "pluginVersion": "10.4.1",
         "targets": [
@@ -315,7 +397,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum by (namespace) (container_memory_rss{namespace=~\"$namespace\", container!=\"\"})",
+            "expr": "sum by (namespace) (container_memory_rss{namespace=~\"$namespace\", container!~\"^(|exporter)$\"})",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "refId": "A"
@@ -331,41 +413,41 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "fixedColor": "blue",
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 0,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
+              "showPoints": "never",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "never",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
                 "mode": "area"
               }
+            },
+            "color": {
+              "mode": "palette-classic",
+              "fixedColor": "blue"
             },
             "mappings": [],
             "thresholds": {
@@ -390,24 +472,24 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 12,
+          "h": 14,
+          "w": 8,
+          "x": 16,
           "y": 7
         },
         "id": 35,
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
           "tooltip": {
             "mode": "multi",
             "sort": "none"
-          }
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
         "pluginVersion": "10.4.1",
         "targets": [
@@ -416,7 +498,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (namespace) (container_memory_rss{namespace=~\"$namespace\", container!=\"\"}) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"memory\", namespace=~\"$namespace\"})",
+            "expr": "sum by (namespace) (container_memory_rss{namespace=~\"$namespace\", container!~\"^(|exporter)$\"}) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"memory\", namespace=~\"$namespace\", container!~\"^(|exporter)$\"})",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
@@ -433,8 +515,40 @@
         },
         "fieldConfig": {
           "defaults": {
+            "custom": {
+              "drawStyle": "points",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
             "color": {
-              "mode": "continuous-GrYlRd"
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -455,37 +569,33 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 6,
+          "h": 7,
+          "w": 12,
           "x": 0,
-          "y": 14
+          "y": 21
         },
         "id": 12,
         "interval": "1m",
         "options": {
-          "displayMode": "lcd",
-          "maxVizHeight": 300,
-          "minVizHeight": 16,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
           },
-          "showUnfilled": true,
-          "sizing": "auto",
-          "valueMode": "color"
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          }
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (namespace) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
+            "expr": "sum by (namespace) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
@@ -493,7 +603,7 @@
           }
         ],
         "title": "수신 대역폭 합계(bps)",
-        "type": "bargauge"
+        "type": "timeseries"
       },
       {
         "datasource": {
@@ -502,8 +612,40 @@
         },
         "fieldConfig": {
           "defaults": {
+            "custom": {
+              "drawStyle": "points",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
             "color": {
-              "mode": "continuous-GrYlRd"
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -524,37 +666,33 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 6,
-          "x": 6,
-          "y": 14
+          "h": 7,
+          "w": 12,
+          "x": 12,
+          "y": 21
         },
         "id": 13,
         "interval": "1m",
         "options": {
-          "displayMode": "lcd",
-          "maxVizHeight": 300,
-          "minVizHeight": 16,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
           },
-          "showUnfilled": true,
-          "sizing": "auto",
-          "valueMode": "color"
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          }
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (namespace) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
+            "expr": "sum by (namespace) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
@@ -562,17 +700,52 @@
           }
         ],
         "title": "송신 대역폭 합계(bps)",
-        "type": "bargauge"
+        "type": "timeseries"
       },
       {
         "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "never",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "area"
+              },
+              "lineStyle": {
+                "fill": "solid"
+              }
+            },
             "color": {
-              "mode": "continuous-GrYlRd"
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -584,63 +757,98 @@
                 },
                 {
                   "color": "red",
-                  "value": 80
+                  "value": 0.01
                 }
               ]
             },
-            "unit": "binBps"
+            "max": 0.1,
+            "min": 0,
+            "unit": "percentunit"
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
+          "h": 7,
           "w": 6,
-          "x": 12,
-          "y": 14
+          "x": 0,
+          "y": 28
         },
-        "id": 14,
+        "id": 20,
         "interval": "1m",
         "options": {
-          "displayMode": "lcd",
-          "maxVizHeight": 300,
-          "minVizHeight": 16,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
           },
-          "showUnfilled": true,
-          "sizing": "auto",
-          "valueMode": "color"
+          "legend": {
+            "showLegend": false,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.1",
         "targets": [
           {
             "datasource": {
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "avg by (namespace) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
+            "expr": "sum by (namespace) (irate(container_network_receive_packets_dropped_total{namespace=~\"$namespace\"}[1m])) / sum by (namespace) (irate(container_network_receive_packets_total{namespace=~\"$namespace\"}[1m]))",
             "format": "time_series",
-            "legendFormat": "{{namespace}}",
+            "legendFormat": "{{pod}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "수신 대역폭 평균(bps)",
-        "type": "bargauge"
+        "title": "수신 패킷 손실률(%)",
+        "type": "timeseries"
       },
       {
         "datasource": {
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "never",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "area"
+              },
+              "lineStyle": {
+                "fill": "solid"
+              }
+            },
             "color": {
-              "mode": "continuous-GrYlRd"
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -652,132 +860,242 @@
                 },
                 {
                   "color": "red",
-                  "value": 80
+                  "value": 0.01
                 }
               ]
             },
-            "unit": "binBps"
+            "max": 0.1,
+            "min": 0,
+            "unit": "percentunit"
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
+          "h": 7,
+          "w": 6,
+          "x": 6,
+          "y": 28
+        },
+        "id": 37,
+        "interval": "1m",
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "showLegend": false,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
+        },
+        "pluginVersion": "10.4.1",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum by (namespace) (irate(container_network_transmit_packets_dropped_total{namespace=~\"$namespace\"}[1m])) / sum by (namespace) (irate(container_network_transmit_packets_total{namespace=~\"$namespace\"}[1m]))",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "송신 패킷 손실률(%)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "prometheus",
+          "type": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "never",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "area"
+              },
+              "lineStyle": {
+                "fill": "solid"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 0.01
+                }
+              ]
+            },
+            "max": 0.1,
+            "min": 0,
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
+          "w": 6,
+          "x": 12,
+          "y": 28
+        },
+        "id": 38,
+        "interval": "1m",
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "showLegend": false,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
+        },
+        "pluginVersion": "10.4.1",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "sum by (namespace) (irate(container_network_receive_errors_total{namespace=~\"$namespace\"}[1m]))",
+            "format": "time_series",
+            "legendFormat": "{{pod}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "수신 오류 패킷 증가율(%)",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "prometheus",
+          "type": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "never",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "area"
+              },
+              "lineStyle": {
+                "fill": "solid"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 0.01
+                }
+              ]
+            },
+            "max": 0.1,
+            "min": 0,
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 7,
           "w": 6,
           "x": 18,
-          "y": 14
+          "y": 28
         },
-        "id": 15,
+        "id": 40,
         "interval": "1m",
         "options": {
-          "displayMode": "lcd",
-          "maxVizHeight": 300,
-          "minVizHeight": 16,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
-          },
-          "showUnfilled": true,
-          "sizing": "auto",
-          "valueMode": "color"
-        },
-        "pluginVersion": "10.4.3",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "expr": "avg by (namespace) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
-            "format": "time_series",
-            "legendFormat": "{{namespace}}",
-            "refId": "A"
-          }
-        ],
-        "title": "송신 대역폭 평균(bps)",
-        "type": "bargauge"
-      },
-      {
-        "datasource": {
-          "uid": "prometheus"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "points",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "pps"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 0,
-          "y": 22
-        },
-        "id": 16,
-        "interval": "1m",
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
           "tooltip": {
             "mode": "single",
             "sort": "none"
-          }
+          },
+          "legend": {
+            "showLegend": false,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
         "pluginVersion": "10.4.1",
         "targets": [
@@ -785,340 +1103,58 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum by (namespace) (irate(container_network_receive_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
+            "editorMode": "code",
+            "expr": "sum by (namespace) (irate(container_network_transmit_errors_total{namespace=~\"$namespace\"}[1m]))",
             "format": "time_series",
-            "legendFormat": "{{namespace}}",
+            "legendFormat": "{{pod}}",
+            "range": true,
             "refId": "A"
           }
         ],
-        "title": "초당 수신 패킷 수(pps)",
+        "title": "송신 오류 패킷 증가율(%)",
         "type": "timeseries"
       },
       {
         "datasource": {
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "points",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "pps"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 12,
-          "y": 22
-        },
-        "id": 17,
-        "interval": "1m",
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "10.4.1",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "expr": "sum by (namespace) (irate(container_network_transmit_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
-            "format": "time_series",
-            "legendFormat": "{{namespace}}",
-            "refId": "A"
-          }
-        ],
-        "title": "초당 송신 패킷 수(pps)",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "uid": "prometheus"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "points",
-              "fillOpacity": 10,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "pps"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 0,
-          "y": 29
-        },
-        "id": 18,
-        "interval": "1m",
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "10.4.1",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "expr": "sum by (namespace) (irate(container_network_receive_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
-            "format": "time_series",
-            "legendFormat": "{{namespace}}",
-            "refId": "A"
-          }
-        ],
-        "title": "초당 수신 실패 패킷 수(pps)",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "uid": "prometheus"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
-              "drawStyle": "points",
-              "fillOpacity": 10,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
-                }
-              ]
-            },
-            "unit": "pps"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 12,
-          "x": 12,
-          "y": 29
-        },
-        "id": 19,
-        "interval": "1m",
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
-          "tooltip": {
-            "mode": "single",
-            "sort": "none"
-          }
-        },
-        "pluginVersion": "10.4.1",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "expr": "sum by (namespace) (irate(container_network_transmit_packets_dropped_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$namespace\"}[5m]))",
-            "format": "time_series",
-            "legendFormat": "{{namespace}}",
-            "refId": "A"
-          }
-        ],
-        "title": "초당 송신 실패 패킷 수(pps)",
-        "type": "timeseries"
-      },
-      {
-        "datasource": {
-          "uid": "prometheus"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
-            "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "smooth",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 0,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "smooth",
-              "lineWidth": 1,
+              "showPoints": "auto",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
                 "mode": "off"
               }
+            },
+            "color": {
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -1142,22 +1178,22 @@
           "h": 7,
           "w": 12,
           "x": 0,
-          "y": 36
+          "y": 35
         },
         "id": 20,
         "interval": "1m",
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
           "tooltip": {
             "mode": "single",
             "sort": "none"
-          }
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
         "pluginVersion": "10.4.1",
         "targets": [
@@ -1165,10 +1201,12 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "ceil(sum by (namespace) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", namespace=~\"$namespace\"}[5m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", namespace=~\"$namespace\"}[5m])))",
+            "expr": "ceil(sum by (namespace) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", namespace=~\"$namespace\"}[1m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", namespace=~\"$namespace\"}[1m])))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
-            "refId": "A"
+            "refId": "A",
+            "editorMode": "code",
+            "range": true
           }
         ],
         "title": "초당 읽기 및 쓰기 작업 수(iops)",
@@ -1180,40 +1218,40 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            },
             "custom": {
-              "axisBorderShow": false,
-              "axisCenteredZero": false,
-              "axisColorMode": "text",
-              "axisLabel": "",
-              "axisPlacement": "auto",
-              "barAlignment": 0,
               "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
               "fillOpacity": 0,
               "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
+              "spanNulls": false,
               "insertNulls": false,
-              "lineInterpolation": "linear",
-              "lineWidth": 1,
+              "showPoints": "auto",
               "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
               "scaleDistribution": {
                 "type": "linear"
               },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
               },
               "thresholdsStyle": {
                 "mode": "off"
               }
+            },
+            "color": {
+              "mode": "palette-classic"
             },
             "mappings": [],
             "thresholds": {
@@ -1237,22 +1275,22 @@
           "h": 7,
           "w": 12,
           "x": 12,
-          "y": 36
+          "y": 35
         },
         "id": 21,
         "interval": "1m",
         "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "right",
-            "showLegend": true
-          },
-          "timezone": ["browser"],
           "tooltip": {
             "mode": "single",
             "sort": "none"
-          }
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "right",
+            "calcs": []
+          },
+          "timezone": ["browser"]
         },
         "pluginVersion": "10.4.1",
         "targets": [
@@ -1260,7 +1298,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", namespace=~\"$namespace\"}[5m]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", namespace=~\"$namespace\"}[5m]))",
+            "expr": "sum by(namespace) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", namespace=~\"$namespace\"}[1m]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", namespace=~\"$namespace\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "refId": "A"
@@ -1276,11 +1314,6 @@
     "templating": {
       "list": [
         {
-          "current": {
-            "selected": false,
-            "text": "monitoring",
-            "value": "monitoring"
-          },
           "datasource": { "type": "prometheus", "uid": "prometheus" },
           "definition": "",
           "hide": 0,
