@@ -22,7 +22,8 @@
     "panels": [
       {
         "datasource": {
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -57,28 +58,29 @@
         "id": 1,
         "interval": "1m",
         "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
           "reduceOptions": {
+            "values": false,
             "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
+            "fields": ""
           },
+          "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true,
-          "sizing": "auto"
+          "sizing": "auto",
+          "minVizWidth": 75,
+          "minVizHeight": 75
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "cluster:node_cpu:ratio_rate5m",
+            "expr": "avg(sum by (instance) (rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])) / sum by (instance) (rate(node_cpu_seconds_total[1m])))",
             "format": "time_series",
             "instant": true,
-            "refId": "A"
+            "refId": "A",
+            "editorMode": "code"
           }
         ],
         "title": "클러스터 CPU 이용률(%)",
@@ -86,7 +88,8 @@
       },
       {
         "datasource": {
-          "uid": "prometheus"
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -124,19 +127,19 @@
         "id": 4,
         "interval": "1m",
         "options": {
-          "minVizHeight": 75,
-          "minVizWidth": 75,
-          "orientation": "auto",
           "reduceOptions": {
+            "values": false,
             "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
+            "fields": ""
           },
+          "orientation": "auto",
           "showThresholdLabels": false,
           "showThresholdMarkers": true,
-          "sizing": "auto"
+          "sizing": "auto",
+          "minVizWidth": 75,
+          "minVizHeight": 75
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
@@ -145,7 +148,8 @@
             "expr": "1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)",
             "format": "time_series",
             "instant": true,
-            "refId": "A"
+            "refId": "A",
+            "editorMode": "code"
           }
         ],
         "title": "클러스터 메모리 이용률(%)",
@@ -155,6 +159,334 @@
         "datasource": {
           "type": "prometheus",
           "uid": "prometheus"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 1,
+                    "text": "Not Ready"
+                  },
+                  "1": {
+                    "index": 0,
+                    "text": "Ready"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            },
+            "fieldMinMax": false,
+            "max": 1,
+            "min": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 31,
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "horizontal",
+          "displayMode": "basic",
+          "valueMode": "color",
+          "namePlacement": "auto",
+          "showUnfilled": true,
+          "sizing": "manual",
+          "minVizWidth": 8,
+          "minVizHeight": 26,
+          "maxVizHeight": 300
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "expr": "kube_node_status_condition{condition=\"Ready\", status=\"true\"}",
+            "format": "time_series",
+            "intervalFactor": 2,
+            "legendFormat": "{{node}}",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "expr": "",
+            "hide": false,
+            "instant": false,
+            "range": true,
+            "refId": "B"
+          }
+        ],
+        "title": "노드 상태",
+        "type": "bargauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false,
+              "filterable": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            },
+            "fieldMinMax": false,
+            "min": 0
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "생성된 파드"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "custom.width"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 20
+                      },
+                      {
+                        "color": "red",
+                        "value": 25
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #B"
+              },
+              "properties": [
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "displayName",
+                  "value": "오류가 발생한 파드"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #C"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "최대 생성 가능 파드"
+                },
+                {
+                  "id": "custom.cellOptions",
+                  "value": {
+                    "mode": "gradient",
+                    "type": "gauge",
+                    "valueDisplayMode": "text"
+                  }
+                },
+                {
+                  "id": "color",
+                  "value": {
+                    "mode": "thresholds"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "node"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "노드"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "",
+                      "url": "/d/m78cdf77779eaa1add43ccec1e5a5620/?var-node=${__data.fields[0]}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 8
+        },
+        "id": 30,
+        "options": {
+          "showHeader": true,
+          "cellHeight": "sm",
+          "footer": {
+            "show": true,
+            "reducer": ["sum"],
+            "countRows": false,
+            "fields": ""
+          },
+          "frameIndex": 0,
+          "sortBy": []
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (node) (kube_pod_status_phase * on(namespace, pod) group_left(node) kube_pod_info)",
+            "format": "table",
+            "instant": true,
+            "intervalFactor": 2,
+            "legendFormat": "{{node}}",
+            "range": false,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (node) (kube_pod_status_ready{condition!=\"true\"} * on(namespace, pod) group_left(node) kube_pod_info)",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "sum by (node) (kube_node_status_capacity{resource=\"pods\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "legendFormat": "__auto",
+            "range": false,
+            "refId": "C"
+          }
+        ],
+        "title": "노드별 파드 현황(개)",
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "29": false,
+                "Time": true
+              },
+              "includeByName": {},
+              "indexByName": {},
+              "renameByName": {}
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "uid": "prometheus",
+          "type": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -189,7 +521,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #B"
+                "options": "Value #A"
               },
               "properties": [
                 {
@@ -238,7 +570,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #A"
+                "options": "Value #B"
               },
               "properties": [
                 {
@@ -258,10 +590,10 @@
           ]
         },
         "gridPos": {
-          "h": 16,
+          "h": 8,
           "w": 12,
           "x": 12,
-          "y": 0
+          "y": 8
         },
         "id": 8,
         "interval": "1m",
@@ -283,7 +615,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (namespace) (kube_pod_status_ready{condition!=\"true\"})",
+            "expr": "sum by (namespace) (kube_pod_status_phase)",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -298,7 +630,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (namespace) (kube_pod_status_phase)",
+            "expr": "sum by (namespace) (kube_pod_status_ready{condition!=\"true\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -328,181 +660,6 @@
           }
         ],
         "type": "table"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
-        "description": "",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
-            "fieldMinMax": false,
-            "mappings": [
-              {
-                "options": {
-                  "0": {
-                    "index": 1,
-                    "text": "Not Ready"
-                  },
-                  "1": {
-                    "index": 0,
-                    "text": "Ready"
-                  }
-                },
-                "type": "value"
-              }
-            ],
-            "max": 1,
-            "min": 0,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "red",
-                  "value": null
-                },
-                {
-                  "color": "green",
-                  "value": 1
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 0,
-          "y": 8
-        },
-        "id": 31,
-        "options": {
-          "displayMode": "basic",
-          "maxVizHeight": 300,
-          "minVizHeight": 26,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
-          },
-          "showUnfilled": true,
-          "sizing": "manual",
-          "valueMode": "color"
-        },
-        "pluginVersion": "10.4.3",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "editorMode": "code",
-            "expr": "kube_node_status_condition{condition=\"Ready\", status=\"true\"}",
-            "format": "time_series",
-            "intervalFactor": 2,
-            "legendFormat": "{{node}}",
-            "range": true,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
-            "expr": "",
-            "hide": false,
-            "instant": false,
-            "range": true,
-            "refId": "B"
-          }
-        ],
-        "title": "노드 상태",
-        "type": "bargauge"
-      },
-      {
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "continuous-GrYlRd"
-            },
-            "fieldMinMax": false,
-            "mappings": [],
-            "min": 0,
-            "max": 29,
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 0,
-          "y": 16
-        },
-        "id": 30,
-        "options": {
-          "displayMode": "basic",
-          "maxVizHeight": 300,
-          "minVizHeight": 16,
-          "minVizWidth": 8,
-          "namePlacement": "auto",
-          "orientation": "horizontal",
-          "reduceOptions": {
-            "calcs": ["lastNotNull"],
-            "fields": "",
-            "values": false
-          },
-          "showUnfilled": true,
-          "sizing": "auto",
-          "valueMode": "color"
-        },
-        "pluginVersion": "10.4.3",
-        "targets": [
-          {
-            "datasource": {
-              "uid": "prometheus"
-            },
-            "editorMode": "code",
-            "expr": "sum by (node) (kubelet_running_pods{job=\"kubelet\", metrics_path=\"/metrics\"}) OR sum by (node) (kubelet_running_pod_count{job=\"kubelet\", metrics_path=\"/metrics\"}) ",
-            "format": "time_series",
-            "intervalFactor": 2,
-            "legendFormat": "{{node}}",
-            "range": true,
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
-            "expr": "",
-            "hide": false,
-            "instant": false,
-            "range": true,
-            "refId": "B"
-          }
-        ],
-        "title": "노드별 파드 현황(개)",
-        "type": "bargauge"
       }
     ],
     "refresh": "5s",
