@@ -50,6 +50,7 @@ echo ""
 bash create_dashboard.sh v2/metrics/cluster.json
 bash create_dashboard.sh v2/metrics/cluster-node.json
 bash create_dashboard.sh v2/metrics/cluster-namespace.json
+bash create_dashboard.sh v2/metrics/node-detail.json
 bash create_dashboard.sh v2/metrics/namespace-detail.json
 bash create_dashboard.sh v2/metrics/service-overview.json
 
