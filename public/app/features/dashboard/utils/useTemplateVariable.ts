@@ -4,8 +4,8 @@ import { useSelector, StoreState } from 'app/types';
 
 import { getDashboardUidFromUrl } from './42cluster';
 
-export const useTemplateVariable = (): [TypedVariableModel, VariableOption[]] => {
-  const result = useSelector((state: StoreState) => getVariablesState(getDashboardUidFromUrl()));
+export const useTemplateVariable = (uid: string = getDashboardUidFromUrl()): [TypedVariableModel, VariableOption[]] => {
+  const result = useSelector((state: StoreState) => getVariablesState(uid));
   const variable = result.variables.namespace;
   const selectedValues = result.optionsPicker.selectedValues;
 
