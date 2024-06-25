@@ -14,22 +14,40 @@ import { customButtonColor } from '../../../../style/color';
 import { getDashboardUidFromUrl } from '../utils/42cluster';
 import { useTemplateVariable } from '../utils/useTemplateVariable';
 
+const SELECTED_ALL = '$__all';
+
 const OptionSelectedChips = () => {
   // should make "result" a state variable
   const [variable, selectedValues] = useTemplateVariable();
   const dispatch = useDispatch();
-  const renderList: string[] = selectedValues.map((v) => v.value as string).sort();
   const styles = useStyles2(getStyles);
   const notifyApp = useAppNotification();
 
-  if (!variable || !variable.multi) {
+  if (!variable || !variable.multi || selectedValues.length === 0) {
     return;
   }
+
+  const renderList: string[] = (selectedValues[0].value === SELECTED_ALL ? variable.options.slice(1) : selectedValues)
+    .map((v) => v.value as string)
+    .sort();
 
   const onRemoveFromRenderList = (e) => {
     const value = e.target.getAttribute('data-value');
     const option = selectedValues.filter((v) => v.value === value)[0];
     const uid = getDashboardUidFromUrl();
+
+    if (selectedValues[0].value === SELECTED_ALL) {
+      console.log(selectedValues, variable.options);
+      for (const currOption of variable.options) {
+        console.log(currOption);
+        if (currOption.value === value) {
+          continue;
+        }
+        dispatch(toKeyedAction(uid, toggleOption({ option: currOption, clearOthers: false, forceSelect: false })));
+      }
+      commitChangesToVariable(uid)(dispatch, getState);
+      return;
+    }
 
     if (selectedValues.length === 1) {
       notifyApp.error('Please select at least 1 option');
