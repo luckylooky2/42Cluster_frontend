@@ -8,7 +8,7 @@ import { useGrafana } from 'app/core/context/GrafanaContext';
 
 import { SubMenu } from '../components/SubMenu/SubMenu';
 import { DashboardModel } from '../state';
-import { variableQueryString, getDashboardUidFromUrl } from '../utils/42cluster';
+import { selectedValuesQueryString, getDashboardUidFromUrl } from '../utils/42cluster';
 import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 import DashboardSelect from './DashboardSelect';
@@ -81,7 +81,6 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
 
     const determinePath = (variable: TypedVariableModel, selectedValues: VariableOption[]) => {
       const uid = getDashboardUidFromUrl();
-      let variableString = '';
 
       // 템플릿 변수가 없는 경우
       if (!variable) {
@@ -89,13 +88,7 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
       }
 
       // 템플릿 변수가 있는 경우
-      if (variable.multi) {
-        variableString = variableQueryString(variable, selectedValues);
-      } else {
-        console.log(variable, variable.current, variable.current.value);
-        variableString = `?var-${variable.id}=${variable.current.value}`;
-      }
-      return `/d/${uid}/${variableString}&from=now-1h&to=now`;
+      return `/d/${uid}/${selectedValuesQueryString(selectedValues, variable.id)}&from=now-1h&to=now`;
     };
 
     return (
