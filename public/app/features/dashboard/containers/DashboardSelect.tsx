@@ -49,6 +49,7 @@ const DashboardSelect = () => {
             key={index}
             url={createAction.url}
             label={createAction.text}
+            disabled={currDashboard?.title === createAction.text}
             checkType={true}
             isChecked={currDashboard?.title === createAction.text}
             onClick={handleNavigate(createAction)}
