@@ -8,8 +8,7 @@ import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
-import { getDashboardUidFromUrl, variableQueryString } from '../utils/42cluster';
-import { useTemplateVariable } from '../utils/useTemplateVariable';
+import { getDashboardUidFromUrl } from '../utils/42cluster';
 
 const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +17,6 @@ const DashboardSelect = () => {
   const mqstyles = useStyles2(mediaQueryStyles);
   const uid: string | undefined = getDashboardUidFromUrl();
   const dashboardList = useDashboardList()?.filter((v) => v.uid.startsWith(uid?.[0]));
-  const [variable, selectedValues] = useTemplateVariable();
 
   if (dashboardList === undefined) {
     return;
@@ -32,11 +30,13 @@ const DashboardSelect = () => {
     //   setCurrDashboard(target.textContent === null ? '' : target.textContent);
   };
 
+  // 모든 대시보드의 variable 상황을 한 꺼번에 받아올 수 없기 때문에 여기서 Link 경로를 지정하는 것에 무리가 있음
+  // - 해당 대시보드가 로드되고 난 이후에 변경하는 방향으로
   const createActions = dashboardList.map((dashboard) => ({
     id: dashboard.uid,
     text: dashboard.title,
     icon: 'plus',
-    url: `${dashboard.url}${variableQueryString(variable, selectedValues)}`,
+    url: `/d/${dashboard.uid}`,
     hideFromTabs: true,
     isCreateAction: true,
   }));
