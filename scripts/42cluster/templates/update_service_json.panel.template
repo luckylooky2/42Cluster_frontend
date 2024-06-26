@@ -68,27 +68,13 @@
     "targets": [
       {
         "datasource": { "uid": "prometheus" },
-        "expr": "sum(node_namespace_pod_container:container_cpu_usage_seconds_total:sum_irate{namespace=\"$service_name\"})",
+        "expr": "sum by (namespace) (rate(container_cpu_usage_seconds_total{namespace=~\"$service_name\", container!~\"^(|exporter)$\"}[1m])) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"cpu\", namespace=~\"$service_name\", container!~\"^(|exporter)$\"})",
         "format": "time_series",
         "legendFormat": "$service_name",
         "refId": "A"
-      },
-      {
-        "datasource": { "uid": "prometheus" },
-        "expr": "scalar(kube_resourcequota{namespace=\"$service_name\", type=\"hard\",resource=\"requests.cpu\"})",
-        "format": "time_series",
-        "legendFormat": "quota - requests",
-        "refId": "B"
-      },
-      {
-        "datasource": { "uid": "prometheus" },
-        "expr": "scalar(kube_resourcequota{namespace=\"$service_name\", type=\"hard\",resource=\"limits.cpu\"})",
-        "format": "time_series",
-        "legendFormat": "quota - limits",
-        "refId": "C"
       }
     ],
-    "title": "CPU 사용량",
+    "title": "CPU 이용률",
     "type": "timeseries"
   },
   {
@@ -152,27 +138,13 @@
     "targets": [
       {
         "datasource": { "uid": "prometheus" },
-        "expr": "sum(container_memory_working_set_bytes{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$service_name\", container!=\"\", image!=\"\"})",
+        "expr": "sum by (namespace) (container_memory_rss{namespace=~\"$service_name\", container!~\"^(|exporter)$\"}) / sum by (namespace) (kube_pod_container_resource_limits{resource=\"memory\", namespace=~\"$service_name\", container!~\"^(|exporter)$\"})",
         "format": "time_series",
         "legendFormat": "$service_name",
         "refId": "A"
-      },
-      {
-        "datasource": { "uid": "prometheus" },
-        "expr": "scalar(kube_resourcequota{namespace=\"$service_name\", type=\"hard\",resource=\"requests.memory\"})",
-        "format": "time_series",
-        "legendFormat": "quota - requests",
-        "refId": "B"
-      },
-      {
-        "datasource": { "uid": "prometheus" },
-        "expr": "scalar(kube_resourcequota{namespace=\"$service_name\", type=\"hard\",resource=\"limits.memory\"})",
-        "format": "time_series",
-        "legendFormat": "quota - limits",
-        "refId": "C"
       }
     ],
-    "title": "메모리 사용량",
+    "title": "메모리 이용률",
     "type": "timeseries"
   },
   {
@@ -237,14 +209,14 @@
       {
         "datasource": { "uid": "prometheus" },
         "editorMode": "code",
-        "expr": "sum(irate(container_network_receive_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$service_name\"}[$__rate_interval]))",
+        "expr": "sum by (namespace) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=~\"$service_name\"}[1m]))",
         "format": "time_series",
         "legendFormat": "$service_name",
         "range": true,
         "refId": "A"
       }
     ],
-    "title": "Rate of Received Packets",
+    "title": "수신 대역폭 합계",
     "type": "timeseries"
   },
   {
@@ -300,12 +272,12 @@
     "targets": [
       {
         "datasource": { "uid": "prometheus" },
-        "expr": "sum(irate(container_network_transmit_packets_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", namespace=\"$service_name\"}[$__rate_interval]))",
+        "expr": "ceil(sum by (namespace) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", namespace=~\"$service_name\"}[1m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!~\"^(|exporter)$\", namespace=~\"$service_name\"}[1m])))",
         "format": "time_series",
         "legendFormat": "$service_name",
         "refId": "A"
       }
     ],
-    "title": "Rate of Transmitted Packets",
+    "title": "초당 읽기 및 쓰기 작업 수",
     "type": "timeseries"
   }
