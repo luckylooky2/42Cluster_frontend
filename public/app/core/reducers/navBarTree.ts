@@ -10,17 +10,17 @@ export const initialState: NavModelItem[] = config.bootData?.navTree ?? [];
 function customNavTree(navTree: NavModelItem[]): NavModelItem[] {
   return navTree.concat([
     {
-      id: 'logs',
-      text: 'Logs',
-      icon: 'list-ui-alt',
-      url: '/logs',
+      id: 'metric',
+      text: 'Metric',
+      icon: 'dashboard',
+      url: '/metric',
       sortWeight: 0,
     },
     {
-      id: 'vulnerability',
-      text: 'Vulnerability',
-      icon: 'shield-exclamation',
-      url: '/vulnerability',
+      id: 'audit',
+      text: 'Audit Log',
+      icon: 'list-ui-alt',
+      url: '/audit',
       sortWeight: 0,
     },
     {
@@ -28,6 +28,13 @@ function customNavTree(navTree: NavModelItem[]): NavModelItem[] {
       text: 'Deployment',
       icon: 'rocket',
       url: '/deployment',
+      sortWeight: 0,
+    },
+    {
+      id: 'vulnerability',
+      text: 'Vulnerability',
+      icon: 'shield-exclamation',
+      url: '/vulnerability',
       sortWeight: 0,
     },
   ]);

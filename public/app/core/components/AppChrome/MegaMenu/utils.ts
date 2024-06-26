@@ -99,7 +99,15 @@ export const getActiveItem = (
         // TODO refactor routes such that we don't need this custom logic
         currentBestMatch = link;
         break;
-      } else if (pathname.startsWith('/d/a') || pathname.startsWith('/deployment')) {
+      } else if (pathname.startsWith('/d/m') || pathname.startsWith('/metric')) {
+        if (link.id === 'metric') {
+          currentBestMatch = link;
+        }
+      } else if (pathname.startsWith('/d/a') || pathname.startsWith('/audit')) {
+        if (link.id === 'audit') {
+          currentBestMatch = link;
+        }
+      } else if (pathname.startsWith('/d/d') || pathname.startsWith('/deployment')) {
         if (link.id === 'deployment') {
           currentBestMatch = link;
         }

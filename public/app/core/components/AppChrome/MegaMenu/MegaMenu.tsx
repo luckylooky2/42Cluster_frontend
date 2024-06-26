@@ -21,20 +21,18 @@ export interface Props extends DOMAttributes {
   onClose: () => void;
 }
 
-const addPriority = (menuName: string) => {
-  switch (menuName) {
-    case 'Home':
+const addPriority = (menuText: string) => {
+  switch (menuText) {
+    case 'Metric':
       return 1;
-    case 'Dashboards':
+    case 'Audit Log':
       return 2;
-    case 'Logs':
+    case 'Deployment':
       return 3;
     case 'Vulnerability':
       return 4;
-    case 'Deployment':
-      return 5;
     case 'Administration':
-      return 6;
+      return 5;
     default:
       return 9;
   }
@@ -42,6 +40,7 @@ const addPriority = (menuName: string) => {
 
 export const MegaMenu = React.memo(
   forwardRef<HTMLDivElement, Props>(({ onClose, ...restProps }, ref) => {
+    // customNavTree로 변경된 navTree를 받아옴
     const navTree = useSelector((state) => state.navBarTree);
     const styles = useStyles2(getStyles);
     const location = useLocation();
@@ -50,22 +49,33 @@ export const MegaMenu = React.memo(
     const dashboardList = useDashboardList();
 
     const determinePath = function (navItem: NavModelItem, dashboardList: DashboardViewItem[] | undefined) {
-      if (navItem.id === 'dashboards/browse') {
+      if (navItem.id === 'metric') {
         if (dashboardList === undefined) {
-          return 'dashboards/not-found';
+          return 'metric/not-found';
         } else {
           const sorted = dashboardList.filter((v) => v.uid.startsWith('m'));
           if (sorted.length > 0) {
             return `d/${sorted[0].uid}`;
           } else {
-            return 'dashboards/not-found';
+            return 'metric/not-found';
+          }
+        }
+      } else if (navItem.id === 'audit') {
+        if (dashboardList === undefined) {
+          return 'audit/not-found';
+        } else {
+          const sorted = dashboardList.filter((v) => v.uid.startsWith('a'));
+          if (sorted.length > 0) {
+            return `d/${sorted[0].uid}`;
+          } else {
+            return 'audit/not-found';
           }
         }
       } else if (navItem.id === 'deployment') {
         if (dashboardList === undefined) {
           return 'deployment/not-found';
         } else {
-          const sorted = dashboardList.filter((v) => v.uid.startsWith('a'));
+          const sorted = dashboardList.filter((v) => v.uid.startsWith('d'));
           if (sorted.length > 0) {
             return `d/${sorted[0].uid}`;
           } else {
@@ -77,8 +87,17 @@ export const MegaMenu = React.memo(
       }
     };
 
-    // Remove profile + help from tree
-    const excludedMenu = ['home', 'alerting', 'profile', 'help', 'explore', 'connections', 'starred'];
+    // Remove from tree
+    const excludedMenu = [
+      'home',
+      'dashboards/browse',
+      'alerting',
+      'profile',
+      'help',
+      'explore',
+      'connections',
+      'starred',
+    ];
     const navItems = navTree
       .map((navItem) => ({
         ...navItem,
