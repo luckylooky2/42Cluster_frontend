@@ -83,7 +83,7 @@
             "editorMode": "code"
           }
         ],
-        "title": "클러스터 CPU 이용률(%)",
+        "title": "클러스터 CPU 이용률",
         "type": "gauge"
       },
       {
@@ -152,7 +152,7 @@
             "editorMode": "code"
           }
         ],
-        "title": "클러스터 메모리 이용률(%)",
+        "title": "클러스터 메모리 이용률",
         "type": "gauge"
       },
       {
@@ -462,7 +462,7 @@
             "refId": "C"
           }
         ],
-        "title": "노드별 파드 현황(개)",
+        "title": "노드별 파드 현황",
         "transformations": [
           {
             "id": "merge",
@@ -639,7 +639,7 @@
             "refId": "B"
           }
         ],
-        "title": "네임스페이스별 파드 현황(개)",
+        "title": "네임스페이스별 파드 현황",
         "transformations": [
           {
             "id": "merge",
