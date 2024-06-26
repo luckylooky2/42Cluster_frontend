@@ -7,13 +7,16 @@ if [ -z "${service_name}" ]; then
     exit 1
 fi
 
+mkdir -p tmp
+mkdir -p new
+
 generate_hash() {
 	curr_time=$(date +%s)
     temp_file="${curr_time}.tmp"
     echo ${curr_time} > "${temp_file}"
     hash=$(md5sum "$temp_file" | cut -d ' ' -f1)
     rm "${temp_file}"
-    echo "${hash:0:32}"
+    echo "m${hash:0:31}"
 }
 
 create_json() {

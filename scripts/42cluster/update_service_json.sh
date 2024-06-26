@@ -18,6 +18,9 @@ if [ -z "${service_name}" ]; then
     exit 1
 fi
 
+mkdir -p tmp
+mkdir -p new
+
 source "$SECRET_PATH"
 basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
 
