@@ -14,7 +14,8 @@ export const SubMenuItems = ({ variables, readOnly }: Props) => {
   const [visibleVariables, setVisibleVariables] = useState<TypedVariableModel[]>([]);
 
   useEffect(() => {
-    setVisibleVariables(variables.filter((state) => state.hide !== VariableHide.hideVariable));
+    // render first(OptionDropdown) only
+    setVisibleVariables(variables.filter((state) => state.hide !== VariableHide.hideVariable).slice(0, 1));
   }, [variables]);
 
   if (visibleVariables.length === 0) {
