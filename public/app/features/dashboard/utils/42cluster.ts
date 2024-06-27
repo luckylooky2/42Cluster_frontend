@@ -3,22 +3,24 @@ import { getVariablesState } from 'app/features/variables/state/selectors';
 import { VariableOption } from '../../../../../packages/grafana-data/src';
 
 export const getDashboardUidFromUrl = function () {
-  const DEV = 2,
-    PROD = 3;
+  const [DEV, PROD] = [2, 3];
 
   return window.location.pathname.split('/')[DEV];
 };
 
-export const determineUrl = function () {
-  const DEV = 0,
-    PROD = 1;
+export const ROOT = 0;
+export const DASHBOARD = 1;
+export const LOGIN = 2;
+
+export const determineUrl = function (index: number) {
+  const [DEV, PROD] = [0, 1];
 
   const url = [
-    ['/d/', '/login'],
-    ['/grafana/d/', '/grafana/login'],
+    ['/', '/d/', '/login'],
+    ['/grafana', '/grafana/d/', '/grafana/login'],
   ];
 
-  return url[DEV];
+  return url[DEV][index];
 };
 
 // TODO : /var-namespace=All
@@ -47,4 +49,50 @@ export const selectedValuesQueryString = (selectedValues: VariableOption[], vari
   }
 
   return prefix + selectedValues.map((v: VariableOption) => `var-${variableId}=${v.value}`).join('&');
+};
+
+export const isTimeRangeChanged = () => {
+  const qs = window.location.search;
+  if (qs) {
+    const splitted = qs
+      .slice(1)
+      .split('&')
+      .map((v) => v.split('='));
+    let [isFromChanged, isToChanged] = [true, true];
+    const keys = splitted.map((v) => v[0]);
+
+    if (!keys.includes('from') && !keys.includes('to')) {
+      return false;
+    }
+
+    for (const [key, value] of splitted) {
+      if (key === 'from' && value === 'now-1h') {
+        isFromChanged = false;
+      }
+      if (key === 'to' && value === 'now') {
+        isToChanged = false;
+      }
+    }
+
+    return isFromChanged || isToChanged ? true : false;
+  }
+
+  return true;
+};
+
+export const isTemplateVariableFiltered = () => {
+  const qs = window.location.search;
+  if (qs) {
+    const splitted = qs
+      .slice(1)
+      .split('&')
+      .map((v) => v.split('='));
+    const keys = splitted.map((v) => v[0]);
+    if (!keys.includes('var-Filters')) {
+      return false;
+    }
+    return true;
+  }
+
+  return false;
 };
