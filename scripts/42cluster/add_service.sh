@@ -84,7 +84,7 @@ curl -s -X POST \
 	-H "Accept: application/json" \
 	-H "Content-Type: application/json" \
 	-H "Authorization: Basic ${basic_token}" \
-	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"prom-kube-prometheus-stack-prometheus.monitoring.svc.cluster.local:9090\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
+	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"$PROMETHEUS_SERVER\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
 	$GRAFANA_APISERVER/api/datasources
 
 echo ""
