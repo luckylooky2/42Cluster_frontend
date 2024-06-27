@@ -37,6 +37,7 @@ import { liveTimer } from '../dashgrid/liveTimer';
 import { getTimeSrv } from '../services/TimeSrv';
 import { cleanUpDashboardAndVariables } from '../state/actions';
 import { initDashboard } from '../state/initDashboard';
+import { determineUrl, ROOT } from '../utils/42cluster';
 
 import DashboardControlBar from './DashboardControlBar';
 import { DashboardPageRouteParams, DashboardPageRouteSearchParams } from './types';
@@ -315,7 +316,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
     const showSubMenu = !editPanel && !kioskMode && !this.props.queryParams.editview;
 
     const showToolbar = kioskMode !== KioskMode.Full && !queryParams.editview;
-    const isHome = window.location.pathname === '/';
+    const isHome = window.location.pathname === determineUrl(ROOT);
 
     const pageClassName = cx({
       'panel-in-fullscreen': Boolean(viewPanel),
