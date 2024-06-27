@@ -76,7 +76,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "avg(sum by (instance) (rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])) / sum by (instance) (rate(node_cpu_seconds_total[1m])))",
+            "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])) / sum(rate(node_cpu_seconds_total[1m]))",
             "format": "time_series",
             "instant": true,
             "refId": "A",
@@ -674,7 +674,7 @@
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",
-    "title": "(1) clutser",
+    "title": "(1) Clutser",
     "uid": "mfd1d0c121a264efa8644b636a3f509a",
     "version": 1,
     "weekStart": ""
