@@ -102,7 +102,7 @@
             "statsGroups": []
           }
         ],
-        "title": "총 변경 실패 횟수",
+        "title": "7일간 ConfigMap 변경 실패 횟수",
         "type": "stat"
       },
       {
@@ -803,7 +803,7 @@
     ],
     "refresh": "",
     "schemaVersion": 39,
-    "tags": [],
+    "tags": ["audit"],
     "templating": {
       "list": []
     },
@@ -813,7 +813,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "(1) ConfigMap Modification Failure",
+    "title": "(1) ConfigMap-Modification Failure",
     "uid": "a70baea6a8ba5d368cd85bef0fbd3876",
     "version": 1,
     "weekStart": ""
