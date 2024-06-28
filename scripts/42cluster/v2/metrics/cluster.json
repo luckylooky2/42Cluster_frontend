@@ -13,7 +13,7 @@
         }
       ]
     },
-    "editable": false,
+    "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
     "id": null,
@@ -518,13 +518,13 @@
             },
             "mappings": [
               {
-                "type": "value",
                 "options": {
                   "": {
-                    "text": "생성 실패한 파드",
-                    "index": 0
+                    "index": 0,
+                    "text": "생성 실패한 파드"
                   }
-                }
+                },
+                "type": "value"
               }
             ],
             "thresholds": {
@@ -603,58 +603,58 @@
               "type": "cloudwatch",
               "uid": "cloudwatch"
             },
-            "id": "",
-            "region": "ap-northeast-2",
-            "logGroups": [],
-            "queryMode": "Metrics",
-            "namespace": "AWS/ApplicationELB",
-            "metricName": "RequestCount",
-            "expression": "",
             "dimensions": {},
-            "statistic": "Sum",
-            "period": "",
-            "metricQueryType": 1,
-            "metricEditorMode": 0,
-            "sqlExpression": "SELECT SUM(RequestCount) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
-            "matchExact": true,
-            "refId": "A",
+            "expression": "SEARCH('{AWS/ApplicationELB,LoadBalancer} MetricName=\"RequestCount\"', 'Sum', 10)",
+            "hide": false,
+            "id": "",
             "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "RequestCount",
+            "metricQueryType": 0,
+            "namespace": "AWS/ApplicationELB",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "ap-northeast-2",
             "sql": {
+              "from": {
+                "property": {
+                  "name": "AWS/ApplicationELB",
+                  "type": "string"
+                },
+                "type": "property"
+              },
+              "groupBy": {
+                "expressions": [
+                  {
+                    "property": {
+                      "name": "LoadBalancer",
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "type": "and"
+              },
+              "orderBy": {
+                "name": "SUM",
+                "type": "function"
+              },
               "select": {
-                "type": "function",
                 "name": "SUM",
                 "parameters": [
                   {
-                    "type": "functionParameter",
-                    "name": "RequestCount"
+                    "name": "RequestCount",
+                    "type": "functionParameter"
                   }
-                ]
-              },
-              "from": {
-                "type": "property",
-                "property": {
-                  "type": "string",
-                  "name": "AWS/ApplicationELB"
-                }
-              },
-              "groupBy": {
-                "type": "and",
-                "expressions": [
-                  {
-                    "type": "groupBy",
-                    "property": {
-                      "type": "string",
-                      "name": "LoadBalancer"
-                    }
-                  }
-                ]
-              },
-              "orderBy": {
-                "type": "function",
-                "name": "SUM"
+                ],
+                "type": "function"
               }
             },
-            "hide": false
+            "sqlExpression": "SELECT SUM(RequestCount) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
+            "statistic": "Sum"
           }
         ],
         "title": "로드 밸런서(ALB) 요청 처리 수",
@@ -880,17 +880,7 @@
             "color": {
               "mode": "palette-classic"
             },
-            "mappings": [
-              {
-                "type": "value",
-                "options": {
-                  "": {
-                    "text": "생성 실패한 파드",
-                    "index": 0
-                  }
-                }
-              }
-            ],
+            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -904,40 +894,7 @@
             "min": 0,
             "unit": "none"
           },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Value #A"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "생성된 파드"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": null
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 20
-                      },
-                      {
-                        "color": "red",
-                        "value": 25
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
         "gridPos": {
           "h": 8,
@@ -967,58 +924,58 @@
               "type": "cloudwatch",
               "uid": "cloudwatch"
             },
-            "id": "",
-            "region": "ap-northeast-2",
-            "logGroups": [],
-            "queryMode": "Metrics",
-            "namespace": "AWS/ApplicationELB",
-            "metricName": "RequestCount",
-            "expression": "",
             "dimensions": {},
-            "statistic": "Sum",
-            "period": "",
-            "metricQueryType": 1,
-            "metricEditorMode": 1,
-            "sqlExpression": "SELECT SUM(ActiveConnectionCount) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
-            "matchExact": true,
-            "refId": "A",
+            "expression": "SEARCH('{AWS/ApplicationELB,LoadBalancer} MetricName=\"ActiveConnectionCount\" ', 'Sum', 10)",
+            "hide": false,
+            "id": "",
             "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "RequestCount",
+            "metricQueryType": 0,
+            "namespace": "AWS/ApplicationELB",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "ap-northeast-2",
             "sql": {
+              "from": {
+                "property": {
+                  "name": "AWS/ApplicationELB",
+                  "type": "string"
+                },
+                "type": "property"
+              },
+              "groupBy": {
+                "expressions": [
+                  {
+                    "property": {
+                      "name": "LoadBalancer",
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "type": "and"
+              },
+              "orderBy": {
+                "name": "SUM",
+                "type": "function"
+              },
               "select": {
-                "type": "function",
                 "name": "SUM",
                 "parameters": [
                   {
-                    "type": "functionParameter",
-                    "name": "HTTPCode_Target_5XX_Count"
+                    "name": "HTTPCode_Target_5XX_Count",
+                    "type": "functionParameter"
                   }
-                ]
-              },
-              "from": {
-                "type": "property",
-                "property": {
-                  "type": "string",
-                  "name": "AWS/ApplicationELB"
-                }
-              },
-              "groupBy": {
-                "type": "and",
-                "expressions": [
-                  {
-                    "type": "groupBy",
-                    "property": {
-                      "type": "string",
-                      "name": "LoadBalancer"
-                    }
-                  }
-                ]
-              },
-              "orderBy": {
-                "type": "function",
-                "name": "SUM"
+                ],
+                "type": "function"
               }
             },
-            "hide": false
+            "sqlExpression": "",
+            "statistic": "Sum"
           }
         ],
         "title": "로드 밸런서(ALB) 활성 연결 수",
@@ -1066,17 +1023,7 @@
             "color": {
               "mode": "palette-classic"
             },
-            "mappings": [
-              {
-                "type": "value",
-                "options": {
-                  "": {
-                    "text": "생성 실패한 파드",
-                    "index": 0
-                  }
-                }
-              }
-            ],
+            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -1090,40 +1037,7 @@
             "min": 0,
             "unit": "none"
           },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "Value #A"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "생성된 파드"
-                },
-                {
-                  "id": "thresholds",
-                  "value": {
-                    "mode": "absolute",
-                    "steps": [
-                      {
-                        "color": "green",
-                        "value": null
-                      },
-                      {
-                        "color": "#EAB839",
-                        "value": 20
-                      },
-                      {
-                        "color": "red",
-                        "value": 25
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
         "gridPos": {
           "h": 8,
@@ -1153,58 +1067,58 @@
               "type": "cloudwatch",
               "uid": "cloudwatch"
             },
-            "id": "",
-            "region": "ap-northeast-2",
-            "logGroups": [],
-            "queryMode": "Metrics",
-            "namespace": "AWS/ApplicationELB",
-            "metricName": "RequestCount",
-            "expression": "",
             "dimensions": {},
-            "statistic": "Sum",
-            "period": "",
-            "metricQueryType": 1,
-            "metricEditorMode": 1,
-            "sqlExpression": "SELECT SUM(HTTPCode_ELB_5XX_Count) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
-            "matchExact": true,
-            "refId": "A",
+            "expression": "SEARCH('{AWS/ApplicationELB,LoadBalancer} MetricName=\"HTTPCode_ELB_5XX_Count\" ', 'Sum', 10)\n",
+            "hide": false,
+            "id": "",
             "label": "",
+            "logGroups": [],
+            "matchExact": true,
+            "metricEditorMode": 1,
+            "metricName": "RequestCount",
+            "metricQueryType": 0,
+            "namespace": "AWS/ApplicationELB",
+            "period": "",
+            "queryMode": "Metrics",
+            "refId": "A",
+            "region": "ap-northeast-2",
             "sql": {
+              "from": {
+                "property": {
+                  "name": "AWS/ApplicationELB",
+                  "type": "string"
+                },
+                "type": "property"
+              },
+              "groupBy": {
+                "expressions": [
+                  {
+                    "property": {
+                      "name": "LoadBalancer",
+                      "type": "string"
+                    },
+                    "type": "groupBy"
+                  }
+                ],
+                "type": "and"
+              },
+              "orderBy": {
+                "name": "SUM",
+                "type": "function"
+              },
               "select": {
-                "type": "function",
                 "name": "SUM",
                 "parameters": [
                   {
-                    "type": "functionParameter",
-                    "name": "HTTPCode_Target_5XX_Count"
+                    "name": "HTTPCode_Target_5XX_Count",
+                    "type": "functionParameter"
                   }
-                ]
-              },
-              "from": {
-                "type": "property",
-                "property": {
-                  "type": "string",
-                  "name": "AWS/ApplicationELB"
-                }
-              },
-              "groupBy": {
-                "type": "and",
-                "expressions": [
-                  {
-                    "type": "groupBy",
-                    "property": {
-                      "type": "string",
-                      "name": "LoadBalancer"
-                    }
-                  }
-                ]
-              },
-              "orderBy": {
-                "type": "function",
-                "name": "SUM"
+                ],
+                "type": "function"
               }
             },
-            "hide": false
+            "sqlExpression": "SELECT SUM(HTTPCode_ELB_5XX_Count) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
+            "statistic": "Sum"
           }
         ],
         "title": "로드 밸런서(ALB) 서버 오류(5XX) 요청 수",
