@@ -1579,7 +1579,7 @@
     ],
     "refresh": "5s",
     "schemaVersion": 39,
-    "tags": ["kubernetes-mixin"],
+    "tags": ["metric"],
     "templating": {
       "list": [
         {

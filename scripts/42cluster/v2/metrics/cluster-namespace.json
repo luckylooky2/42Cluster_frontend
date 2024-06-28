@@ -58,7 +58,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #B"
+                "options": "Value #A"
               },
               "properties": [
                 {
@@ -111,7 +111,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #A"
+                "options": "Value #B"
               },
               "properties": [
                 {
@@ -166,7 +166,7 @@
             "instant": true,
             "legendFormat": "__auto",
             "range": false,
-            "refId": "A"
+            "refId": "B"
           },
           {
             "datasource": {
@@ -181,7 +181,7 @@
             "instant": true,
             "legendFormat": "__auto",
             "range": false,
-            "refId": "B"
+            "refId": "A"
           }
         ],
         "title": "네임스페이스별 파드 현황",
@@ -1419,7 +1419,7 @@
     ],
     "refresh": "5s",
     "schemaVersion": 39,
-    "tags": ["kubernetes-mixin"],
+    "tags": ["metric"],
     "templating": {
       "list": [
         {

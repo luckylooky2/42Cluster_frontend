@@ -22,8 +22,8 @@
     "panels": [
       {
         "datasource": {
-          "uid": "prometheus",
-          "type": "prometheus"
+          "type": "prometheus",
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -50,8 +50,8 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 6,
+          "h": 5,
+          "w": 4,
           "x": 0,
           "y": 0
         },
@@ -76,11 +76,11 @@
             "datasource": {
               "uid": "prometheus"
             },
+            "editorMode": "code",
             "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[1m])) / sum(rate(node_cpu_seconds_total[1m]))",
             "format": "time_series",
             "instant": true,
-            "refId": "A",
-            "editorMode": "code"
+            "refId": "A"
           }
         ],
         "title": "클러스터 CPU 이용률",
@@ -88,8 +88,8 @@
       },
       {
         "datasource": {
-          "uid": "prometheus",
-          "type": "prometheus"
+          "type": "prometheus",
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -119,9 +119,9 @@
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 6,
-          "x": 6,
+          "h": 5,
+          "w": 4,
+          "x": 4,
           "y": 0
         },
         "id": 4,
@@ -145,11 +145,11 @@
             "datasource": {
               "uid": "prometheus"
             },
+            "editorMode": "code",
             "expr": "1 - sum(node_memory_MemAvailable_bytes) / sum(node_memory_MemTotal_bytes)",
             "format": "time_series",
             "instant": true,
-            "refId": "A",
-            "editorMode": "code"
+            "refId": "A"
           }
         ],
         "title": "클러스터 메모리 이용률",
@@ -160,68 +160,53 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "description": "",
         "fieldConfig": {
           "defaults": {
-            "mappings": [
-              {
-                "options": {
-                  "0": {
-                    "index": 1,
-                    "text": "Not Ready"
-                  },
-                  "1": {
-                    "index": 0,
-                    "text": "Ready"
-                  }
-                },
-                "type": "value"
-              }
-            ],
+            "custom": {
+              "neutral": -2
+            },
+            "mappings": [],
             "thresholds": {
-              "mode": "absolute",
+              "mode": "percentage",
               "steps": [
                 {
-                  "color": "red",
+                  "color": "green",
                   "value": null
                 },
                 {
-                  "color": "green",
-                  "value": 1
+                  "color": "orange",
+                  "value": 70
+                },
+                {
+                  "color": "red",
+                  "value": 85
                 }
               ]
             },
-            "color": {
-              "mode": "thresholds"
-            },
-            "fieldMinMax": false,
-            "max": 1,
-            "min": 0
+            "unit": "percentunit"
           },
           "overrides": []
         },
         "gridPos": {
-          "h": 8,
-          "w": 12,
-          "x": 12,
+          "h": 5,
+          "w": 4,
+          "x": 8,
           "y": 0
         },
-        "id": 31,
+        "id": 35,
+        "interval": "1m",
         "options": {
           "reduceOptions": {
             "values": false,
             "calcs": ["lastNotNull"],
             "fields": ""
           },
-          "orientation": "horizontal",
-          "displayMode": "basic",
-          "valueMode": "color",
-          "namePlacement": "auto",
-          "showUnfilled": true,
-          "sizing": "manual",
-          "minVizWidth": 8,
-          "minVizHeight": 26,
-          "maxVizHeight": 300
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto",
+          "minVizWidth": 75,
+          "minVizHeight": 75
         },
         "pluginVersion": "10.4.0-pre",
         "targets": [
@@ -230,27 +215,14 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "kube_node_status_condition{condition=\"Ready\", status=\"true\"}",
+            "expr": "(sum(kubelet_volume_stats_capacity_bytes) - sum(kubelet_volume_stats_available_bytes)) / sum(kubelet_volume_stats_capacity_bytes)",
             "format": "time_series",
-            "intervalFactor": 2,
-            "legendFormat": "{{node}}",
-            "range": true,
+            "instant": true,
             "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "prometheus"
-            },
-            "expr": "",
-            "hide": false,
-            "instant": false,
-            "range": true,
-            "refId": "B"
           }
         ],
-        "title": "노드 상태",
-        "type": "bargauge"
+        "title": "클러스터 디스크 이용률",
+        "type": "gauge"
       },
       {
         "datasource": {
@@ -267,7 +239,17 @@
               "inspect": false,
               "filterable": false
             },
-            "mappings": [],
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "": {
+                    "text": "생성 실패한 파드",
+                    "index": 0
+                  }
+                }
+              }
+            ],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -303,7 +285,8 @@
                   }
                 },
                 {
-                  "id": "custom.width"
+                  "id": "custom.width",
+                  "value": 130
                 },
                 {
                   "id": "thresholds",
@@ -344,6 +327,10 @@
                 {
                   "id": "displayName",
                   "value": "오류가 발생한 파드"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 130
                 }
               ]
             },
@@ -355,7 +342,7 @@
               "properties": [
                 {
                   "id": "displayName",
-                  "value": "최대 생성 가능 파드"
+                  "value": "최대 생성 가능한 파드"
                 },
                 {
                   "id": "custom.cellOptions",
@@ -370,6 +357,10 @@
                   "value": {
                     "mode": "thresholds"
                   }
+                },
+                {
+                  "id": "custom.width",
+                  "value": 130
                 }
               ]
             },
@@ -399,8 +390,8 @@
         "gridPos": {
           "h": 8,
           "w": 12,
-          "x": 0,
-          "y": 8
+          "x": 12,
+          "y": 0
         },
         "id": 30,
         "options": {
@@ -485,8 +476,194 @@
       },
       {
         "datasource": {
-          "uid": "prometheus",
-          "type": "prometheus"
+          "uid": "cloudwatch",
+          "type": "cloudwatch"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "": {
+                    "text": "생성 실패한 파드",
+                    "index": 0
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "fieldMinMax": false,
+            "min": 0,
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "생성된 파드"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 20
+                      },
+                      {
+                        "color": "red",
+                        "value": 25
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 5
+        },
+        "id": 32,
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": [],
+            "width": 250
+          },
+          "timezone": ["browser"]
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "id": "",
+            "region": "ap-northeast-2",
+            "logGroups": [],
+            "queryMode": "Metrics",
+            "namespace": "AWS/ApplicationELB",
+            "metricName": "RequestCount",
+            "expression": "",
+            "dimensions": {},
+            "statistic": "Sum",
+            "period": "",
+            "metricQueryType": 1,
+            "metricEditorMode": 0,
+            "sqlExpression": "SELECT SUM(RequestCount) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
+            "matchExact": true,
+            "refId": "A",
+            "label": "",
+            "sql": {
+              "select": {
+                "type": "function",
+                "name": "SUM",
+                "parameters": [
+                  {
+                    "type": "functionParameter",
+                    "name": "RequestCount"
+                  }
+                ]
+              },
+              "from": {
+                "type": "property",
+                "property": {
+                  "type": "string",
+                  "name": "AWS/ApplicationELB"
+                }
+              },
+              "groupBy": {
+                "type": "and",
+                "expressions": [
+                  {
+                    "type": "groupBy",
+                    "property": {
+                      "type": "string",
+                      "name": "LoadBalancer"
+                    }
+                  }
+                ]
+              },
+              "orderBy": {
+                "type": "function",
+                "name": "SUM"
+              }
+            },
+            "hide": false
+          }
+        ],
+        "title": "로드 밸런서(ALB) 요청 처리 수",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -660,11 +837,470 @@
           }
         ],
         "type": "table"
+      },
+      {
+        "datasource": {
+          "uid": "cloudwatch",
+          "type": "cloudwatch"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "": {
+                    "text": "생성 실패한 파드",
+                    "index": 0
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "fieldMinMax": false,
+            "min": 0,
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "생성된 파드"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 20
+                      },
+                      {
+                        "color": "red",
+                        "value": 25
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 0,
+          "y": 13
+        },
+        "id": 34,
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": [],
+            "width": 250
+          },
+          "timezone": ["browser"]
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "id": "",
+            "region": "ap-northeast-2",
+            "logGroups": [],
+            "queryMode": "Metrics",
+            "namespace": "AWS/ApplicationELB",
+            "metricName": "RequestCount",
+            "expression": "",
+            "dimensions": {},
+            "statistic": "Sum",
+            "period": "",
+            "metricQueryType": 1,
+            "metricEditorMode": 1,
+            "sqlExpression": "SELECT SUM(ActiveConnectionCount) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
+            "matchExact": true,
+            "refId": "A",
+            "label": "",
+            "sql": {
+              "select": {
+                "type": "function",
+                "name": "SUM",
+                "parameters": [
+                  {
+                    "type": "functionParameter",
+                    "name": "HTTPCode_Target_5XX_Count"
+                  }
+                ]
+              },
+              "from": {
+                "type": "property",
+                "property": {
+                  "type": "string",
+                  "name": "AWS/ApplicationELB"
+                }
+              },
+              "groupBy": {
+                "type": "and",
+                "expressions": [
+                  {
+                    "type": "groupBy",
+                    "property": {
+                      "type": "string",
+                      "name": "LoadBalancer"
+                    }
+                  }
+                ]
+              },
+              "orderBy": {
+                "type": "function",
+                "name": "SUM"
+              }
+            },
+            "hide": false
+          }
+        ],
+        "title": "로드 밸런서(ALB) 활성 연결 수",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "uid": "cloudwatch",
+          "type": "cloudwatch"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "drawStyle": "line",
+              "lineInterpolation": "linear",
+              "barAlignment": 0,
+              "lineWidth": 1,
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "spanNulls": false,
+              "insertNulls": false,
+              "showPoints": "auto",
+              "pointSize": 5,
+              "stacking": {
+                "mode": "none",
+                "group": "A"
+              },
+              "axisPlacement": "auto",
+              "axisLabel": "",
+              "axisColorMode": "text",
+              "axisBorderShow": false,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "axisCenteredZero": false,
+              "hideFrom": {
+                "tooltip": false,
+                "viz": false,
+                "legend": false
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "color": {
+              "mode": "palette-classic"
+            },
+            "mappings": [
+              {
+                "type": "value",
+                "options": {
+                  "": {
+                    "text": "생성 실패한 파드",
+                    "index": 0
+                  }
+                }
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "fieldMinMax": false,
+            "min": 0,
+            "unit": "none"
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value #A"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "생성된 파드"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "green",
+                        "value": null
+                      },
+                      {
+                        "color": "#EAB839",
+                        "value": 20
+                      },
+                      {
+                        "color": "red",
+                        "value": 25
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 6,
+          "x": 6,
+          "y": 13
+        },
+        "id": 33,
+        "options": {
+          "tooltip": {
+            "mode": "single",
+            "sort": "none"
+          },
+          "legend": {
+            "showLegend": true,
+            "displayMode": "list",
+            "placement": "bottom",
+            "calcs": [],
+            "width": 250
+          },
+          "timezone": ["browser"]
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "type": "cloudwatch",
+              "uid": "cloudwatch"
+            },
+            "id": "",
+            "region": "ap-northeast-2",
+            "logGroups": [],
+            "queryMode": "Metrics",
+            "namespace": "AWS/ApplicationELB",
+            "metricName": "RequestCount",
+            "expression": "",
+            "dimensions": {},
+            "statistic": "Sum",
+            "period": "",
+            "metricQueryType": 1,
+            "metricEditorMode": 1,
+            "sqlExpression": "SELECT SUM(HTTPCode_ELB_5XX_Count) FROM \"AWS/ApplicationELB\" GROUP BY LoadBalancer ORDER BY SUM() ASC",
+            "matchExact": true,
+            "refId": "A",
+            "label": "",
+            "sql": {
+              "select": {
+                "type": "function",
+                "name": "SUM",
+                "parameters": [
+                  {
+                    "type": "functionParameter",
+                    "name": "HTTPCode_Target_5XX_Count"
+                  }
+                ]
+              },
+              "from": {
+                "type": "property",
+                "property": {
+                  "type": "string",
+                  "name": "AWS/ApplicationELB"
+                }
+              },
+              "groupBy": {
+                "type": "and",
+                "expressions": [
+                  {
+                    "type": "groupBy",
+                    "property": {
+                      "type": "string",
+                      "name": "LoadBalancer"
+                    }
+                  }
+                ]
+              },
+              "orderBy": {
+                "type": "function",
+                "name": "SUM"
+              }
+            },
+            "hide": false
+          }
+        ],
+        "title": "로드 밸런서(ALB) 서버 오류(5XX) 요청 수",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 1,
+                    "text": "Not Ready"
+                  },
+                  "1": {
+                    "index": 0,
+                    "text": "Ready"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "red",
+                  "value": null
+                },
+                {
+                  "color": "green",
+                  "value": 1
+                }
+              ]
+            },
+            "color": {
+              "mode": "thresholds"
+            },
+            "fieldMinMax": false,
+            "max": 1,
+            "min": 0
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 12,
+          "x": 12,
+          "y": 16
+        },
+        "id": 31,
+        "options": {
+          "reduceOptions": {
+            "values": false,
+            "calcs": ["lastNotNull"],
+            "fields": ""
+          },
+          "orientation": "horizontal",
+          "displayMode": "basic",
+          "valueMode": "color",
+          "namePlacement": "auto",
+          "showUnfilled": true,
+          "sizing": "manual",
+          "minVizWidth": 8,
+          "minVizHeight": 26,
+          "maxVizHeight": 300
+        },
+        "pluginVersion": "10.4.0-pre",
+        "targets": [
+          {
+            "datasource": {
+              "uid": "prometheus"
+            },
+            "editorMode": "code",
+            "exemplar": false,
+            "expr": "kube_node_status_condition{condition=\"Ready\", status=\"true\"}",
+            "format": "time_series",
+            "instant": true,
+            "intervalFactor": 2,
+            "legendFormat": "{{node}}",
+            "range": false,
+            "refId": "A"
+          }
+        ],
+        "title": "노드 상태",
+        "type": "bargauge"
       }
     ],
     "refresh": "5s",
     "schemaVersion": 39,
-    "tags": ["kubernetes-mixin"],
+    "tags": ["metric"],
     "templating": {
       "list": []
     },

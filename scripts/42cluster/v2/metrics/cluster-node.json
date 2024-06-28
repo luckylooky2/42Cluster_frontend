@@ -27,9 +27,6 @@
         },
         "fieldConfig": {
           "defaults": {
-            "color": {
-              "mode": "thresholds"
-            },
             "custom": {
               "align": "auto",
               "cellOptions": {
@@ -37,9 +34,7 @@
               },
               "inspect": false
             },
-            "fieldMinMax": false,
             "mappings": [],
-            "min": 0,
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -48,7 +43,12 @@
                   "value": null
                 }
               ]
-            }
+            },
+            "color": {
+              "mode": "thresholds"
+            },
+            "fieldMinMax": false,
+            "min": 0
           },
           "overrides": [
             {
@@ -123,7 +123,7 @@
               "properties": [
                 {
                   "id": "displayName",
-                  "value": "최대 생성 가능 파드"
+                  "value": "최대 생성 가능한 파드"
                 },
                 {
                   "id": "color",
@@ -174,16 +174,16 @@
         },
         "id": 30,
         "options": {
+          "showHeader": true,
           "cellHeight": "sm",
           "footer": {
-            "countRows": false,
-            "fields": "",
+            "show": true,
             "reducer": ["sum"],
-            "show": false
-          },
-          "showHeader": true
+            "countRows": false,
+            "fields": ""
+          }
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
@@ -1766,7 +1766,7 @@
     ],
     "refresh": "5s",
     "schemaVersion": 39,
-    "tags": ["kubernetes-mixin"],
+    "tags": ["metric"],
     "templating": {
       "list": []
     },
