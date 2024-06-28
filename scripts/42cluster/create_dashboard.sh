@@ -5,11 +5,6 @@
 
 file_name=$1
 
-if [[ ! -r "$SECRET_PATH" ]]; then
-	echo "Permission denied: create dashboard."
-    exit 1
-fi
-
 if [ -z "${file_name}" ]; then
     echo "No arguments: create dashboard."
     exit 1
@@ -20,8 +15,7 @@ if [[ ! -r "${file_name}" ]]; then
 	exit 1
 fi
 
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 
 # Create / Update dashboard : https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/#create--update-dashboard
 dashboardId=$(curl -s -X POST \

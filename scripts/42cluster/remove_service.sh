@@ -2,11 +2,6 @@
 
 service_name=$1
 
-if [[ ! -r "$SECRET_PATH" ]]; then
-	echo "Permission denied: remove service."
-    exit 1
-fi
-
 if [ -z "${service_name}" ]; then
     echo "No arguments: remove service."
     exit 1
@@ -15,8 +10,7 @@ fi
 mkdir -p tmp
 mkdir -p new
 
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 urlencode=$(echo -n "${service_name}" | jq -sRr @uri)
 org_admin=1
 

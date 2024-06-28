@@ -1,5 +1,6 @@
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+#! /bin/bash
+
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 
 # 1
 curl -s -X DELETE \

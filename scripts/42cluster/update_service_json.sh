@@ -3,11 +3,6 @@
 command=$1
 service_name=$2
 
-if [[ ! -r "$SECRET_PATH" ]]; then
-	echo "Permission denied: update service.json"
-    exit 1
-fi
-
 if [ ${command} != 'add' -a ${command} != 'remove' ]; then
 	echo "Invalid Command: update service.json"
 	exit 1
@@ -21,8 +16,7 @@ fi
 mkdir -p tmp
 mkdir -p new
 
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 
 # Get dashboard by uid : https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/#get-dashboard-by-uid
 message=$(curl -s -X GET \

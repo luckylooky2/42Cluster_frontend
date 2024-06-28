@@ -7,13 +7,7 @@
 # provisioning으로 대시보드를 구성하지 않는다
 # dashboard를 생성할 때는 반드시 "id": null를 설정하고, { dashboard: {} } 로 감싸주어야 한다
 
-if [[ ! -r "$SECRET_PATH" ]]; then
-	echo "Permission denied: init 42cluster"
-    exit 1
-fi
-
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 
 # 1. 첫 번째 Org 이름을 Admin으로 변경
 # Update Organization : https://grafana.com/docs/grafana/latest/developers/http_api/org/#update-organization

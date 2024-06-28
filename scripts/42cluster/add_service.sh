@@ -2,18 +2,12 @@
 
 service_name=$1
 
-if [[ ! -r "$SECRET_PATH" ]]; then
-	echo "Permission denied: add service."
-    exit 1
-fi
-
 if [ -z "${service_name}" ]; then
     echo "No arguments: add service."
     exit 1
 fi
 
-source "$SECRET_PATH"
-basic_token=$(echo -n "$ADMIN_ID:$ADMIN_PW" | base64)
+basic_token=$(echo -n "$GRAFANA_ADMIN_ID:$GRAFANA_ADMIN_PW" | base64)
 org_admin=1
 
 # 1. org 생성(자동으로 admin은 추가)
