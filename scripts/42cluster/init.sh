@@ -48,9 +48,13 @@ bash create_dashboard.sh v2/metrics/node-detail.json
 bash create_dashboard.sh v2/metrics/namespace-detail.json
 bash create_dashboard.sh v2/metrics/service-overview.json
 
+bash create_dashboard.sh v2/deployments/application-overview.json
+bash create_dashboard.sh v2/deployments/operation-overview.json
 bash create_dashboard.sh v2/deployments/argocd.json
-bash create_dashboard.sh v2/deployments/argocd-application-overview.json
-bash create_dashboard.sh v2/deployments/argocd-operation-overview.json
+
+bash create_dashboard.sh v2/audit/configmap-modification-failure.json
+bash create_dashboard.sh v2/audit/secret-access.json
+bash create_dashboard.sh v2/audit/secret-modification.json
 
 # 5. datasource 추가
 curl -s -X POST \
@@ -59,6 +63,14 @@ curl -s -X POST \
 	-H "Authorization: Basic ${basic_token}" \
 	-d "{\"name\":\"prometheus\",\"type\":\"prometheus\",\"access\":\"proxy\",\"url\":\"$PROMETHEUS_SERVER\",\"isDefault\":true,\"version\":\"1\",\"editable\":false}" \
 	$GRAFANA_APISERVER/api/datasources
+
+curl -s -X POST \
+	-H "Accept: application/json" \
+	-H "Content-Type: application/json" \
+	-H "Authorization: Basic ${basic_token}" \
+	-d "{\"name\": \"cloudwatch\",\"type\": \"cloudwatch\",\"access\": \"proxy\",\"jsonData\":{\"authType\":\"keys\",\"defaultRegion\":\"ap-northeast-2\"},\"secureJsonData\":{\"accessKey\": \"$AWS_ACCESS_KEY_ID\",\"secretKey\":\"$AWS_SECRET_ACCESS_KEY\"}}" \
+	$GRAFANA_APISERVER/api/datasources
+
 
 # 6. Team 생성
 message=$(curl -s -X POST \
