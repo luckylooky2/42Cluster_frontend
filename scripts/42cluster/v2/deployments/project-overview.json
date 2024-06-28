@@ -17,7 +17,7 @@
       ]
     },
     "description": "A dashboard that monitors ArgoCD with a focus on the operational. It is created using the [argo-cd-mixin](https://github.com/adinhodovic/argo-cd-mixin).",
-    "editable": false,
+    "editable": true,
     "fiscalYearStartMonth": 0,
     "gnetId": 19993,
     "graphTooltip": 0,
@@ -40,13 +40,13 @@
           "y": 0
         },
         "id": 1,
-        "title": "Summary",
+        "title": "프로젝트 요약",
         "type": "row"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -94,19 +94,19 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_cluster_info{\n    namespace=~'$namespace',\n    job=~'$job'\n  }\n)\n",
+            "expr": "sum(\n  argocd_cluster_info{\n    namespace=~'argocd',\n    job=~'.+'\n  }\n)\n",
             "refId": "A"
           }
         ],
-        "title": "Clusters",
+        "title": "클러스터",
         "type": "stat"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -154,19 +154,19 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "count(\n  count(\n    argocd_app_info{\n      namespace=~'$namespace',\n      job=~'$job'\n    }\n  )\n  by (repo)\n)\n",
+            "expr": "count(\n  count(\n    argocd_app_info{\n      namespace=~'argocd',\n      job=~'.+'\n    }\n  )\n  by (repo)\n)\n",
             "refId": "A"
           }
         ],
-        "title": "Repositories",
+        "title": "레포지토리",
         "type": "stat"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -214,19 +214,19 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n  }\n)\n",
+            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n)\n",
             "refId": "A"
           }
         ],
-        "title": "Applications",
+        "title": "애플리케이션",
         "type": "stat"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -253,27 +253,7 @@
             },
             "unit": "short"
           },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byName",
-                "options": "name"
-              },
-              "properties": [
-                {
-                  "id": "links",
-                  "value": [
-                    {
-                      "targetBlank": true,
-                      "title": "Go To Application",
-                      "type": "dashboard",
-                      "url": "/d/argo-cd-application-overview-kask/argocd-notifications-overview?&var-project=${__data.fields.Project}&var-application=${__value.raw}"
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+          "overrides": []
         },
         "gridPos": {
           "h": 10,
@@ -303,15 +283,15 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n  }\n) by (job, dest_server, project, name, health_status, sync_status)\n",
+            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (job, dest_server, project, name, health_status, sync_status)\n",
             "format": "table",
             "instant": true,
             "refId": "A"
           }
         ],
-        "title": "Applications",
+        "title": "애플리케이션 요약",
         "transformations": [
           {
             "id": "organize",
@@ -344,7 +324,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -439,21 +419,21 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n  }\n) by (health_status)\n",
+            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (health_status)\n",
             "instant": true,
             "legendFormat": "{{ health_status }}",
             "refId": "A"
           }
         ],
-        "title": "Health Status",
+        "title": "애플리케이션 상태",
         "type": "piechart"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -548,15 +528,15 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n  }\n) by (sync_status)\n",
+            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (sync_status)\n",
             "instant": true,
             "legendFormat": "{{ sync_status }}",
             "refId": "A"
           }
         ],
-        "title": "Sync Status",
+        "title": "동기화 상태",
         "type": "piechart"
       },
       {
@@ -568,13 +548,13 @@
           "y": 11
         },
         "id": 8,
-        "title": "Sync Stats",
+        "title": "동기화 통계",
         "type": "row"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -657,20 +637,20 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n      }[$__rate_interval]\n    )\n  )\n) by (job, dest_server, project, name)\n",
+            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n      }[$__rate_interval]\n    )\n  )\n) by (job, dest_server, project, name)\n",
             "legendFormat": "{{ dest_server }}/{{ project }}/{{ name }}",
             "refId": "A"
           }
         ],
-        "title": "Sync Activity",
+        "title": "동기화 시도",
         "type": "timeseries"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -753,14 +733,14 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'$namespace',\njob=~'$job',\ndest_server=~'$cluster',\nproject=~'$project',\n\n        phase=~\"Error|Failed\"\n      }[$__rate_interval]\n    )\n  )\n) by (job, dest_server, project, application, phase)\n",
+            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n        phase=~\"Error|Failed\"\n      }[$__rate_interval]\n    )\n  )\n) by (job, dest_server, project, application, phase)\n",
             "legendFormat": "{{ dest_server }}/{{ project }}/{{ application }} - {{ phase }}",
             "refId": "A"
           }
         ],
-        "title": "Sync Failures",
+        "title": "동기화 실패",
         "type": "timeseries"
       },
       {
@@ -772,13 +752,13 @@
           "y": 18
         },
         "id": 11,
-        "title": "Controller Stats",
+        "title": "컨트롤러 통계",
         "type": "row"
       },
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -815,9 +795,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_reconcile_count{\n        namespace=~'$namespace',\n        job=~'$job',\n        dest_server=~'$cluster'\n      }[$__rate_interval]\n    )\n  )\n) by (namespace, job, dest_server)\n",
+            "expr": "sum(\n  round(\n    increase(\n      argocd_app_reconcile_count{\n        namespace=~'argocd',\n        job=~'.+',\n        dest_server=~'.+'\n      }[$__rate_interval]\n    )\n  )\n) by (namespace, job, dest_server)\n",
             "legendFormat": "{{ namespace }}/{{ dest_server }}",
             "refId": "A"
           }
@@ -828,7 +808,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -848,9 +828,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_app_reconcile_bucket{\n      namespace=~'$namespace',\n      job=~'$job',\n      dest_server=~'$cluster'\n    }[$__rate_interval]\n  )\n) by (le)\n",
+            "expr": "sum(\n  increase(\n    argocd_app_reconcile_bucket{\n      namespace=~'argocd',\n      job=~'.+',\n      dest_server=~'.+'\n    }[$__rate_interval]\n  )\n) by (le)\n",
             "format": "heatmap",
             "legendFormat": "{{ le }}",
             "refId": "A"
@@ -862,7 +842,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -899,9 +879,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_k8s_request_total{\n        namespace=~'$namespace',\n        job=~'$job',\n        project=~'$project'\n      }[$__rate_interval]\n    )\n  )\n) by (job, server, project, verb, resource_kind)\n",
+            "expr": "sum(\n  round(\n    increase(\n      argocd_app_k8s_request_total{\n        namespace=~'argocd',\n        job=~'.+',\n        project=~'$project'\n      }[$__rate_interval]\n    )\n  )\n) by (job, server, project, verb, resource_kind)\n",
             "legendFormat": "{{ server }}/{{ project }} - {{ verb }}/{{ resource_kind }}",
             "refId": "A"
           }
@@ -912,7 +892,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -949,9 +929,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_kubectl_exec_pending{\n    namespace=~'$namespace',\n    job=~'$job'\n  }\n) by (job, command)\n",
+            "expr": "sum(\n  argocd_kubectl_exec_pending{\n    namespace=~'argocd',\n    job=~'.+'\n  }\n) by (job, command)\n",
             "legendFormat": "{{ dest_server }} - {{ command }}",
             "refId": "A"
           }
@@ -974,7 +954,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1011,9 +991,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_cluster_api_resource_objects{\n    namespace=~'$namespace',\n    job=~'$job',\n    server=~'$cluster'\n  }\n) by (namespace, job, server)\n",
+            "expr": "sum(\n  argocd_cluster_api_resource_objects{\n    namespace=~'argocd',\n    job=~'.+',\n    server=~'.+'\n  }\n) by (namespace, job, server)\n",
             "legendFormat": "{{ server }}",
             "refId": "A"
           }
@@ -1024,7 +1004,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1061,9 +1041,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_cluster_api_resources{\n    namespace=~'$namespace',\n    job=~'$job',\n    server=~'$cluster'\n  }\n) by (namespace, job, server)\n",
+            "expr": "sum(\n  argocd_cluster_api_resources{\n    namespace=~'argocd',\n    job=~'.+',\n    server=~'.+'\n  }\n) by (namespace, job, server)\n",
             "legendFormat": "{{ server }}",
             "refId": "A"
           }
@@ -1074,7 +1054,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1111,9 +1091,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_cluster_events_total{\n      namespace=~'$namespace',\n      job=~'$job',\n      server=~'$cluster'\n    }[$__rate_interval]\n  )\n) by (namespace, job, server)\n",
+            "expr": "sum(\n  increase(\n    argocd_cluster_events_total{\n      namespace=~'argocd',\n      job=~'.+',\n      server=~'.+'\n    }[$__rate_interval]\n  )\n) by (namespace, job, server)\n",
             "legendFormat": "{{ server }}",
             "refId": "A"
           }
@@ -1136,7 +1116,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1173,9 +1153,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_git_request_total{\n      namespace=~'$namespace',\n      job=~'$job',\n      request_type=\"ls-remote\"\n    }[$__rate_interval]\n  )\n) by (namespace, job, repo)\n",
+            "expr": "sum(\n  increase(\n    argocd_git_request_total{\n      namespace=~'argocd',\n      job=~'.+',\n      request_type=\"ls-remote\"\n    }[$__rate_interval]\n  )\n) by (namespace, job, repo)\n",
             "legendFormat": "{{ namespace }} - {{ repo }}",
             "refId": "A"
           }
@@ -1186,7 +1166,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1223,9 +1203,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_git_request_total{\n      namespace=~'$namespace',\n      job=~'$job',\n      request_type=\"fetch\"\n    }[$__rate_interval]\n  )\n) by (namespace, job, repo)\n",
+            "expr": "sum(\n  increase(\n    argocd_git_request_total{\n      namespace=~'argocd',\n      job=~'.+',\n      request_type=\"fetch\"\n    }[$__rate_interval]\n  )\n) by (namespace, job, repo)\n",
             "legendFormat": "{{ namespace }} - {{ repo }}",
             "refId": "A"
           }
@@ -1236,7 +1216,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1256,9 +1236,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_git_request_duration_seconds_bucket{\n      namespace=~'$namespace',\n      job=~'$job',\n      request_type=\"fetch\"\n    }[$__rate_interval]\n  )\n) by (le)\n",
+            "expr": "sum(\n  increase(\n    argocd_git_request_duration_seconds_bucket{\n      namespace=~'argocd',\n      job=~'.+',\n      request_type=\"fetch\"\n    }[$__rate_interval]\n  )\n) by (le)\n",
             "format": "heatmap",
             "legendFormat": "{{ le }}",
             "refId": "A"
@@ -1270,7 +1250,7 @@
       {
         "datasource": {
           "type": "datasource",
-          "uid": "-- Mixed --"
+          "uid": "prometheus"
         },
         "fieldConfig": {
           "defaults": {
@@ -1290,9 +1270,9 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "$datasource"
+              "uid": "prometheus"
             },
-            "expr": "sum(\n  increase(\n    argocd_git_request_duration_seconds_bucket{\n      namespace=~'$namespace',\n      job=~'$job',\n      request_type=\"ls-remote\"\n    }[$__rate_interval]\n  )\n) by (le)\n",
+            "expr": "sum(\n  increase(\n    argocd_git_request_duration_seconds_bucket{\n      namespace=~'argocd',\n      job=~'.+',\n      request_type=\"ls-remote\"\n    }[$__rate_interval]\n  )\n) by (le)\n",
             "format": "heatmap",
             "legendFormat": "{{ le }}",
             "refId": "A"
@@ -1303,118 +1283,27 @@
       }
     ],
     "schemaVersion": 39,
-    "tags": ["ci/cd", "argo-cd"],
+    "tags": ["deployment"],
     "templating": {
       "list": [
         {
           "current": {
             "selected": false,
-            "text": "prometheus",
-            "value": "fdostxjripgxsd"
+            "text": "All",
+            "value": "$__all"
           },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "definition": "",
           "hide": 0,
           "includeAll": false,
-          "label": "Data source",
-          "multi": false,
-          "name": "datasource",
-          "options": [],
-          "query": "prometheus",
-          "refresh": 1,
-          "regex": "",
-          "skipUrlSync": false,
-          "type": "datasource"
-        },
-        {
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "",
-          "hide": 0,
-          "includeAll": true,
-          "label": "Namespace",
-          "multi": true,
-          "name": "namespace",
-          "options": [],
-          "query": "label_values(argocd_app_info{}, namespace)",
-          "refresh": 2,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 1,
-          "type": "query"
-        },
-        {
-          "allValue": ".*",
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "",
-          "hide": 0,
-          "includeAll": true,
-          "label": "Job",
-          "multi": true,
-          "name": "job",
-          "options": [],
-          "query": "label_values(job)",
-          "refresh": 2,
-          "regex": "argo.*",
-          "skipUrlSync": false,
-          "sort": 1,
-          "type": "query"
-        },
-        {
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "",
-          "hide": 0,
-          "includeAll": true,
-          "label": "Cluster",
-          "multi": true,
-          "name": "cluster",
-          "options": [],
-          "query": "label_values(argocd_app_info{namespace=~\"$namespace\", job=~\"$job\"}, dest_server)",
-          "refresh": 2,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 1,
-          "type": "query"
-        },
-        {
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "definition": "",
-          "hide": 0,
-          "includeAll": true,
           "label": "Project",
-          "multi": true,
+          "multi": false,
           "name": "project",
           "options": [],
-          "query": "label_values(argocd_app_info{namespace=~\"$namespace\", job=~\"$job\", dest_server=~\"$cluster\"}, project)",
+          "query": "label_values(argocd_app_info{namespace=~\"argocd\", job=~\".+\", dest_server=~\".+\"}, project)",
           "refresh": 2,
           "regex": "",
           "skipUrlSync": false,
@@ -1429,8 +1318,8 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "(3) ArgoCD / Operational / Overview",
-    "uid": "a595cac94cda1b36fc103b78a9e33f47",
+    "title": "(1) Project Overview",
+    "uid": "d595cac94cda1b36fc103b78a9e33f47",
     "version": 1,
     "weekStart": ""
   }
