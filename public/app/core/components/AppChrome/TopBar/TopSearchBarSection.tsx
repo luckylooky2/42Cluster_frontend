@@ -8,9 +8,10 @@ import { useStyles2 } from '@grafana/ui';
 export interface TopSearchBarSectionProps {
   children: React.ReactNode;
   align?: 'left' | 'center' | 'right';
+  gap?: boolean;
 }
 
-export function TopSearchBarSection({ children, align = 'left' }: TopSearchBarSectionProps) {
+export function TopSearchBarSection({ children, align = 'left', gap = true }: TopSearchBarSectionProps) {
   const styles = useStyles2(getStyles);
   // const theme = useTheme2();
   // const breakpoint = theme.breakpoints.values.sm;
@@ -29,7 +30,10 @@ export function TopSearchBarSection({ children, align = 'left' }: TopSearchBarSe
   // }
 
   return (
-    <div data-testid="wrapper" className={cx(styles.wrapper, { [styles[align]]: align === 'right' })}>
+    <div
+      data-testid="wrapper"
+      className={cx(styles.wrapper, gap && styles.gap, { [styles[align]]: align === 'right' })}
+    >
       {children}
     </div>
   );
@@ -38,10 +42,9 @@ export function TopSearchBarSection({ children, align = 'left' }: TopSearchBarSe
 const getStyles = (theme: GrafanaTheme2) => ({
   wrapper: css({
     display: 'flex',
-    gap: theme.spacing(1.5),
     alignItems: 'center',
   }),
-
+  gap: css({ gap: theme.spacing(1.5) }),
   right: css({
     justifyContent: 'flex-end',
   }),

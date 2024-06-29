@@ -29,7 +29,7 @@ export const TopSearchBar = React.memo(function TopSearchBar() {
 
   return (
     <div className={styles.layout}>
-      <TopSearchBarSection>
+      <TopSearchBarSection gap={false}>
         <NavigateControls />
       </TopSearchBarSection>
 
