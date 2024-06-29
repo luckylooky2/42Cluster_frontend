@@ -1,6 +1,6 @@
 // Libraries
 import { css } from '@emotion/css';
-import React, { useState } from 'react';
+import React from 'react';
 
 // Components
 import { GrafanaTheme2 } from '@grafana/data';
@@ -14,12 +14,9 @@ import { ChangePassword } from '../ForgottenPassword/ChangePassword';
 import LoginCtrl from './LoginCtrl';
 import { LoginForm } from './LoginForm';
 import { LoginLayout, InnerBox } from './LoginLayout';
-import { LoginServiceButtons } from './LoginServiceButtons';
 import { UserSignup } from './UserSignup';
 
 export const LoginPage = () => {
-  const [radioValue, setRadioValue] = useState('user');
-
   const styles = useStyles2(getStyles);
   document.title = Branding.AppTitle;
 
@@ -44,39 +41,8 @@ export const LoginPage = () => {
               {loginErrorMessage}
             </Alert>
           )}
-          {!isChangingPassword && ( // login radio group
-            <fieldset className={styles.radioGroup}>
-              <div className={styles.radioEach}>
-                <input
-                  type="radio"
-                  id="user"
-                  value="user"
-                  checked={radioValue === 'user'}
-                  onChange={() => setRadioValue('user')}
-                />
-                <label htmlFor="user">user</label>
-              </div>
-              <div className={styles.radioEach}>
-                <input
-                  type="radio"
-                  id="administrator"
-                  value="administrator"
-                  checked={radioValue === 'administrator'}
-                  onChange={() => setRadioValue('administrator')}
-                />
-                <label htmlFor="administrator">administrator</label>
-              </div>
-            </fieldset>
-          )}
           <div className={styles.loginField}>
-            {radioValue === 'user' && (
-              <InnerBox>
-                <div className={styles.userLogin}>
-                  <LoginServiceButtons />
-                </div>
-              </InnerBox>
-            )}
-            {radioValue === 'administrator' && !isChangingPassword && (
+            {!isChangingPassword && (
               <InnerBox>
                 {!disableLoginForm && (
                   <LoginForm
