@@ -17,18 +17,18 @@ const profileRoutes: RouteDescriptor[] = [
       () => import(/* webPackChunkName: "ChangePasswordPage" */ 'app/features/profile/ChangePasswordPage')
     ),
   },
-  {
-    path: '/profile/select-org',
-    component: SafeDynamicImport(
-      () => import(/* webpackChunkName: "SelectOrgPage" */ 'app/features/org/SelectOrgPage')
-    ),
-  },
-  {
-    path: '/profile/notifications',
-    component: SafeDynamicImport(
-      () => import(/* webpackChunkName: "NotificationsPage"*/ 'app/features/notifications/NotificationsPage')
-    ),
-  },
+  // {
+  //   path: '/profile/select-org',
+  //   component: SafeDynamicImport(
+  //     () => import(/* webpackChunkName: "SelectOrgPage" */ 'app/features/org/SelectOrgPage')
+  //   ),
+  // },
+  // {
+  //   path: '/profile/notifications',
+  //   component: SafeDynamicImport(
+  //     () => import(/* webpackChunkName: "NotificationsPage"*/ 'app/features/notifications/NotificationsPage')
+  //   ),
+  // },
 ];
 
 export function getProfileRoutes(cfg = config): RouteDescriptor[] {

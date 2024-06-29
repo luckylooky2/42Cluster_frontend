@@ -9,14 +9,15 @@ import config from 'app/core/config';
 import { contextSrv } from 'app/core/services/context_srv';
 import UserAdminPage from 'app/features/admin/UserAdminPage';
 import LdapPage from 'app/features/admin/ldap/LdapPage';
-import { getAlertingRoutes } from 'app/features/alerting/routes';
+// import { getAlertingRoutes } from 'app/features/alerting/routes';
 import { ConnectionsRedirectNotice } from 'app/features/connections/components/ConnectionsRedirectNotice';
 import { getAppPluginRoutes } from 'app/features/plugins/routes';
+import { getProfileRoutes } from 'app/features/profile/routes';
 import { AccessControlAction, DashboardRoutes } from 'app/types';
 
 import { SafeDynamicImport } from '../core/components/DynamicImports/SafeDynamicImport';
 import { RouteDescriptor } from '../core/navigation/types';
-import { getPublicDashboardRoutes } from '../features/dashboard/routes';
+// import { getPublicDashboardRoutes } from '../features/dashboard/routes';
 // import { getPublicDeploymentRoutes } from '../features/deployment/routes';
 
 export const extraRoutes: RouteDescriptor[] = [];
@@ -42,67 +43,67 @@ export function getAppRoutes(): RouteDescriptor[] {
         () => import(/* webpackChunkName: "DashboardPageProxy" */ '../features/dashboard/containers/DashboardPageProxy')
       ),
     },
-    {
-      path: '/dashboard/new',
-      roles: () => contextSrv.evaluatePermission([AccessControlAction.DashboardsCreate]),
-      pageClass: 'page-dashboard',
-      routeName: DashboardRoutes.New,
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/DashboardPageProxy')
-      ),
-    },
-    {
-      path: '/dashboard/new-with-ds/:datasourceUid',
-      roles: () => contextSrv.evaluatePermission([AccessControlAction.DashboardsCreate]),
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/NewDashboardWithDS')
-      ),
-    },
-    {
-      path: '/dashboard/:type/:slug',
-      pageClass: 'page-dashboard',
-      routeName: DashboardRoutes.Normal,
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/DashboardPageProxy')
-      ),
-    },
-    {
-      // We currently have no core usage of the embedded dashboard so is to have a page for e2e to test
-      path: '/dashboards/embedding-test',
-      component: SafeDynamicImport(
-        () =>
-          import(
-            /* webpackChunkName: "DashboardPage"*/ 'app/features/dashboard-scene/embedding/EmbeddedDashboardTestPage'
-          )
-      ),
-    },
-    {
-      path: '/d-solo/:uid/:slug?',
-      pageClass: 'dashboard-solo',
-      routeName: DashboardRoutes.Normal,
-      chromeless: true,
-      component: SafeDynamicImport(() =>
-        config.featureToggles.dashboardSceneSolo
-          ? import(/* webpackChunkName: "SoloPanelPage" */ '../features/dashboard-scene/solo/SoloPanelPage')
-          : import(/* webpackChunkName: "SoloPanelPageOld" */ '../features/dashboard/containers/SoloPanelPage')
-      ),
-    },
-    // This route handles embedding of snapshot/scripted dashboard panels
-    {
-      path: '/dashboard-solo/:type/:slug',
-      pageClass: 'dashboard-solo',
-      routeName: DashboardRoutes.Normal,
-      chromeless: true,
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "SoloPanelPage" */ '../features/dashboard/containers/SoloPanelPage')
-      ),
-    },
-    {
-      path: '/dashboard/import',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardImport"*/ 'app/features/manage-dashboards/DashboardImportPage')
-      ),
-    },
+    // {
+    //   path: '/dashboard/new',
+    //   roles: () => contextSrv.evaluatePermission([AccessControlAction.DashboardsCreate]),
+    //   pageClass: 'page-dashboard',
+    //   routeName: DashboardRoutes.New,
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/DashboardPageProxy')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboard/new-with-ds/:datasourceUid',
+    //   roles: () => contextSrv.evaluatePermission([AccessControlAction.DashboardsCreate]),
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/NewDashboardWithDS')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboard/:type/:slug',
+    //   pageClass: 'page-dashboard',
+    //   routeName: DashboardRoutes.Normal,
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardPage" */ '../features/dashboard/containers/DashboardPageProxy')
+    //   ),
+    // },
+    // {
+    //   // We currently have no core usage of the embedded dashboard so is to have a page for e2e to test
+    //   path: '/dashboards/embedding-test',
+    //   component: SafeDynamicImport(
+    //     () =>
+    //       import(
+    //         /* webpackChunkName: "DashboardPage"*/ 'app/features/dashboard-scene/embedding/EmbeddedDashboardTestPage'
+    //       )
+    //   ),
+    // },
+    // {
+    //   path: '/d-solo/:uid/:slug?',
+    //   pageClass: 'dashboard-solo',
+    //   routeName: DashboardRoutes.Normal,
+    //   chromeless: true,
+    //   component: SafeDynamicImport(() =>
+    //     config.featureToggles.dashboardSceneSolo
+    //       ? import(/* webpackChunkName: "SoloPanelPage" */ '../features/dashboard-scene/solo/SoloPanelPage')
+    //       : import(/* webpackChunkName: "SoloPanelPageOld" */ '../features/dashboard/containers/SoloPanelPage')
+    //   ),
+    // },
+    // // This route handles embedding of snapshot/scripted dashboard panels
+    // {
+    //   path: '/dashboard-solo/:type/:slug',
+    //   pageClass: 'dashboard-solo',
+    //   routeName: DashboardRoutes.Normal,
+    //   chromeless: true,
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "SoloPanelPage" */ '../features/dashboard/containers/SoloPanelPage')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboard/import',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardImport"*/ 'app/features/manage-dashboards/DashboardImportPage')
+    //   ),
+    // },
     // {
     //   path: DATASOURCES_ROUTES.List,
     //   component: () => <Redirect to={CONNECTIONS_ROUTES.DataSources} />,
@@ -133,24 +134,24 @@ export function getAppRoutes(): RouteDescriptor[] {
     //         )
     //   ),
     // },
-    {
-      path: '/dashboards',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
-      ),
-    },
-    {
-      path: '/dashboards/f/:uid/:slug',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
-      ),
-    },
-    {
-      path: '/dashboards/f/:uid',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
-      ),
-    },
+    // {
+    //   path: '/dashboards',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboards/f/:uid/:slug',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboards/f/:uid',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "DashboardListPage"*/ 'app/features/browse-dashboards/BrowseDashboardsPage')
+    //   ),
+    // },
     // {
     //   path: '/explore',
     //   pageClass: 'page-explore',
@@ -165,26 +166,26 @@ export function getAppRoutes(): RouteDescriptor[] {
     //   path: '/apps',
     //   component: () => <NavLandingPage navId="apps" />,
     // },
-    {
-      path: '/alerts-and-incidents',
-      component: () => <NavLandingPage navId="alerts-and-incidents" />,
-    },
-    {
-      path: '/testing-and-synthetics',
-      component: () => <NavLandingPage navId="testing-and-synthetics" />,
-    },
-    {
-      path: '/monitoring',
-      component: () => <NavLandingPage navId="monitoring" />,
-    },
-    {
-      path: '/infrastructure',
-      component: () => <NavLandingPage navId="infrastructure" />,
-    },
-    {
-      path: '/frontend',
-      component: () => <NavLandingPage navId="frontend" />,
-    },
+    // {
+    //   path: '/alerts-and-incidents',
+    //   component: () => <NavLandingPage navId="alerts-and-incidents" />,
+    // },
+    // {
+    //   path: '/testing-and-synthetics',
+    //   component: () => <NavLandingPage navId="testing-and-synthetics" />,
+    // },
+    // {
+    //   path: '/monitoring',
+    //   component: () => <NavLandingPage navId="monitoring" />,
+    // },
+    // {
+    //   path: '/infrastructure',
+    //   component: () => <NavLandingPage navId="infrastructure" />,
+    // },
+    // {
+    //   path: '/frontend',
+    //   component: () => <NavLandingPage navId="frontend" />,
+    // },
     {
       path: '/admin/general',
       component: () => <NavLandingPage navId="cfg/general" />,
@@ -365,126 +366,118 @@ export function getAppRoutes(): RouteDescriptor[] {
       pageClass: 'login-page',
       chromeless: true,
     },
-    {
-      path: '/invite/:code',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "SignupInvited" */ 'app/features/invites/SignupInvited')
-      ),
-      chromeless: true,
-    },
-    {
-      path: '/verify',
-      component: !config.verifyEmailEnabled
-        ? () => <Redirect to="/signup" />
-        : SafeDynamicImport(
-            () => import(/* webpackChunkName "VerifyEmailPage"*/ 'app/core/components/Signup/VerifyEmailPage')
-          ),
-      pageClass: 'login-page',
-      chromeless: true,
-    },
-    {
-      path: '/signup',
-      component: config.disableUserSignUp
-        ? () => <Redirect to="/login" />
-        : SafeDynamicImport(() => import(/* webpackChunkName "SignupPage"*/ 'app/core/components/Signup/SignupPage')),
-      pageClass: 'login-page',
-      chromeless: true,
-    },
-    {
-      path: '/user/password/send-reset-email',
-      chromeless: true,
-      component: SafeDynamicImport(
-        () =>
-          import(/* webpackChunkName: "SendResetMailPage" */ 'app/core/components/ForgottenPassword/SendResetMailPage')
-      ),
-    },
-    {
-      path: '/user/password/reset',
-      component: SafeDynamicImport(
-        () =>
-          import(
-            /* webpackChunkName: "ChangePasswordPage" */ 'app/core/components/ForgottenPassword/ChangePasswordPage'
-          )
-      ),
-      pageClass: 'login-page',
-      chromeless: true,
-    },
-    {
-      path: '/dashboard/snapshots',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "SnapshotListPage" */ 'app/features/manage-dashboards/SnapshotListPage')
-      ),
-    },
-    {
-      path: '/playlists',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "PlaylistPage"*/ 'app/features/playlist/PlaylistPage')
-      ),
-    },
-    {
-      path: '/playlists/play/:uid',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "PlaylistStartPage"*/ 'app/features/playlist/PlaylistStartPage')
-      ),
-    },
-    {
-      path: '/playlists/new',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "PlaylistNewPage"*/ 'app/features/playlist/PlaylistNewPage')
-      ),
-    },
-    {
-      path: '/playlists/edit/:uid',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "PlaylistEditPage"*/ 'app/features/playlist/PlaylistEditPage')
-      ),
-    },
-    {
-      path: '/sandbox/benchmarks',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "BenchmarksPage"*/ 'app/features/sandbox/BenchmarksPage')
-      ),
-    },
-    {
-      path: '/sandbox/test',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "TestStuffPage"*/ 'app/features/sandbox/TestStuffPage')
-      ),
-    },
-    {
-      path: '/dashboards/f/:uid/:slug/library-panels',
-      component: SafeDynamicImport(
-        () =>
-          import(
-            /* webpackChunkName: "FolderLibraryPanelsPage"*/ 'app/features/browse-dashboards/BrowseFolderLibraryPanelsPage'
-          )
-      ),
-    },
-    {
-      path: '/dashboards/f/:uid/:slug/alerting',
-      roles: () => contextSrv.evaluatePermission([AccessControlAction.AlertingRuleRead]),
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "FolderAlerting"*/ 'app/features/browse-dashboards/BrowseFolderAlertingPage')
-      ),
-    },
-    {
-      path: '/library-panels',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "LibraryPanelsPage"*/ 'app/features/library-panels/LibraryPanelsPage')
-      ),
-    },
-    {
-      path: '/notifications',
-      component: SafeDynamicImport(
-        () => import(/* webpackChunkName: "NotificationsPage"*/ 'app/features/notifications/NotificationsPage')
-      ),
-    },
     // {
-    //   path: '/deployment',
-    //   pageClass: 'page-dashboard',
-    //   routeName: DashboardRoutes.Home,
+    //   path: '/invite/:code',
     //   component: SafeDynamicImport(
-    //     () => import(/* webpackChunkName: "DashboardPageProxy" */ '../features/deployment/Deployment')
+    //     () => import(/* webpackChunkName: "SignupInvited" */ 'app/features/invites/SignupInvited')
+    //   ),
+    //   chromeless: true,
+    // },
+    // {
+    //   path: '/verify',
+    //   component: !config.verifyEmailEnabled
+    //     ? () => <Redirect to="/signup" />
+    //     : SafeDynamicImport(
+    //         () => import(/* webpackChunkName "VerifyEmailPage"*/ 'app/core/components/Signup/VerifyEmailPage')
+    //       ),
+    //   pageClass: 'login-page',
+    //   chromeless: true,
+    // },
+    // {
+    //   path: '/signup',
+    //   component: config.disableUserSignUp
+    //     ? () => <Redirect to="/login" />
+    //     : SafeDynamicImport(() => import(/* webpackChunkName "SignupPage"*/ 'app/core/components/Signup/SignupPage')),
+    //   pageClass: 'login-page',
+    //   chromeless: true,
+    // },
+    // {
+    //   path: '/user/password/send-reset-email',
+    //   chromeless: true,
+    //   component: SafeDynamicImport(
+    //     () =>
+    //       import(/* webpackChunkName: "SendResetMailPage" */ 'app/core/components/ForgottenPassword/SendResetMailPage')
+    //   ),
+    // },
+    // {
+    //   path: '/user/password/reset',
+    //   component: SafeDynamicImport(
+    //     () =>
+    //       import(
+    //         /* webpackChunkName: "ChangePasswordPage" */ 'app/core/components/ForgottenPassword/ChangePasswordPage'
+    //       )
+    //   ),
+    //   pageClass: 'login-page',
+    //   chromeless: true,
+    // },
+    // {
+    //   path: '/dashboard/snapshots',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "SnapshotListPage" */ 'app/features/manage-dashboards/SnapshotListPage')
+    //   ),
+    // },
+    // {
+    //   path: '/playlists',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "PlaylistPage"*/ 'app/features/playlist/PlaylistPage')
+    //   ),
+    // },
+    // {
+    //   path: '/playlists/play/:uid',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "PlaylistStartPage"*/ 'app/features/playlist/PlaylistStartPage')
+    //   ),
+    // },
+    // {
+    //   path: '/playlists/new',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "PlaylistNewPage"*/ 'app/features/playlist/PlaylistNewPage')
+    //   ),
+    // },
+    // {
+    //   path: '/playlists/edit/:uid',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "PlaylistEditPage"*/ 'app/features/playlist/PlaylistEditPage')
+    //   ),
+    // },
+    // {
+    //   path: '/sandbox/benchmarks',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "BenchmarksPage"*/ 'app/features/sandbox/BenchmarksPage')
+    //   ),
+    // },
+    // {
+    //   path: '/sandbox/test',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "TestStuffPage"*/ 'app/features/sandbox/TestStuffPage')
+    //   ),
+    // },
+    // {
+    //   path: '/dashboards/f/:uid/:slug/library-panels',
+    //   component: SafeDynamicImport(
+    //     () =>
+    //       import(
+    //         /* webpackChunkName: "FolderLibraryPanelsPage"*/ 'app/features/browse-dashboards/BrowseFolderLibraryPanelsPage'
+    //       )
+    //   ),
+    // },
+    // {
+    //   path: '/dashboards/f/:uid/:slug/alerting',
+    //   roles: () => contextSrv.evaluatePermission([AccessControlAction.AlertingRuleRead]),
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "FolderAlerting"*/ 'app/features/browse-dashboards/BrowseFolderAlertingPage')
+    //   ),
+    // },
+    // {
+    //   path: '/library-panels',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "LibraryPanelsPage"*/ 'app/features/library-panels/LibraryPanelsPage')
+    //   ),
+    // },
+    // {
+    //   path: '/notifications',
+    //   component: SafeDynamicImport(
+    //     () => import(/* webpackChunkName: "NotificationsPage"*/ 'app/features/notifications/NotificationsPage')
     //   ),
     // },
     // {
@@ -497,10 +490,10 @@ export function getAppRoutes(): RouteDescriptor[] {
     // },
     // ...getPluginCatalogRoutes(),
     // ...getSupportBundleRoutes(),
-    ...getAlertingRoutes(),
-    // ...getProfileRoutes(),
+    // ...getAlertingRoutes(),
+    ...getProfileRoutes(),
     ...extraRoutes,
-    ...getPublicDashboardRoutes(),
+    // ...getPublicDashboardRoutes(),
     // ...getPublicDeploymentRoutes(),
     // ...getDataConnectionsRoutes(),
     {
