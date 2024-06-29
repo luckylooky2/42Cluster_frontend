@@ -42,14 +42,14 @@ echo ""
 
 # 4. 대시보드 추가
 bash create_dashboard.sh v2/metrics/cluster.json
-bash create_dashboard.sh v2/metrics/cluster-node.json
-bash create_dashboard.sh v2/metrics/cluster-namespace.json
+bash create_dashboard.sh v2/metrics/node.json
 bash create_dashboard.sh v2/metrics/node-detail.json
+bash create_dashboard.sh v2/metrics/namespace.json
 bash create_dashboard.sh v2/metrics/namespace-detail.json
-bash create_dashboard.sh v2/metrics/service-overview.json
+bash create_dashboard.sh v2/metrics/service-summary.json
 
-bash create_dashboard.sh v2/deployments/project-overview.json
-bash create_dashboard.sh v2/deployments/application-overview.json
+bash create_dashboard.sh v2/deployments/project.json
+bash create_dashboard.sh v2/deployments/application-detail.json
 
 bash create_dashboard.sh v2/audit/configmap-modification-failure.json
 bash create_dashboard.sh v2/audit/secret-access.json
