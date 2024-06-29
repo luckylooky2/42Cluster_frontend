@@ -114,7 +114,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
   initDashboard() {
     const { dashboard, match, queryParams } = this.props;
 
-    console.log('initDashboard', dashboard);
+    // console.log('initDashboard', dashboard);
 
     if (dashboard) {
       this.closeDashboard();
@@ -141,7 +141,7 @@ export class UnthemedDashboardPage extends PureComponent<Props, State> {
     const routeReloadCounter = (this.props.history.location.state as any)?.routeReloadCounter;
 
     // dashboard.panels 값을 DashboardGrid 컴포넌트로 넘겨주어 렌더링한다
-    console.log('componentDidUpdate', dashboard, match);
+    // console.log('componentDidUpdate', dashboard, match);
 
     if (!dashboard) {
       return;
