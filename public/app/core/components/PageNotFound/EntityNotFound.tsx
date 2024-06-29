@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 import React from 'react';
 
 import { GrafanaTheme2 } from '@grafana/data';
-import { useStyles2, useTheme2 } from '@grafana/ui';
+import { useStyles2 } from '@grafana/ui';
 
 export interface Props {
   /**
@@ -13,15 +13,15 @@ export interface Props {
 
 export function EntityNotFound({ entity = 'Page' }: Props) {
   const styles = useStyles2(getStyles);
-  const theme = useTheme2();
+  // const theme = useTheme2();
 
   // 사진 변경
   return (
     <div className={styles.container}>
       <h1>{entity} not found</h1>
       <div className={styles.subtitle}>We&apos;re looking but can&apos;t seem to find this {entity.toLowerCase()}.</div>
-      <div className={styles.grot}>
-        <img src={`public/img/grot-404-${theme.isDark ? 'dark' : 'light'}.svg`} width="100%" alt="grot" />
+      <div className={styles.notfound}>
+        <img src={`public/img/42Cluster/404.png`} width="100%" alt="notfound" />
       </div>
     </div>
   );
@@ -43,9 +43,10 @@ export function getStyles(theme: GrafanaTheme2) {
       padding: theme.spacing(2, 0),
       textAlign: 'center',
     }),
-    grot: css({
+    notfound: css({
       maxWidth: '450px',
-      paddingTop: theme.spacing(8),
+      // paddingTop: theme.spacing(8),
+      paddingLeft: theme.spacing(5),
       margin: '0 auto',
     }),
   };
