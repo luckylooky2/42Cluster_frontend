@@ -19,6 +19,11 @@ export function TopNavBarMenu({ node: nodePlain }: TopNavBarMenuProps) {
     return null;
   }
 
+  // hide profile, notification history
+  if (node.children) {
+    node.children.splice(1, 1);
+  }
+
   return (
     <Menu
       header={
