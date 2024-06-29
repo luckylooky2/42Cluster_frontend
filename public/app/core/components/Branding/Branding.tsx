@@ -43,10 +43,10 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  const theme = useTheme2();
+  // const theme = useTheme2();
 
   const filterLogo = css({
-    filter: theme.isDark ? '' : 'invert(100%)',
+    // filter: theme.isDark ? '' : 'invert(100%)',
   });
   return <img className={cx(className, filterLogo)} src="public/img/42Cluster/42Cluster.png" alt="42Cluster" />;
 };
@@ -64,8 +64,8 @@ export class Branding {
   static LoginBackground = LoginBackground;
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
-  static AppTitle = '42Cluster';
-  static LoginTitle = 'Welcome to 42Cluster';
+  static AppTitle = '42cluster';
+  static LoginTitle = 'Welcome to 42cluster';
   static HideEdition = false;
   static GetLoginSubTitle = (): null | string => {
     return null;

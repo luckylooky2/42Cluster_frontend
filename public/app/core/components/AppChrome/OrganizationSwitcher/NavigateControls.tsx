@@ -85,11 +85,12 @@ const getStyles = (theme: GrafanaTheme2) => ({
     color: '#777',
   }),
   img: css({
-    height: theme.spacing(3),
-    width: theme.spacing(3),
+    height: theme.spacing(3.5),
+    width: theme.spacing(3.5),
   }),
   logo: css({
     display: 'flex',
+
     gap: theme.spacing(1.5),
   }),
   serviceName: css({
