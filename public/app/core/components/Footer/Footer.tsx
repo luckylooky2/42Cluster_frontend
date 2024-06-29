@@ -51,13 +51,13 @@ export function getVersionMeta(version: string) {
 export function getVersionLinks(hideEdition?: boolean): FooterLink[] {
   const { buildInfo, licenseInfo } = config;
   const links: FooterLink[] = [];
-  const stateInfo = licenseInfo.stateInfo ? ` (${licenseInfo.stateInfo})` : '';
+  // const stateInfo = licenseInfo.stateInfo ? ` (${licenseInfo.stateInfo})` : '';
 
   if (!hideEdition) {
     links.push({
       target: '_blank',
       id: 'license',
-      text: `${buildInfo.edition}${stateInfo}`,
+      text: `Grafana OSS (v${buildInfo.version})`,
       url: licenseInfo.licenseUrl,
     });
   }
@@ -66,14 +66,14 @@ export function getVersionLinks(hideEdition?: boolean): FooterLink[] {
     return links;
   }
 
-  const { hasReleaseNotes } = getVersionMeta(buildInfo.version);
+  // const { hasReleaseNotes } = getVersionMeta(buildInfo.version);
 
-  links.push({
-    target: '_blank',
-    id: 'version',
-    text: `v${buildInfo.version} (${buildInfo.commit})`,
-    url: hasReleaseNotes ? `https://github.com/grafana/grafana/blob/main/CHANGELOG.md` : undefined,
-  });
+  // links.push({
+  //   target: '_blank',
+  //   id: 'version',
+  //   text: `v${buildInfo.version} (${buildInfo.commit})`,
+  //   url: hasReleaseNotes ? `https://github.com/grafana/grafana/blob/main/CHANGELOG.md` : undefined,
+  // });
 
   if (buildInfo.hasUpdate) {
     links.push({
@@ -105,6 +105,7 @@ export const Footer = React.memo(({ customLinks, hideEdition }: Props) => {
     <footer className="footer">
       <div className="text-center">
         <ul>
+          Powered by{' '}
           {links.map((link) => (
             <li key={link.text}>
               <FooterItem item={link} />
