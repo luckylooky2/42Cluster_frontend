@@ -6,8 +6,10 @@ import { getDashboardUidFromUrl } from './42cluster';
 
 export const useTemplateVariable = (uid: string = getDashboardUidFromUrl()): [TypedVariableModel, VariableOption[]] => {
   const result = useSelector((state: StoreState) => getVariablesState(uid));
-  const variable = result.variables.namespace;
   const selectedValues = result.optionsPicker.selectedValues;
+  const id = result.optionsPicker.id;
+  // variable 한 개만 사용한다고 가정
+  const variable = result.variables[id];
 
   return [variable, selectedValues];
 };
