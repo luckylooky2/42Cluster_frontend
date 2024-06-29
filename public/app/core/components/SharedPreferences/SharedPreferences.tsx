@@ -9,16 +9,16 @@ import {
   Button,
   Field,
   FieldSet,
-  Label,
+  // Label,
   Select,
   stylesFactory,
   TimeZonePicker,
   WeekStartPicker,
-  FeatureBadge,
+  // FeatureBadge,
 } from '@grafana/ui';
-import { DashboardPicker } from 'app/core/components/Select/DashboardPicker';
+// import { DashboardPicker } from 'app/core/components/Select/DashboardPicker';
 import { t, Trans } from 'app/core/internationalization';
-import { LANGUAGES } from 'app/core/internationalization/constants';
+// import { LANGUAGES } from 'app/core/internationalization/constants';
 import { PreferencesService } from 'app/core/services/PreferencesService';
 import { changeTheme } from 'app/core/services/theme';
 
@@ -31,22 +31,22 @@ export interface Props {
 
 export type State = UserPreferencesDTO;
 
-function getLanguageOptions(): Array<SelectableValue<string>> {
-  const languageOptions = LANGUAGES.map((v) => ({
-    value: v.code,
-    label: v.name,
-  }));
+// function getLanguageOptions(): Array<SelectableValue<string>> {
+//   const languageOptions = LANGUAGES.map((v) => ({
+//     value: v.code,
+//     label: v.name,
+//   }));
 
-  const options = [
-    {
-      value: '',
-      label: t('common.locale.default', 'Default'),
-    },
-    ...languageOptions,
-  ];
+//   const options = [
+//     {
+//       value: '',
+//       label: t('common.locale.default', 'Default'),
+//     },
+//     ...languageOptions,
+//   ];
 
-  return options;
-}
+//   return options;
+// }
 
 export class SharedPreferences extends PureComponent<Props, State> {
   service: PreferencesService;
@@ -133,7 +133,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
     const { theme, timezone, weekStart, homeDashboardUID, language } = this.state;
     const { disabled } = this.props;
     const styles = getStyles();
-    const languages = getLanguageOptions();
+    // const languages = getLanguageOptions();
     const currentThemeOption = this.themeOptions.find((x) => x.value === theme) ?? this.themeOptions[0];
 
     return (
@@ -148,7 +148,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
             />
           </Field>
 
-          <Field
+          {/* <Field
             label={
               <Label htmlFor="home-dashboard-select">
                 <span className={styles.labelText}>
@@ -166,7 +166,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
               placeholder={t('shared-preferences.fields.home-dashboard-placeholder', 'Default dashboard')}
               inputId="home-dashboard-select"
             />
-          </Field>
+          </Field> */}
 
           <Field
             label={t('shared-dashboard.fields.timezone-label', 'Timezone')}
@@ -191,7 +191,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
             />
           </Field>
 
-          <Field
+          {/* <Field
             label={
               <Label htmlFor="locale-select">
                 <span className={styles.labelText}>
@@ -209,7 +209,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
               placeholder={t('shared-preferences.fields.locale-placeholder', 'Choose language')}
               inputId="locale-select"
             />
-          </Field>
+          </Field> */}
         </FieldSet>
         <Button type="submit" variant="primary" data-testid={selectors.components.UserProfile.preferencesSaveButton}>
           <Trans i18nKey="common.save">Save</Trans>
