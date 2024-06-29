@@ -42,7 +42,7 @@
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",
-    "title": "(6) Service Overview",
+    "title": "(6) Service Summary",
     "uid": "mb0d919ec0ea5f6543124e16c42a5a87",
     "version": "$version",
     "weekStart": ""

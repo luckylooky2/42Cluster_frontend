@@ -1453,7 +1453,7 @@
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",
-    "title": "(3) Cluster-Namespace",
+    "title": "(4) Namespace",
     "uid": "md0c121a26444b636a3f509a8efa86fd",
     "version": 1,
     "weekStart": ""

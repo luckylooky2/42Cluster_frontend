@@ -102,7 +102,7 @@
             "statsGroups": []
           }
         ],
-        "title": "7일간 ConfigMap 변경 실패 횟수",
+        "title": "ConfigMap 변경 실패 횟수",
         "type": "stat"
       },
       {
@@ -808,7 +808,7 @@
       "list": []
     },
     "time": {
-      "from": "now-7d",
+      "from": "now-1d",
       "to": "now"
     },
     "timepicker": {},

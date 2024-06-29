@@ -1776,7 +1776,7 @@
       "time_options": ["5m", "15m", "1h", "6h", "12h", "24h", "2d", "7d", "30d"]
     },
     "timezone": "browser",
-    "title": "(2) Cluster-Node",
+    "title": "(2) Node",
     "uid": "m0c121a26444b636a3fd509a8efa86fd",
     "version": 1,
     "weekStart": ""
