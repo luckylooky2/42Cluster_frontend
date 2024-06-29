@@ -36,9 +36,13 @@ export function AppChrome({ children }: Props) {
   const isLogin = window.location.pathname.startsWith(loginUrl);
   // should render when kiosk mode is full while only at dashboard page
   const shouldRenderContent = !isLogin && (!isDashboardPage || (isDashboardPage && !state.kioskMode));
-
+  // not execute in login page
   // for fetching current users's accessible dashboards
-  useLoadNextChildrenPage()(undefined);
+  const handleFetchDashboards = useLoadNextChildrenPage();
+
+  if (!isLogin) {
+    handleFetchDashboards(undefined);
+  }
 
   const dockedMenuBreakpoint = theme.breakpoints.values.xl;
   const dockedMenuLocalStorageState = store.getBool(DOCKED_LOCAL_STORAGE_KEY, true);
