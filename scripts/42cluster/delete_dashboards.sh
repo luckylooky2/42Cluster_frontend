@@ -9,8 +9,8 @@ bash delete_dashboard.sh md0c121a26444b636a3f509a8efa86fd # namespace.json
 bash delete_dashboard.sh m5a562078cdf77779eaa1add43ccec1e # namespace-detail.json
 bash delete_dashboard.sh mb0d919ec0ea5f6543124e16c42a5a87 # service-summary.json
 
-bash delete_dashboard.sh d595cac94cda1b36fc103b78a9e33f47 # project.json
-bash delete_dashboard.sh d87670baea6a8ba5d368cd85bef0fbd3 # application-detail.json
+bash delete_dashboard.sh d595cac94cda1b36fc103b78a9e33f47 # overview.json
+bash delete_dashboard.sh d87670baea6a8ba5d368cd85bef0fbd3 # application.json
 
 bash delete_dashboard.sh a70baea6a8ba5d368cd85bef0fbd3876 # configmap-modification-failure.json
 bash delete_dashboard.sh a0baea6a8ba5d368cd85bef0fbd38767 # secret-access.json

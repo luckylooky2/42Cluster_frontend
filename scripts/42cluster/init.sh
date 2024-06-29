@@ -48,8 +48,8 @@ bash create_dashboard.sh v2/metrics/namespace.json
 bash create_dashboard.sh v2/metrics/namespace-detail.json
 bash create_dashboard.sh v2/metrics/service-summary.json
 
-bash create_dashboard.sh v2/deployments/project.json
-bash create_dashboard.sh v2/deployments/application-detail.json
+bash create_dashboard.sh v2/deployments/overview.json
+bash create_dashboard.sh v2/deployments/application.json
 
 bash create_dashboard.sh v2/audit/configmap-modification-failure.json
 bash create_dashboard.sh v2/audit/secret-access.json
