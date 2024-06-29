@@ -30,11 +30,18 @@ function customNavTree(navTree: NavModelItem[]): NavModelItem[] {
       url: '/deployment',
       sortWeight: 0,
     },
+    // {
+    //   id: 'vulnerability',
+    //   text: 'Vulnerability',
+    //   icon: 'shield-exclamation',
+    //   url: '/vulnerability',
+    //   sortWeight: 0,
+    // },
     {
-      id: 'vulnerability',
-      text: 'Vulnerability',
-      icon: 'shield-exclamation',
-      url: '/vulnerability',
+      id: 'profile2',
+      text: 'Profile',
+      icon: 'user',
+      url: '/profile',
       sortWeight: 0,
     },
   ]);

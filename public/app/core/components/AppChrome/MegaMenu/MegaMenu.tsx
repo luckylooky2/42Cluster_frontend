@@ -29,10 +29,12 @@ const addPriority = (menuText: string) => {
       return 2;
     case 'Deployment':
       return 3;
-    case 'Vulnerability':
-      return 4;
-    case 'Administration':
+    // case 'Vulnerability':
+    //   return 4;
+    case 'Profile':
       return 5;
+    case 'Administration':
+      return 6;
     default:
       return 9;
   }
