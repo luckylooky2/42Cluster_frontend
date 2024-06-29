@@ -100,6 +100,7 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
 
       ['.login-content-box']: {
         opacity: 1,
+        background: 'none',
       },
     }),
     submitButton: css({
@@ -107,13 +108,12 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       width: '100%',
     }),
     loginLogo: css({
-      width: '100%',
-      maxWidth: 60,
-      marginBottom: theme.spacing(2),
+      width: '400px',
+      // marginBottom: theme.spacing(2),
 
-      [theme.breakpoints.up('sm')]: {
-        maxWidth: 100,
-      },
+      // [theme.breakpoints.up('sm')]: {
+      //   maxWidth: 100,
+      // },
     }),
     loginLogoWrapper: css({
       display: 'flex',
