@@ -22,14 +22,7 @@
     "gnetId": 19993,
     "graphTooltip": 0,
     "id": null,
-    "links": [
-      {
-        "tags": ["ci/cd", "argo-cd"],
-        "targetBlank": true,
-        "title": "ArgoCD Dashboards",
-        "type": "dashboards"
-      }
-    ],
+    "links": [],
     "panels": [
       {
         "datasource": {
@@ -181,7 +174,25 @@
             },
             "unit": "short"
           },
-          "overrides": []
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Application"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "",
+                      "url": "/d/d87670baea6a8ba5d368cd85bef0fbd3/?var-project=${__data.fields[1]}&var-application=${__data.fields[0]}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         },
         "gridPos": {
           "h": 10,
@@ -191,22 +202,22 @@
         },
         "id": 7,
         "options": {
+          "showHeader": true,
           "cellHeight": "sm",
           "footer": {
-            "countRows": false,
-            "enablePagination": true,
-            "fields": "",
+            "show": false,
             "reducer": ["sum"],
-            "show": false
+            "countRows": false,
+            "fields": "",
+            "enablePagination": true
           },
-          "showHeader": true,
           "sortBy": [
             {
               "displayName": "Application"
             }
           ]
         },
-        "pluginVersion": "10.4.3",
+        "pluginVersion": "10.4.0-pre",
         "targets": [
           {
             "datasource": {
@@ -671,7 +682,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "(1) Project",
+    "title": "(1) Overview",
     "uid": "d595cac94cda1b36fc103b78a9e33f47",
     "version": 1,
     "weekStart": ""

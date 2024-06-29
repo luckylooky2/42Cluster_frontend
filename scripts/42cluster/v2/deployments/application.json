@@ -22,14 +22,7 @@
     "gnetId": 19974,
     "graphTooltip": 0,
     "id": null,
-    "links": [
-      {
-        "tags": ["ci/cd", "argo-cd"],
-        "targetBlank": true,
-        "title": "ArgoCD Dashboards",
-        "type": "dashboards"
-      }
-    ],
+    "links": [],
     "panels": [
       {
         "datasource": {
@@ -119,8 +112,8 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (job, dest_server, project, health_status)\n",
-            "legendFormat": "{{ dest_server }}/{{ project }} - {{ health_status }}",
+            "expr": "sum(argocd_app_info{namespace=~\"argocd\",job=~\".+\",dest_server=~\".+\",project=\"$project\"}) by (job, dest_server, health_status, name)",
+            "legendFormat": "{{ name }} - {{ health_status }}",
             "refId": "A"
           }
         ],
@@ -215,8 +208,8 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (job, dest_server, project, sync_status)\n",
-            "legendFormat": "{{ dest_server }}/{{ project }} - {{ sync_status }}",
+            "expr": "sum(argocd_app_info{namespace=~\"argocd\",job=~\".+\",dest_server=~\".+\",project=~\"$project\",}) by (job, dest_server, sync_status, name)",
+            "legendFormat": "{{ name }} - {{ sync_status }}",
             "refId": "A"
           }
         ],
@@ -311,8 +304,8 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n      }[$__rate_interval]\n    )\n  )\n) by (job, dest_server, project, phase)\n",
-            "legendFormat": "{{ dest_server }}/{{ project }} - {{ phase }}",
+            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"argocd\",job=~\".+\",dest_server=~\".+\",project=~\"$project\",}[1m]))) by (job, dest_server, name, phase)",
+            "legendFormat": "{{ name }} - {{ phase }}",
             "refId": "A"
           }
         ],
@@ -407,8 +400,8 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "sum(\n  argocd_app_info{\n    namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n  }\n) by (job, dest_server, project, autosync_enabled)\n",
-            "legendFormat": "{{ dest_server }}/{{ project }} - {{ autosync_enabled }}",
+            "expr": "sum(argocd_app_info{namespace=~\"argocd\",job=~\".+\",dest_server=~\".+\",project=~\"$project\"}) by (job, dest_server, project, autosync_enabled)",
+            "legendFormat": "{{ name }} - {{ autosync_enabled }}",
             "refId": "A"
           }
         ],
@@ -457,8 +450,8 @@
               "type": "prometheus",
               "uid": "prometheus"
             },
-            "expr": "sum(\n  round(\n    increase(\n      argocd_app_sync_total{\n        namespace=~'argocd',\njob=~'.+',\ndest_server=~'.+',\nproject=~'$project',\n\n        name=~\"$application\",\n      }[$__rate_interval]\n    )\n  )\n) by (namespace, job, dest_server, project, name, phase)\n",
-            "legendFormat": "{{ dest_server }}/{{ project }}/{{ name }} - {{ phase }}",
+            "expr": "sum(round(increase(argocd_app_sync_total{namespace=~\"argocd\",job=~\".+\",dest_server=~\".+\",project=~\"$project\",name=~\"$application\"}[1m]))) by (namespace, job, dest_server, name, phase)",
+            "legendFormat": "{{ name }} - {{ phase }}",
             "refId": "A"
           }
         ],
@@ -471,11 +464,25 @@
     "templating": {
       "list": [
         {
-          "current": {
-            "selected": false,
-            "text": "All",
-            "value": "$__all"
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
           },
+          "definition": "",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Application",
+          "multi": false,
+          "name": "application",
+          "options": [],
+          "query": "label_values(argocd_app_info{namespace=~\"argocd\", job=~\".+\", dest_server=~\".+\", project=~\"$project\"}, name)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 2,
+          "type": "query"
+        },
+        {
           "datasource": {
             "type": "prometheus",
             "uid": "prometheus"
@@ -493,31 +500,6 @@
           "skipUrlSync": false,
           "sort": 1,
           "type": "query"
-        },
-        {
-          "current": {
-            "isNone": true,
-            "selected": false,
-            "text": "None",
-            "value": ""
-          },
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
-          },
-          "definition": "",
-          "hide": 0,
-          "includeAll": false,
-          "label": "Application",
-          "multi": false,
-          "name": "application",
-          "options": [],
-          "query": "label_values(argocd_app_info{namespace=~\"argocd\", job=~\".+\", dest_server=~\".+\", project=~\"$project\"}, name)",
-          "refresh": 2,
-          "regex": "",
-          "skipUrlSync": false,
-          "sort": 1,
-          "type": "query"
         }
       ]
     },
@@ -527,7 +509,7 @@
     },
     "timepicker": {},
     "timezone": "browser",
-    "title": "(2) Application Detail",
+    "title": "(2) Application",
     "uid": "d87670baea6a8ba5d368cd85bef0fbd3",
     "version": 1,
     "weekStart": ""

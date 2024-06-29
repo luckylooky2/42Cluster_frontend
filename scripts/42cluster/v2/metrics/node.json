@@ -191,7 +191,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (node) (kube_pod_status_phase * on(namespace, pod) group_left(node) kube_pod_info)",
+            "expr": "sum by (node) (kube_pod_status_phase * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"})",
             "format": "table",
             "instant": true,
             "intervalFactor": 2,
@@ -206,7 +206,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (node) (kube_pod_status_ready{condition!=\"true\"} * on(namespace, pod) group_left(node) kube_pod_info)",
+            "expr": "sum by (node) (kube_pod_status_ready{condition!=\"true\"} * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -221,7 +221,7 @@
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (node) (kube_node_status_capacity{resource=\"pods\"})",
+            "expr": "sum by (node) (kube_node_status_capacity{resource=\"pods\", node=~\"$node\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -425,7 +425,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "sum by (node) (rate(node_cpu_seconds_total{mode!=\"idle\"}[1m]) * on(namespace, pod) group_left(node) kube_pod_info) / sum by (node) (rate(node_cpu_seconds_total[1m]) * on(namespace, pod) group_left(node) kube_pod_info)",
+            "expr": "sum by (node) (rate(node_cpu_seconds_total{mode!=\"idle\"}[1m]) * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"}) / sum by (node) (rate(node_cpu_seconds_total[1m]) * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"})",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -437,7 +437,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (rate(container_cpu_usage_seconds_total{node=~\".+\", container!=\"\"}[1m])) / sum by (node) (kube_pod_container_resource_limits{resource=\"cpu\", node=~\".+\", container!=\"\"})",
+            "expr": "sum by (node) (rate(container_cpu_usage_seconds_total{node=~\"$node\", container!=\"\"}[1m])) / sum by (node) (kube_pod_container_resource_limits{resource=\"cpu\", node=~\"$node\", container!=\"\"})",
             "hide": false,
             "instant": false,
             "legendFormat": "__auto",
@@ -625,7 +625,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (node_memory_MemTotal_bytes * on(namespace, pod) group_left(node) kube_pod_info) - sum by (node) (node_memory_MemAvailable_bytes * on(namespace, pod) group_left(node) kube_pod_info)",
+            "expr": "sum by (node) (node_memory_MemTotal_bytes * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"}) - sum by (node) (node_memory_MemAvailable_bytes * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"})",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -638,7 +638,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (container_memory_rss{container!=\"\", node=~\".+\"})",
+            "expr": "sum by (node) (container_memory_rss{container!=\"\", node=~\"$node\"})",
             "hide": false,
             "instant": false,
             "legendFormat": "__auto",
@@ -826,7 +826,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "1 - sum by (node) (node_memory_MemAvailable_bytes * on(namespace, pod) group_left(node) kube_pod_info) / sum by (node) (node_memory_MemTotal_bytes * on(namespace, pod) group_left(node) kube_pod_info)",
+            "expr": "1 - sum by (node) (node_memory_MemAvailable_bytes * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"}) / sum by (node) (node_memory_MemTotal_bytes * on(namespace, pod) group_left(node) kube_pod_info{node=~\"$node\"})",
             "format": "time_series",
             "intervalFactor": 2,
             "legendFormat": "{{node}}",
@@ -839,7 +839,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (container_memory_rss{node=~\".+\", container!=\"\"}) / sum by (node) (kube_pod_container_resource_limits{resource=\"memory\", node=~\".+\", container!=\"\"})",
+            "expr": "sum by (node) (container_memory_rss{node=~\"$node\", container!=\"\"}) / sum by (node) (kube_pod_container_resource_limits{resource=\"memory\", node=~\"$node\", container!=\"\"})",
             "hide": false,
             "instant": false,
             "legendFormat": "__auto",
@@ -938,7 +938,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_receive_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1042,7 +1042,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_receive_packets_dropped_total{node=~\".+\"}[1m])) / sum by (node) (irate(container_network_receive_packets_total{node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_receive_packets_dropped_total{node=~\"$node\"}[1m])) / sum by (node) (irate(container_network_receive_packets_total{node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1146,7 +1146,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_receive_errors_total{node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_receive_errors_total{node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1244,7 +1244,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_transmit_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1348,7 +1348,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_transmit_packets_dropped_total{node=~\".+\"}[1m])) / sum by (node) (irate(container_network_transmit_packets_total{node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_transmit_packets_dropped_total{node=~\"$node\"}[1m])) / sum by (node) (irate(container_network_transmit_packets_total{node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1452,7 +1452,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by (node) (irate(container_network_transmit_errors_total{node=~\".+\"}[1m]))",
+            "expr": "sum by (node) (irate(container_network_transmit_errors_total{node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "range": true,
@@ -1550,7 +1550,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "ceil(sum by (node) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node!=\"\"}[1m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node!=\"\"}[1m])))",
+            "expr": "ceil(sum by (node) (rate(container_fs_reads_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node=~\"$node\"}[1m]) + rate(container_fs_writes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node=~\"$node\"}[1m])))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
@@ -1649,7 +1649,7 @@
               "uid": "prometheus"
             },
             "editorMode": "code",
-            "expr": "sum by(node) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node!=\"\"}[1m]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node!=\"\"}[1m]))",
+            "expr": "sum by(node) (rate(container_fs_reads_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", device=~\"(/dev/)?(mmcblk.p.+|nvme.+|rbd.+|sd.+|vd.+|xvd.+|dm-.+|md.+|dasd.+)\", node=~\"$node\"}[1m]) + rate(container_fs_writes_bytes_total{job=\"kubelet\", metrics_path=\"/metrics/cadvisor\", container!=\"\", node=~\"$node\"}[1m]))",
             "format": "time_series",
             "legendFormat": "{{namespace}}",
             "range": true,
@@ -1752,7 +1752,7 @@
             "datasource": {
               "uid": "prometheus"
             },
-            "expr": "(sum by (node) (kubelet_volume_stats_capacity_bytes{node=~\".+\"}) - sum by (node) (kubelet_volume_stats_available_bytes{node=~\".+\"})) / sum by (node) (kubelet_volume_stats_capacity_bytes{node=~\".+\"})",
+            "expr": "(sum by (node) (kubelet_volume_stats_capacity_bytes{node=~\"$node\"}) - sum by (node) (kubelet_volume_stats_available_bytes{node=~\"$node\"})) / sum by (node) (kubelet_volume_stats_capacity_bytes{node=~\"$node\"})",
             "format": "time_series",
             "legendFormat": "{{pod}}",
             "refId": "A",
@@ -1768,7 +1768,31 @@
     "schemaVersion": 39,
     "tags": ["metric"],
     "templating": {
-      "list": []
+      "list": [
+        {
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": { "type": "prometheus", "uid": "prometheus" },
+          "definition": "",
+          "hide": 0,
+          "includeAll": true,
+          "multi": true,
+          "name": "node",
+          "options": [],
+          "query": "label_values(kube_node_info, node)",
+          "refresh": 2,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 1,
+          "tagValuesQuery": "",
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
     },
     "time": { "from": "now-1h", "to": "now" },
     "timepicker": {
