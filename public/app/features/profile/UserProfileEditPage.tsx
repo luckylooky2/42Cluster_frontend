@@ -13,7 +13,7 @@ import { t } from 'app/core/internationalization';
 import { StoreState } from 'app/types';
 
 import UserOrganizations from './UserOrganizations';
-import UserProfileEditForm from './UserProfileEditForm';
+// import UserProfileEditForm from './UserProfileEditForm';
 import UserSessions from './UserSessions';
 import { UserTeams } from './UserTeams';
 import { changeUserOrg, initUserProfilePage, revokeUserSession, updateUserProfile } from './state/actions';
@@ -114,7 +114,7 @@ export function UserProfileEditPage({
 
   const UserProfile = () => (
     <VerticalGroup spacing="md">
-      <UserProfileEditForm updateProfile={updateUserProfile} isSavingUser={isUpdating} user={user} />
+      {/* <UserProfileEditForm updateProfile={updateUserProfile} isSavingUser={isUpdating} user={user} /> */}
       <SharedPreferences resourceUri="user" preferenceType="user" />
       <Stack direction="column" gap={6}>
         <UserTeams isLoading={teamsAreLoading} teams={teams} />
