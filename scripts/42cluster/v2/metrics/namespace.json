@@ -58,7 +58,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #A"
+                "options": "Value #B"
               },
               "properties": [
                 {
@@ -111,7 +111,7 @@
             {
               "matcher": {
                 "id": "byName",
-                "options": "Value #B"
+                "options": "Value #A"
               },
               "properties": [
                 {
@@ -156,11 +156,12 @@
         "targets": [
           {
             "datasource": {
+              "type": "prometheus",
               "uid": "prometheus"
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (namespace) (kube_pod_status_ready{condition!=\"true\", namespace=~\"$namespace\"})",
+            "expr": "sum by (namespace) (kube_pod_status_phase{namespace=~\"$namespace\"})",
             "format": "table",
             "hide": false,
             "instant": true,
@@ -170,12 +171,11 @@
           },
           {
             "datasource": {
-              "type": "prometheus",
               "uid": "prometheus"
             },
             "editorMode": "code",
             "exemplar": false,
-            "expr": "sum by (namespace) (kube_pod_status_phase{namespace=~\"$namespace\"})",
+            "expr": "sum by (namespace) (kube_pod_status_ready{condition!=\"true\", namespace=~\"$namespace\"})",
             "format": "table",
             "hide": false,
             "instant": true,
