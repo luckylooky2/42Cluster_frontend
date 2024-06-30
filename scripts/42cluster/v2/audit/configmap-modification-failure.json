@@ -723,6 +723,18 @@
                   "value": "네임스페이스"
                 }
               ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "objectRef.name"
+              },
+              "properties": [
+                {
+                  "id": "displayName",
+                  "value": "요청 대상"
+                }
+              ]
             }
           ]
         },
@@ -740,7 +752,8 @@
             "show": false,
             "reducer": ["sum"],
             "countRows": false,
-            "fields": ""
+            "fields": "",
+            "enablePagination": true
           },
           "sortBy": [
             {
@@ -757,7 +770,7 @@
               "uid": "cloudwatch"
             },
             "dimensions": {},
-            "expression": "fields user.username, verb, level, objectRef.resource, objectRef.namespace, responseStatus.code, user.groups.0, user.groups.1, user.groups.2, @timestamp\n| filter verb=\"create\" or verb=\"update\" or verb=\"delete\"\n| filter responseStatus.code < 200 or responseStatus.code >= 300\n| filter objectRef.resource = 'configmaps'\n| sort @timestamp desc",
+            "expression": "fields user.username, verb, objectRef.name, level, objectRef.resource, objectRef.namespace, responseStatus.code, user.groups.0, user.groups.1, user.groups.2, @timestamp\n| filter verb=\"create\" or verb=\"update\" or verb=\"delete\"\n| filter responseStatus.code < 200 or responseStatus.code >= 300\n| filter objectRef.resource = 'configmaps'\n| sort @timestamp desc",
             "hide": false,
             "id": "",
             "label": "",
