@@ -1,4 +1,4 @@
-<!-- ![42cluster Logo](public/img/42Cluster/banner.png) -->
+![42cluster Logo](public/img/42Cluster/banner.png)
 
 ## Introduction
 
@@ -34,7 +34,7 @@ Kubernetes(k8s)에 최적화된 monitoring 및 observability 서비스를 제공
 
 2. `grafana` 이미지 대신 아래 이미지로 교체
 
-- [`chanhyle/grafana-oss`](https://hub.docker.com/repository/docker/chanhyle/grafana-oss/general)
+   - [`chanhyle/grafana-oss`](https://hub.docker.com/repository/docker/chanhyle/grafana-oss/general)
 
 3. 레포지토리를 다운 받은 후, `scripts/42cluster`로 이동
 
