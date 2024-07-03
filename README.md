@@ -1,3 +1,4 @@
+![42cluster Logo](public/img/42Cluster/banner-icon.png)
 ![42cluster Logo](public/img/42Cluster/banner.png)
 
 ## Introduction
