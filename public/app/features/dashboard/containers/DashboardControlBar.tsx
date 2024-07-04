@@ -2,7 +2,7 @@ import { css } from '@emotion/css';
 import React from 'react';
 
 import { GrafanaTheme2, TypedVariableModel, VariableOption } from '@grafana/data';
-import { locationService } from '@grafana/runtime';
+// import { locationService } from '@grafana/runtime';
 import { Divider, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 
@@ -14,7 +14,8 @@ import {
   isTimeRangeChanged,
   isTemplateVariableFiltered,
 } from '../utils/42cluster';
-import { useTemplateVariable } from '../utils/useTemplateVariable';
+import { UrlModule } from '../utils/urlModule';
+// import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 import DashboardSelect from './DashboardSelect';
 import DashboardUtilityButton from './DashboardUtilityButton';
@@ -53,19 +54,20 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
   };
 
   const UtilityControls = () => {
-    const [variable, selectedValues] = useTemplateVariable();
+    // const [variable, selectedValues] = useTemplateVariable();
 
-    const restorePath = (variable: TypedVariableModel, selectedValues: VariableOption[]) => {
-      const uid = getDashboardUidFromUrl();
-      const restoredTimeRange = 'from=now-1h&to=now';
+    // const restorePath = (variable: TypedVariableModel, selectedValues: VariableOption[]) => {
+    //   const uid = getDashboardUidFromUrl();
+    //   const restoredTimeRange = 'from=now-1h&to=now';
 
-      // 템플릿 변수가 없는 경우
-      if (!variable) {
-        return `/d/${uid}/?${restoredTimeRange}`;
-      }
-      // 템플릿 변수가 있는 경우
-      return `/d/${uid}/${selectedValuesQueryString(selectedValues, variable.id)}&${restoredTimeRange}`;
-    };
+    //   // 템플릿 변수가 없는 경우
+    //   if (!variable) {
+
+    //     return `/d/${uid}/?${restoredTimeRange}`;
+    //   }
+    //   // 템플릿 변수가 있는 경우
+    //   return `/d/${uid}/${selectedValuesQueryString(selectedValues, variable.id)}&${restoredTimeRange}`;
+    // };
 
     return (
       <div className={styles.controls}>
@@ -73,7 +75,7 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
           <DashboardUtilityButton
             title="Reset"
             icon="sync"
-            onClick={() => locationService.push(restorePath(variable, selectedValues))}
+            onClick={() => new UrlModule().updateParam('from', 'now-1h').deleteAllParam('var-Filters').navigate()}
           />
         )}
         <DashboardUtilityButton title="Kiosk Mode" icon="presentation-play" onClick={chrome.onToggleKioskMode} />
