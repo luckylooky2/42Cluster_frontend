@@ -1,8 +1,8 @@
 import { css, cx } from '@emotion/css';
-import React, { CSSProperties, ReactElement, ReactNode, useId } from 'react';
+import React, { CSSProperties, ReactElement, ReactNode, useId, useEffect } from 'react';
 import { useMeasure, useToggle } from 'react-use';
 
-import { GrafanaTheme2, LoadingState } from '@grafana/data';
+import { GrafanaTheme2, LoadingState, PanelModel } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
 import { useStyles2, useTheme2 } from '../../themes';
@@ -31,6 +31,7 @@ interface BaseProps {
   menu?: ReactElement | (() => ReactElement);
   dragClass?: string;
   dragClassCancel?: string;
+  panel?: PanelModel;
   /**
    * Use only to indicate loading or streaming data in the panel.
    * Any other values of loadingState are ignored.
@@ -100,6 +101,7 @@ export function PanelChrome({
   width,
   height,
   children,
+  panel,
   padding = 'md',
   title = '',
   description = '',
@@ -275,6 +277,7 @@ export function PanelChrome({
           {menu && (
             <PanelMenu
               menu={menu}
+              panel={panel}
               title={typeof title === 'string' ? title : undefined}
               placement="bottom-end"
               menuButtonClass={cx(styles.menuItem, dragClassCancel, showOnHoverClass)}
