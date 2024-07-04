@@ -130,10 +130,12 @@ export class KeybindingSrv {
       return;
     }
 
-    if (search.viewPanel) {
-      this.locationService.partial({ viewPanel: null, tab: null });
-      return;
-    }
+    // 순서상 먼저 처리되기 때문에 viewPanel => kiosk 모드를 해도, ESC를 누르면 viewPanel이 먼저 해제된다
+
+    // if (search.viewPanel) {
+    //   this.locationService.partial({ viewPanel: null, tab: null });
+    //   return;
+    // }
 
     const { kioskMode } = this.chromeService.state.getValue();
     if (kioskMode) {
