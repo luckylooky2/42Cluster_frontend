@@ -8,7 +8,7 @@ import { Menu, Dropdown, useStyles2, ToolbarButton, Icon } from '@grafana/ui';
 import { useDashboardList } from 'app/features/browse-dashboards/state';
 
 import { GitHubButtonStyles } from '../../../../style/GitHubButtonStyles';
-import { getDashboardUidFromUrl } from '../utils/42cluster';
+import { getDashboardUidFromUrl } from '../utils/42cluster/utils';
 
 const DashboardSelect = () => {
   const [isOpen, setIsOpen] = useState(false);

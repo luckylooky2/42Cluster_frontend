@@ -5,7 +5,7 @@ import { PanelModel } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 
 // import { Dropdown } from '../Dropdown/Dropdown';
-import { UrlModule } from '../../../../../public/app/features/dashboard/utils/urlModule';
+import { UrlModule } from '../../../../../public/app/features/dashboard/utils/42cluster/urlModule';
 import { ToolbarButton } from '../ToolbarButton';
 import { TooltipPlacement } from '../Tooltip';
 

@@ -37,7 +37,7 @@ import { liveTimer } from '../dashgrid/liveTimer';
 import { getTimeSrv } from '../services/TimeSrv';
 import { cleanUpDashboardAndVariables } from '../state/actions';
 import { initDashboard } from '../state/initDashboard';
-import { determineUrl, ROOT } from '../utils/42cluster';
+import { determineUrl, ROOT } from '../utils/42cluster/utils';
 
 import DashboardControlBar from './DashboardControlBar';
 import { DashboardPageRouteParams, DashboardPageRouteSearchParams } from './types';

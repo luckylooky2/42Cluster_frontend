@@ -1,4 +1,4 @@
-import { isTimeRangeChanged, isTemplateVariableFiltered } from 'app/features/dashboard/utils/42cluster';
+import { isTimeRangeChanged, isTemplateVariableFiltered } from 'app/features/dashboard/utils/42cluster/utils';
 
 describe('Time Range Changed', () => {
   beforeAll(() => {

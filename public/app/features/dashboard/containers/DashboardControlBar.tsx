@@ -1,20 +1,15 @@
 import { css } from '@emotion/css';
 import React from 'react';
 
-import { GrafanaTheme2, TypedVariableModel, VariableOption } from '@grafana/data';
+import { GrafanaTheme2 } from '@grafana/data';
 // import { locationService } from '@grafana/runtime';
 import { Divider, useStyles2 } from '@grafana/ui';
 import { useGrafana } from 'app/core/context/GrafanaContext';
 
 import { SubMenu } from '../components/SubMenu/SubMenu';
 import { DashboardModel } from '../state';
-import {
-  selectedValuesQueryString,
-  getDashboardUidFromUrl,
-  isTimeRangeChanged,
-  isTemplateVariableFiltered,
-} from '../utils/42cluster';
-import { UrlModule } from '../utils/urlModule';
+import { UrlModule } from '../utils/42cluster/urlModule';
+import { isTimeRangeChanged, isTemplateVariableFiltered } from '../utils/42cluster/utils';
 // import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 import DashboardSelect from './DashboardSelect';

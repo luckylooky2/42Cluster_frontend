@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import React from 'react';
 
-import { GrafanaTheme2 } from '@grafana/data';
+import { GrafanaTheme2, VariableOption } from '@grafana/data';
 import { useStyles2 } from '@grafana/ui';
 import { useAppNotification } from 'app/core/copy/appNotification';
 import { commitChangesToVariable } from 'app/features/variables/pickers/OptionsPicker/actions';
@@ -11,7 +11,7 @@ import { getState } from 'app/store/store';
 import { useDispatch } from 'app/types';
 
 import { customButtonColor } from '../../../../style/color';
-import { getDashboardUidFromUrl } from '../utils/42cluster';
+import { getDashboardUidFromUrl } from '../utils/42cluster/utils';
 import { useTemplateVariable } from '../utils/useTemplateVariable';
 
 const SELECTED_ALL = '$__all';
@@ -28,11 +28,12 @@ const OptionSelectedChips = () => {
   }
 
   const renderList: string[] = (selectedValues[0].value === SELECTED_ALL ? variable.options.slice(1) : selectedValues)
-    .map((v) => v.value as string)
+    .map((v: VariableOption) => v.value as string)
     .sort();
 
-  const onRemoveFromRenderList = (e) => {
-    const value = e.target.getAttribute('data-value');
+  const onRemoveFromRenderList = (e: React.MouseEvent<HTMLSpanElement>) => {
+    const target = e.target as HTMLSpanElement;
+    const value = target.getAttribute('data-value');
     const option = selectedValues.filter((v) => v.value === value)[0];
     const uid = getDashboardUidFromUrl();
 

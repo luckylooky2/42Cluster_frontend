@@ -11,7 +11,7 @@ import { useMediaQueryChange } from 'app/core/hooks/useMediaQueryChange';
 import store from 'app/core/store';
 import { useLoadNextChildrenPage } from 'app/features/browse-dashboards/state';
 import { CommandPalette } from 'app/features/commandPalette/CommandPalette';
-import { determineUrl, DASHBOARD, LOGIN } from 'app/features/dashboard/utils/42cluster';
+import { determineUrl, DASHBOARD, LOGIN } from 'app/features/dashboard/utils/42cluster/utils';
 import { KioskMode } from 'app/types';
 
 import { AppChromeMenu } from './AppChromeMenu';

@@ -1,4 +1,4 @@
-import { UrlModule } from 'app/features/dashboard/utils/urlModule';
+import { UrlModule } from 'app/features/dashboard/utils/42cluster/urlModule';
 
 describe('Panel', () => {
   beforeAll(() => {
