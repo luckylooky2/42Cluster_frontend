@@ -33,7 +33,7 @@ Kubernetes(k8s)에 최적화된 monitoring 및 observability 서비스를 제공
 
 1. `helm`을 이용하여 `prometheus` 스택 구성
 
-2. `grafana` 이미지 대신 아래 이미지로 교체
+2. `grafana` 이미지를 아래 이미지로 교체
 
    - [`chanhyle/grafana-oss`](https://hub.docker.com/repository/docker/chanhyle/grafana-oss/general)
 
