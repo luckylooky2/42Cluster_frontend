@@ -1,24 +1,22 @@
 import { locationService } from '@grafana/runtime';
 
 export class UrlModule {
-  url: string;
+  pathname: string;
+  search: string;
 
-  constructor(url = window.location.pathname + window.location.search) {
-    this.url = url;
+  constructor(pathname = window.location.pathname, search = window.location.search) {
+    this.pathname = pathname;
+    this.search = search;
   }
 
   addParam(key: any, value: any) {
-    const delimeter = window.location.search ? '&' : '?';
-    this.url = this.url + delimeter + `${String(key)}=${String(value)}`;
+    const delimeter = this.search ? '&' : '?';
+    this.search = this.search + delimeter + `${String(key)}=${String(value)}`;
     return this;
   }
 
   deleteParam(key: any) {
-    const baseUrl = window.location.pathname;
-    const params = window.location.search
-      .split(/[?&]/)
-      .filter((v) => v !== '')
-      .map((v) => v.split('='));
+    const params = this.getParams();
     const newParams = [];
     let flag = false;
 
@@ -31,16 +29,16 @@ export class UrlModule {
       newParams.push([k, v]);
     }
 
-    this.url = baseUrl + '?' + `${newParams.map((v) => v.join('=')).join('&')}`;
+    if (newParams.length) {
+      this.search = '?' + `${newParams.map(([k, v]) => (!v ? k : [k, v].join('='))).join('&')}`;
+    } else {
+      this.search = '';
+    }
     return this;
   }
 
   deleteAllParam(key: any) {
-    const baseUrl = window.location.pathname;
-    const params = window.location.search
-      .split(/[?&]/)
-      .filter((v) => v !== '')
-      .map((v) => v.split('='));
+    const params = this.getParams();
     const newParams = [];
 
     // excludes all
@@ -51,33 +49,45 @@ export class UrlModule {
       newParams.push([k, v]);
     }
 
-    this.url = baseUrl + '?' + `${newParams.map((v) => v.join('=')).join('&')}`;
+    this.search = '?' + `${newParams.map(([k, v]) => (!v ? k : [k, v].join('='))).join('&')}`;
     return this;
   }
 
   updateParam(key: any, value: any) {
-    const baseUrl = window.location.pathname;
-    const params = window.location.search
-      .split(/[?&]/)
-      .filter((v) => v !== '')
-      .map((v) => v.split('='));
+    const params = this.getParams();
+    const newParams = [];
+    let flag = false;
 
-    for (let i = 0; i < params.length; i++) {
-      const curr = params[i];
-      if (curr[0] === String(key)) {
-        curr[1] = String(value);
+    for (const [k, v] of params) {
+      if (k === String(key)) {
+        newParams.push([k, value]);
+        flag = true;
+        continue;
       }
+      newParams.push([k, v]);
     }
 
-    this.url = baseUrl + '?' + `${params.map((v) => v.join('=')).join('&')}`;
+    // 없으면 추가
+    if (!flag) {
+      newParams.push([key, value]);
+    }
+
+    this.search = '?' + `${newParams.map(([k, v]) => (!v ? k : [k, v].join('='))).join('&')}`;
     return this;
   }
 
   navigate() {
-    locationService.push(this.url);
+    locationService.push(this.pathname + this.search);
   }
 
   getUrl() {
-    return this.url;
+    return this.pathname + this.search;
+  }
+
+  getParams() {
+    return this.search
+      .split(/[?&]/)
+      .filter((v) => v !== '')
+      .map((v) => v.split('='));
   }
 }
