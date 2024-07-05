@@ -10,7 +10,7 @@ import { useSelector } from 'app/types';
 // import { enrichHelpItem } from '../MegaMenu/utils';
 // import { NewsContainer } from '../News/NewsContainer';
 import { NavigateControls } from '../OrganizationSwitcher/NavigateControls';
-import { QuickAdd } from '../QuickAdd/QuickAdd';
+// import { QuickAdd } from '../QuickAdd/QuickAdd';
 import { TOP_BAR_LEVEL_HEIGHT } from '../types';
 
 import DarkModeToggle from './DarkModeToggle';

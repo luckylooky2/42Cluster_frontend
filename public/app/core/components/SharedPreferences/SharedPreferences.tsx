@@ -1,7 +1,7 @@
 import { css } from '@emotion/css';
 import React, { PureComponent } from 'react';
 
-import { FeatureState, SelectableValue, getBuiltInThemes, ThemeRegistryItem } from '@grafana/data';
+import { SelectableValue, getBuiltInThemes, ThemeRegistryItem } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { config, reportInteraction } from '@grafana/runtime';
 import { Preferences as UserPreferencesDTO } from '@grafana/schema/src/raw/preferences/x/preferences_types.gen';
@@ -130,7 +130,7 @@ export class SharedPreferences extends PureComponent<Props, State> {
   };
 
   render() {
-    const { theme, timezone, weekStart, homeDashboardUID, language } = this.state;
+    const { theme, timezone, weekStart } = this.state;
     const { disabled } = this.props;
     const styles = getStyles();
     // const languages = getLanguageOptions();

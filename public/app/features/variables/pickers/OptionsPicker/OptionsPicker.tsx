@@ -7,7 +7,7 @@ import { ClickOutsideWrapper } from '@grafana/ui';
 // import { notifyApp } from 'app/core/actions';
 // import { createErrorNotification } from 'app/core/copy/appNotification';
 import OptionDropdown from 'app/features/dashboard/containers/OptionDropdown';
-import { StoreState, ThunkDispatch, AppNotification } from 'app/types';
+import { StoreState, ThunkDispatch } from 'app/types';
 
 // import { VARIABLE_PREFIX } from '../../constants';
 import { isMulti } from '../../guard';

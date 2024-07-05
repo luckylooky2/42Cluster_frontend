@@ -1,5 +1,5 @@
 import { css, cx } from '@emotion/css';
-import React, { CSSProperties, ReactElement, ReactNode, useId, useEffect } from 'react';
+import React, { CSSProperties, ReactElement, ReactNode, useId } from 'react';
 import { useMeasure, useToggle } from 'react-use';
 
 import { GrafanaTheme2, LoadingState, PanelModel } from '@grafana/data';
