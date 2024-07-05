@@ -75,7 +75,13 @@ const DashboardControlBar = ({ showSubMenu, dashboard, ariaLabel }: Props) => {
           <DashboardUtilityButton
             title="Reset"
             icon="sync"
-            onClick={() => new UrlModule().updateParam('from', 'now-1h').deleteAllParam('var-Filters').navigate()}
+            onClick={() =>
+              new UrlModule()
+                .updateParam('from', 'now-1h')
+                .updateParam('to', 'now')
+                .deleteAllParam('var-Filters')
+                .navigate()
+            }
           />
         )}
         <DashboardUtilityButton title="Kiosk Mode" icon="presentation-play" onClick={chrome.onToggleKioskMode} />
