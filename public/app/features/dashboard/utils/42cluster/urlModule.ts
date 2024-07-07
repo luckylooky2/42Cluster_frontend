@@ -9,20 +9,20 @@ export class UrlModule {
     this.search = search;
   }
 
-  addParam(key: any, value: any) {
+  addParam(key: string, value: string): UrlModule {
     const delimeter = this.search ? '&' : '?';
-    this.search = this.search + delimeter + `${String(key)}=${String(value)}`;
+    this.search = this.search + delimeter + `${key}=${value}`;
     return this;
   }
 
-  deleteParam(key: any) {
+  deleteParam(key: string): UrlModule {
     const params = this.getParams();
     const newParams = [];
     let flag = false;
 
     // excludes first occurence only
     for (const [k, v] of params) {
-      if (!flag && k === String(key)) {
+      if (!flag && k === key) {
         flag = true;
         continue;
       }
@@ -37,13 +37,13 @@ export class UrlModule {
     return this;
   }
 
-  deleteAllParam(key: any) {
+  deleteAllParam(key: string): UrlModule {
     const params = this.getParams();
     const newParams = [];
 
     // excludes all
     for (const [k, v] of params) {
-      if (k === String(key)) {
+      if (k === key) {
         continue;
       }
       newParams.push([k, v]);
@@ -53,13 +53,13 @@ export class UrlModule {
     return this;
   }
 
-  updateParam(key: any, value: any) {
+  updateParam(key: string, value: string): UrlModule {
     const params = this.getParams();
     const newParams = [];
     let flag = false;
 
     for (const [k, v] of params) {
-      if (k === String(key)) {
+      if (k === key) {
         newParams.push([k, value]);
         flag = true;
         continue;
@@ -67,7 +67,7 @@ export class UrlModule {
       newParams.push([k, v]);
     }
 
-    // 없으면 추가
+    // add if param not defined
     if (!flag) {
       newParams.push([key, value]);
     }
@@ -76,15 +76,15 @@ export class UrlModule {
     return this;
   }
 
-  navigate() {
+  navigate(): void {
     locationService.push(this.pathname + this.search);
   }
 
-  getUrl() {
+  getUrl(): string {
     return this.pathname + this.search;
   }
 
-  getParams() {
+  getParams(): string[][] {
     return this.search
       .split(/[?&]/)
       .filter((v) => v !== '')

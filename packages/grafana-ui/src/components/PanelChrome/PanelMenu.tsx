@@ -43,7 +43,7 @@ export function PanelMenu({
   // );
 
   const expandPanel = () => {
-    new UrlModule().addParam('viewPanel', panel?.id).navigate();
+    new UrlModule().addParam('viewPanel', String(panel?.id)).navigate();
     setIsExpanded(true);
   };
 
