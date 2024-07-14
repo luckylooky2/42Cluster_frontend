@@ -3,7 +3,7 @@
 ## For more information, refer to https://suva.sh/posts/well-documented-makefiles/
 
 WIRE_TAGS = "oss"
-TAG_NUMBER = "0.0.2"
+TAG_NUMBER = "test2-dev-amd"
 
 -include local/Makefile
 include .bingo/Variables.mk
@@ -231,8 +231,8 @@ shellcheck: $(SH_FILES) ## Run checks for shell scripts.
 ##@ Docker
 
 TAG_SUFFIX=$(if $(WIRE_TAGS)!=oss,-$(WIRE_TAGS))
-# PLATFORM=linux/amd64
-PLATFORM=linux/arm64
+PLATFORM=linux/amd64
+#PLATFORM=linux/arm64
 
 build-docker-full: ## Build Docker image for development.
 	@echo "build docker container"
@@ -261,6 +261,21 @@ build-docker-full-ubuntu: ## Build Docker image based on Ubuntu for development.
 	--build-arg GO_IMAGE=golang:1.21.8 \
 	--tag chanhyle/grafana$(TAG_SUFFIX):$(TAG_NUMBER) \
 	$(DOCKER_BUILD_ARGS)
+
+build-gobuilder:
+	echo "\033[32mrun go-builder!\033[0m"; \
+	docker build -f Dockerfile.gobuilder --target go-builder -t go-builder .;
+
+build-42cluster:
+	@docker image inspect go-builder > /dev/null 2>&1; \
+	EXIT_CODE=$$?; \
+	if [ $$EXIT_CODE -eq 0 ]; then \
+		echo "\033[32mgo-builder already exist!\033[0m"; \
+		make build-docker-full-ubuntu; \
+	else \
+		make build-gobuilder; \
+		make build-docker-full-ubuntu; \
+	fi;
 
 ##@ Services
 
